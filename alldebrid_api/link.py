@@ -2,14 +2,15 @@ import url
 import config
 import requests
 
-api = config.api_key
-agent = config.agent
 
-
-def get_link_info(link):
-    c = requests.get(url.create(agent, api, "infos", link))
+def get_link_info(link, agent, api_key):
+    c = requests.get(
+        url.create(
+            "infos",
+            link=link,
+            agent=agent,
+            api_key=api_key,
+        )
+    )
 
     return c.json()
-
-
-print(get_link_info("https://www.youtube.com/watch?v=21T-Sc-TXJY")["data"])

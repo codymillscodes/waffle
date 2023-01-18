@@ -13,10 +13,14 @@ torrents = py1337x(proxy="1337x.to")
 class DebridCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.api_key = config.debrid_key
+        self.api_host = config.debrid_key
 
     @commands.command(name="stat")
     async def stat(self, ctx):
-        all_status = magnet.get_all_magnet_status()
+        all_status = magnet.get_all_magnet_status(
+            agent=self.api_host, api_key=self.api_key
+        )
         if all_status == 0:
             await ctx.send("No active downloads.")
         else:
@@ -105,7 +109,9 @@ class DebridCog(commands.Cog):
                         "magnetLink"
                     ]
                     # add magnet, get ready, name, id
-                    mag = magnet.upload_magnet(magnet_link)
+                    mag = magnet.upload_magnet(
+                        magnet_link, agent=self.api_host, api_key=self.api_key
+                    )
                     if mag[2]:
                         em_links = discord.Embed(description=f"{ctx.author.mention}")
                         link = f"{config.http_url}magnets/{urllib.parse.quote(mag[1])}/"
