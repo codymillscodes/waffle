@@ -1,6 +1,6 @@
 # https://docs.alldebrid.com
 
-def create(request, link="", magnet="", magnetid="", agent=agent, api_key=api):
+def create(request, link="", magnet="", magnetid="", agent="", api_key=""):
     base_url = "https://api.alldebrid.com/v4/"
     cred = f"agent={agent}&apikey={api_key}"
 
