@@ -1,9 +1,5 @@
 # https://docs.alldebrid.com
 
-api = "qc778sk7AqUhB7xCVDgU"
-agent = "Debridbot"
-
-
 def create(request, link="", magnet="", magnetid="", agent=agent, api_key=api):
     base_url = "https://api.alldebrid.com/v4/"
     cred = f"agent={agent}&apikey={api_key}"
