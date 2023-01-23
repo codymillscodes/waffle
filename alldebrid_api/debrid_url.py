@@ -19,6 +19,14 @@ def create(request, link="", magnet="", magnetid="", agent="", api_key=""):
         return "request must be upload or instant"
     elif request == "status":
         return f"{base_url}magnet/{request}?{cred}&status=active"
+    elif request == "ready":
+        return f"{base_url}magnet/status?{cred}&status=ready"
+    elif request == "all":
+        return f"{base_url}magnet/status?{cred}"
+    elif request == "ping":
+        return f"{base_url}ping?agent={agent}"
+    elif request == "hosts":
+        return f"{base_url}hosts?agent={agent}"
 
 
 apiErrors = {
