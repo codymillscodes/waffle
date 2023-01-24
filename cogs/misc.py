@@ -737,17 +737,6 @@ class MiscCog(commands.Cog):
         else:
             await ctx.send("lol youre not allowed to do this")
 
-    @commands.command(name="alchemy")
-    async def alchemy(self, ctx):
-        link = "https://ciaccodavi.de/qbdp/acg/?coloured=true"
-        image = (
-            BeautifulSoup(requests.get(link).content, "html.parser")
-            .find("body")
-            .find("img")
-            .attrs["src"]
-        )
-        await ctx.send(image)
-
 
 def setup(bot):
     bot.add_cog(MiscCog(bot))
