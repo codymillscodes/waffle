@@ -12,22 +12,21 @@ class SystemCog(commands.Cog):
 
     @commands.command(name="restartbot")
     async def restartbot(self, ctx):
-        role = ctx.guild.get_role(self.sys_role)
-        logger.info(role)
-        if role in ctx.author.roles:
-            subprocess.run("/mnt/thumb/waffle/scripts/restart.sh", shell=True)
-            logger.info(f"{ctx.author} is restarting the bot.")
-            await ctx.send("Bot restarting!")
+        for role in ctx.author.roles:
+            if role.id == self.sys_role:
+                subprocess.run("/mnt/thumb/waffle/scripts/restart.sh", shell=True)
+                logger.info(f"{ctx.author} is restarting the bot.")
+                await ctx.send("Bot restarting!")
         else:
             await ctx.send("You're no bot boy!")
 
     @commands.command(name="gitupdate")
     async def gitupdate(self, ctx):
-        role = ctx.guild.get_role(self.sys_role)
-        if role in ctx.author.roles:
-            subprocess.run("/waffle/scripts/update.sh", shell=True)
-            logger.info(f"{ctx.author} is updating the bot.")
-            await ctx.send("Bot updating!")
+        for role in ctx.author.roles:
+            if role.id == self.sys_role:
+                subprocess.run("/waffle/scripts/update.sh", shell=True)
+                logger.info(f"{ctx.author} is updating the bot.")
+                await ctx.send("Bot updating!")
         else:
             await ctx.send("You're no bot boy!")
 
