@@ -15,7 +15,7 @@ class SystemCog(commands.Cog):
         logger.info(self.sys_role)
         for role in ctx.author.roles:
             logger.info(f"{role} | {role.id}")
-            if role.id == self.sys_role:
+            if role == "bot boys":
                 subprocess.run("/mnt/thumb/waffle/scripts/restart.sh", shell=True)
                 logger.info(f"{ctx.author} is restarting the bot.")
                 await ctx.send("Bot restarting!")
