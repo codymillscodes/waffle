@@ -15,12 +15,12 @@ class SystemCog(commands.Cog):
         logger.info(self.sys_role)
         for role in ctx.author.roles:
             logger.info(f"{role} | {role.id}")
-            if role == "bot boys":
+            if role.id == self.sys_role:
                 subprocess.run("/mnt/thumb/waffle/scripts/restart.sh", shell=True)
                 logger.info(f"{ctx.author} is restarting the bot.")
                 await ctx.send("Bot restarting!")
-        else:
-            await ctx.send("You're no bot boy!")
+            else:
+                await ctx.send("You're no bot boy!")
 
     @commands.command(name="gitupdate")
     async def gitupdate(self, ctx):
