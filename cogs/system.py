@@ -12,7 +12,9 @@ class SystemCog(commands.Cog):
 
     @commands.command(name="restartbot")
     async def restartbot(self, ctx):
+        logger.info(self.sys_role)
         for role in ctx.author.roles:
+            logger.info(f"{role} | {role.id}")
             if role.id == self.sys_role:
                 subprocess.run("/mnt/thumb/waffle/scripts/restart.sh", shell=True)
                 logger.info(f"{ctx.author} is restarting the bot.")
