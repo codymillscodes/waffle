@@ -12,7 +12,7 @@ class SystemCog(commands.Cog):
 
     @commands.command(name="restartbot")
     async def restartbot(self, ctx):
-        if await ctx.author.get_role(self.sys_role) == self.sys_role:
+        if self.sys_role in ctx.author.roles:
             subprocess.run("/mnt/thumb/waffle/scripts/restart.sh", shell=True)
             logger.info(f"{ctx.author} is restarting the bot.")
             await ctx.send("Bot restarting!")
@@ -21,7 +21,7 @@ class SystemCog(commands.Cog):
 
     @commands.command(name="gitupdate")
     async def gitupdate(self, ctx):
-        if await ctx.author.get_role(self.sys_role) == self.sys_role:
+        if self.sys_role in ctx.author.roles:
             subprocess.run("/waffle/scripts/update.sh", shell=True)
             logger.info(f"{ctx.author} is updating the bot.")
             await ctx.send("Bot updating!")
