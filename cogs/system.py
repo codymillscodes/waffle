@@ -14,7 +14,7 @@ class SystemCog(commands.Cog):
     async def restartbot(self, ctx):
         valid_role = 0
         for role in ctx.author.roles:
-            if role.id == self.sys_role:
+            if int(role.id) == int(self.sys_role):
                 valid_role = 1
         if valid_role == 1:
             subprocess.run("/mnt/thumb/waffle/scripts/restart.sh", shell=True)
@@ -27,7 +27,7 @@ class SystemCog(commands.Cog):
     async def gitupdate(self, ctx):
         valid_role = 0
         for role in ctx.author.roles:
-            if role.id == self.sys_role:
+            if int(role.id) == int(self.sys_role):
                 valid_role = 1
         if valid_role == 1:
             subprocess.run("/waffle/scripts/update.sh", shell=True)
