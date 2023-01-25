@@ -8,11 +8,12 @@ from loguru import logger
 class SystemCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.sys_role = config.botboy_role
+        self.sys_role = config.restart_role
 
     @commands.command(name="restartbot")
     async def restartbot(self, ctx):
-        role = ctx.guild.get_role(self.sys_role)
+        role = await ctx.guild.get_role(self.sys_role)
+        logger.info(role)
         if role in ctx.author.roles:
             subprocess.run("/mnt/thumb/waffle/scripts/restart.sh", shell=True)
             logger.info(f"{ctx.author} is restarting the bot.")

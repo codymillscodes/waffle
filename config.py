@@ -13,7 +13,6 @@ discord_oauth_secret = os.environ["discord_oauth_secret"]
 log_channel = os.environ["log_channel"]
 dl_channel = os.environ["dl_channel"]
 restart_role = os.environ["restart_role"]
-botboy_role = os.environ["botboy_role"]
 
 # debrid settings
 debrid_host = os.environ["debrid_host"]
