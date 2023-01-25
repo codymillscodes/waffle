@@ -17,7 +17,7 @@ class SystemCog(commands.Cog):
             if int(role.id) == int(self.sys_role):
                 valid_role = 1
         if valid_role == 1:
-            subprocess.run("/mnt/thumb/waffle/scripts/restart.sh", shell=True)
+            subprocess.run("sudo /mnt/thumb/waffle/scripts/restart.sh", shell=True)
             logger.info(f"{ctx.author} is restarting the bot.")
             await ctx.send("Bot restarting!")
         else:
@@ -30,7 +30,7 @@ class SystemCog(commands.Cog):
             if int(role.id) == int(self.sys_role):
                 valid_role = 1
         if valid_role == 1:
-            subprocess.run("/waffle/scripts/update.sh", shell=True)
+            subprocess.run("sudo /waffle/scripts/update.sh", shell=True)
             logger.info(f"{ctx.author} is updating the bot.")
             await ctx.send("Bot updating!")
         else:
