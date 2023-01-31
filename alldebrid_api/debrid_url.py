@@ -1,13 +1,19 @@
 # https://docs.alldebrid.com
 
 
-def create(request, link="", magnet="", magnetid="", agent="", api_key=""):
+def create(
+    request, link="", magnet="", magnetid="", agent="", api_key="", stream="", id=""
+):
     base_url = "https://api.alldebrid.com/v4/"
     cred = f"agent={agent}&apikey={api_key}"
 
     if link != "":
         if request in {"infos", "unlock", "streaming", "delayed"}:
-            return f"{base_url}link/{request}?{cred}&link[]={link}"
+            if request == "streaming":
+                return f"{base_url}link/{request}?{cred}&id={id}&stream={stream}"
+            if request == "delayed":
+                return f"{base_url}link/{request}?{cred}&id={id}"
+            return f"{base_url}link/{request}?{cred}&link={link}"
         return "request must be infos, unlock, streaming or delayed"
     if magnetid != "":
         if request in {"status", "delete", "restart"}:

@@ -7,6 +7,7 @@ import config
 import urllib.parse
 import random
 from loguru import logger
+from alldebrid_api import debrid_url
 
 
 class BGTasks(commands.Cog):
@@ -65,39 +66,69 @@ class BGTasks(commands.Cog):
         if len(debrid) > 0:
             logger.info(f"{debrid}")
         for id in debrid:
-            status_url = f"https://api.alldebrid.com/v4/magnet/status?agent={config.debrid_host}&apikey={config.debrid_key}&id="
-            try:
-                status_json = json.loads(requests.get(f"{status_url}{id[0]}").text)
-            except:
-                pass
-            logger.info(f"Checking: {id[0]}")
-            try:
-                if (
-                    status_json["status"] == "error"
-                    or status_json["data"]["magnets"]["statusCode"] > 4
-                ):
+            if id[2] == "link":
+                logger.info(f"Checking: {id[0]}")
+                delay_url = debrid_url.create(
+                    "delayed",
+                    agent=config.debrid_host,
+                    api_key=config.debrid_key,
+                    id=id[0],
+                    link="link",
+                )
+                r = requests.get(delay_url).json()
+                if r["data"]["status"] == 2:
+                    link = r["data"]["link"]
+                    link_split = link.split("/")[-2:]
+                    filename = urllib.parse.unquote(link_split[1])
                     debrid.remove(id)
                     logger.info(f"removing {id[0]}")
-
-                if "Ready" in status_json["data"]["magnets"]["status"]:
                     with open("debrid.txt", "w") as f:
                         for line in debrid:
-                            if line != f"{id[0]},{id[1]}":
-                                f.write(f"{id[0]},{id[1]}")
+                            if line != f"{id[0]},{id[1]},{id[2]}":
+                                f.write(f"{id[0]},{id[1]},{id[2]}")
                     em_links = discord.Embed(description=f"<@{id[1]}>")
-                    filename = status_json["data"]["magnets"]["filename"]
-                    link = f"{config.http_url}magnets/{urllib.parse.quote(filename)}/"
                     em_links.add_field(
                         name=f"{filename}",
                         value=f"[{random.choice(link_msg)}]({link})",
                     )
-                    debrid.remove(id)
-                    logger.info(f"Removed: {id}")
                     dl_channel = await self.bot.fetch_channel(config.dl_channel)
                     await dl_channel.send(embed=em_links)
+            else:
+                status_url = f"https://api.alldebrid.com/v4/magnet/status?agent={config.debrid_host}&apikey={config.debrid_key}&id="
+                try:
+                    status_json = json.loads(requests.get(f"{status_url}{id[0]}").text)
+                except:
+                    pass
+                logger.info(f"Checking: {id[0]}")
+                try:
+                    if (
+                        status_json["status"] == "error"
+                        or status_json["data"]["magnets"]["statusCode"] > 4
+                    ):
+                        debrid.remove(id)
+                        logger.info(f"removing {id[0]}")
 
-            except:
-                pass
+                    if "Ready" in status_json["data"]["magnets"]["status"]:
+                        with open("debrid.txt", "w") as f:
+                            for line in debrid:
+                                if line != f"{id[0]},{id[1]},magnet":
+                                    f.write(f"{id[0]},{id[1]},magnet")
+                        em_links = discord.Embed(description=f"<@{id[1]}>")
+                        filename = status_json["data"]["magnets"]["filename"]
+                        link = (
+                            f"{config.http_url}magnets/{urllib.parse.quote(filename)}/"
+                        )
+                        em_links.add_field(
+                            name=f"{filename}",
+                            value=f"[{random.choice(link_msg)}]({link})",
+                        )
+                        debrid.remove(id)
+                        logger.info(f"Removed: {id}")
+                        dl_channel = await self.bot.fetch_channel(config.dl_channel)
+                        await dl_channel.send(embed=em_links)
+
+                except:
+                    pass
 
         with open("debrid.txt", "w") as f:
             for id in debrid:

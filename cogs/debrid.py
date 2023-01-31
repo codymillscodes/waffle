@@ -67,7 +67,7 @@ class DebridCog(commands.Cog):
                 await dl_channel.send(embed=em_links)
             else:
                 with open("debrid.txt", "a") as f:
-                    f.write(f"{mag[0]},{ctx.author.id}\n")
+                    f.write(f"{mag[0]},{ctx.author.id},magnet\n")
                 await ctx.send("It aint ready. Try !stat.")
         else:
             await ctx.send("Not a valid magnet link.")
@@ -198,7 +198,7 @@ class DebridCog(commands.Cog):
                         await dl_channel.send(embed=em_links)
                     else:
                         with open("debrid.txt", "a") as f:
-                            f.write(f"{mag[0]},{ctx.author.id}\n")
+                            f.write(f"{mag[0]},{ctx.author.id},magnet\n")
                         await ctx.send("It aint ready. Try !stat.")
             except asyncio.TimeoutError:
                 await ctx.send("TOO SLOW")
@@ -262,7 +262,7 @@ class DebridCog(commands.Cog):
                         await dl_channel.send(embed=em_links)
                     else:
                         with open("debrid.txt", "a") as f:
-                            f.write(f"{mag[0]},{ctx.author.id}\n")
+                            f.write(f"{mag[0]},{ctx.author.id},magnet\n")
                         await ctx.send("It aint ready. Try !stat.")
 
             except asyncio.TimeoutError:
