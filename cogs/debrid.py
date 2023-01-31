@@ -135,13 +135,13 @@ class DebridCog(commands.Cog):
         url = f"https://torrentapi.org/pubapi_v2.php?app_id=waffle&token={self.token}&mode=search&search_string={input}&sort=seeders&format=json_extended&category=18;41;54;50;45;44;17;48;14"
         counter = 0
         while counter < max_requests:
-            async with aiohttp.ClientSession() as session:
-                async with session.get(url) as resp:
-                    r = await resp.json()
-                    if "torrent_results" in r:
-                        break
-                    time.sleep(0.1)
-                    counter = counter + 1
+            # async with aiohttp.ClientSession() as session:
+            async with self.session.get(url) as resp:
+                r = await resp.json()
+                if "torrent_results" in r:
+                    break
+                time.sleep(0.1)
+                counter = counter + 1
 
         if "error_code" in r:
             if r["error_code"] == 5:
