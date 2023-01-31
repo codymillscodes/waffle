@@ -19,7 +19,7 @@ class DebridCog(commands.Cog):
         self.bot = bot
         self.api_key = config.debrid_key
         self.api_host = config.debrid_host
-        self.token = "pluvdrt620"
+        self.token = ""
         self.session = aiohttp.ClientSession()
 
     @commands.command(name="deletetorrents")
@@ -206,6 +206,13 @@ class DebridCog(commands.Cog):
     @commands.command(name="search")
     async def search(self, ctx, *, input: str):
         results = torrents.search(input, sortBy="seeders", order="desc")
+        sanitized_results = []
+        for torrent in results["items"]:
+            info = torrents.info(torrentId=torrent["torrentId"])
+            if "xxx".upper() not in info["category"]:
+                sanitized_results.append(torrent)
+            if len(sanitized_results) > 5:
+                break
         if len(results["items"]) > 0:
             em_result = discord.Embed()
             if len(results["items"]) > 5:

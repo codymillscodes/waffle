@@ -69,6 +69,7 @@ class ChatbotCog(commands.Cog):
                 await message.channel.send(response)
         except Exception as e:
             logger.exception(e)
+            await message.channel.send("The server is overloaded or not ready yet.")
 
 
 def setup(bot):
