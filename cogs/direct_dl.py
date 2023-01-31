@@ -12,8 +12,8 @@ class DirectDLCog(commands.Cog):
         self.bot = bot
         self.api_key = config.debrid_key
         self.api_host = config.debrid_host
-        self.token = ""
-        self.session = aiohttp.ClientSession()
+
+    #    self.session = aiohttp.ClientSession()
 
     # @commands.command(name="bandcamp")
     # async def status(self, ctx, *, url: str):
@@ -57,3 +57,7 @@ class DirectDLCog(commands.Cog):
                 value=f"[Click this shit for files, i am very lazy.]({link})",
             )
             await dl_channel.send(embed=em_links)
+
+
+def setup(bot):
+    bot.add_cog(DirectDLCog(bot))
