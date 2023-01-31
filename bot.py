@@ -13,7 +13,6 @@ coggers = [
     "cogs.chatbot",
     "cogs.debrid",
     "cogs.bg_tasks",
-    "cogs.system",
 ]
 
 bot = commands.Bot(command_prefix="!", description="waffle")
