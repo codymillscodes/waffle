@@ -213,12 +213,12 @@ class DebridCog(commands.Cog):
                 sanitized_results.append(torrent)
             if len(sanitized_results) > 5:
                 break
-        if len(results["items"]) > 0:
+        if len(sanitized_results) > 0:
             em_result = discord.Embed()
-            if len(results["items"]) > 5:
-                results = results["items"][:5]
+            if len(sanitized_results) > 5:
+                results = sanitized_results[:5]
             else:
-                results = results["items"]
+                results = sanitized_results
 
             x = 0
             for torrent in results:
