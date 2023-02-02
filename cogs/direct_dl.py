@@ -20,9 +20,9 @@ class DirectDLCog(commands.Cog):
     @commands.command(name="bandcamp")
     async def status(self, ctx, *, url: str):
         title = get_title(url)
-        for t in title:
-            t = t.lower().replace(" ", "-")
-        os.system(f"sh /mnt/thumb/waffle/scripts/bandcamp.sh {url} {title[1]}")
+        for t in range(len(title)):
+            title[t] = title[t].lower().replace(" ", "-")
+        os.system(f"sh /mnt/thumb/waffle/scripts/bandcamp.sh {url} {title[1]} &")
         await ctx.send(
             f"Processing. Album will be here:\n {config.music_ip}{title[1]}/{title[0]}"
         )
