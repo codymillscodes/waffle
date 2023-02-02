@@ -19,9 +19,11 @@ class DirectDLCog(commands.Cog):
 
     @commands.command(name="bandcamp")
     async def status(self, ctx, *, url: str):
-        os.system(f"bandcamp-dl -k --base-dir=/mnt/thumb/music {url}")
         title = get_title(url)
-        await ctx.send(f"Done! {config.music_ip}/{title[1].lower()}/{title[0].lower()}")
+        os.system(f"sh bandcamp.sh {url} {title[1]}")
+        await ctx.send(
+            f"Processing. Album will be here:\n {config.music_ip}/{title[1].lower()}/{title[0].lower()}"
+        )
 
     @commands.command(name="unlock")
     async def unlock(self, ctx, *, input: str):
