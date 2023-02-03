@@ -25,7 +25,7 @@ class DirectDLCog(commands.Cog):
         os.system(
             f"sh /mnt/thumb/waffle/scripts/bandcamp.sh {url} {title[1]} {title[0]}&"
         )
-        await ctx.add_reaction(config.emoji)
+        await ctx.message.add_reaction(config.emoji)
 
     @commands.command(name="unlock")
     async def unlock(self, ctx, *, input: str):
