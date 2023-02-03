@@ -7,6 +7,7 @@ import aiohttp
 import discord
 from bs4 import BeautifulSoup
 import os
+import re
 
 
 class DirectDLCog(commands.Cog):
@@ -21,7 +22,8 @@ class DirectDLCog(commands.Cog):
     async def status(self, ctx, *, url: str):
         title = get_title(url)
         for t in range(len(title)):
-            title[t] = title[t].lower().replace(" ", "-")
+            title[t] = re.sub(r"[^\w\s]", "", title[t].lower())
+            title[t] = re.sub(r"\s+", "-", title[t])
         os.system(
             f"sh /mnt/thumb/waffle/scripts/bandcamp.sh {url} {title[1]} {title[0]}&"
         )
