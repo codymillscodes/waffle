@@ -32,3 +32,4 @@ twitch_channel = os.environ["twitch_channel"]
 twitch_notify_role = os.environ["twitch_notify_role"]
 
 music_ip = os.environ["music_ip"]
+emoji = "\N{WAFFLE}"

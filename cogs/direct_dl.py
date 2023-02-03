@@ -22,10 +22,10 @@ class DirectDLCog(commands.Cog):
         title = get_title(url)
         for t in range(len(title)):
             title[t] = title[t].lower().replace(" ", "-")
-        os.system(f"sh /mnt/thumb/waffle/scripts/bandcamp.sh {url} {title[1]} &")
-        await ctx.send(
-            f"Processing. Album will be here:\n {config.music_ip}{title[1]}/{title[0]}"
+        os.system(
+            f"sh /mnt/thumb/waffle/scripts/bandcamp.sh {url} {title[1]} {title[0]}&"
         )
+        await ctx.add_reaction(config.emoji)
 
     @commands.command(name="unlock")
     async def unlock(self, ctx, *, input: str):
