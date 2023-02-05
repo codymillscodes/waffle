@@ -3,6 +3,8 @@ from discord.ext import commands
 import wikipediaapi as wiki
 import datetime
 from udpy import AsyncUrbanClient
+import requests
+from bs4 import BeautifulSoup
 
 
 class SearchCog(commands.Cog):
