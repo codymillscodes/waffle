@@ -4,7 +4,6 @@ import wikipediaapi as wiki
 import datetime
 from udpy import AsyncUrbanClient
 import requests
-from bs4 import BeautifulSoup
 
 
 class SearchCog(commands.Cog):
@@ -16,19 +15,19 @@ class SearchCog(commands.Cog):
 
     @commands.command(name="hogwarts")
     async def hogwarts(self, ctx):
-        r = requests.get("https://steamcrackedgames.com/games/hogwarts-legacy").text
-        soup = BeautifulSoup(r, "html.parser")
-        status = soup.find_all("dd", class_="col-sm-7")
-
-        h = []
-        # print(status)
-        for x in status:
-            if x.a != None:
-                h.append(x.a.text)
-
-        await ctx.send(
-            f"Hogwarts crack status:\nGame release date:{h[0]}\nCrack:{h[1]}"
-        )
+        r = requests.get(
+            "https://api.xrel.to/v2/search/releases.json?q=hogwarts%20legacy&scene=true&p2p=true&limit=5"
+        ).json()
+        if r["total"] == 0:
+            await ctx.send("No release yet.")
+        else:
+            results = r["p2p_results"]
+            results_embed = discord.Embed()
+            for x in results:
+                results_embed.add_field(
+                    name=f"{x['dirname']}", value=f"{x['link_href']},", inline=False
+                )
+            await ctx.send(embed=results_embed)
 
     @commands.command(name="wiki")
     async def wiki(self, ctx, *, arg):
