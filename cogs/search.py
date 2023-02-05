@@ -12,6 +12,22 @@ class SearchCog(commands.Cog):
         self.bot = bot
         self.urban = AsyncUrbanClient()
 
+    @commands.command(name="hogwarts")
+    async def hogwarts(self, ctx):
+        r = requests.get("https://steamcrackedgames.com/games/hogwarts-legacy").text
+        soup = BeautifulSoup(r, "html.parser")
+        status = soup.find_all("dd", class_="col-sm-7")
+
+        h = []
+        # print(status)
+        for x in status:
+            if x.a != None:
+                h.append(x.a.text)
+
+        await ctx.send(
+            f"Hogwarts crack status:\nGame release date:{h[0]}\nCrack:{h[1]}"
+        )
+
     @commands.command(name="wiki")
     async def wiki(self, ctx, *, arg):
         wiki_search = wiki.Wikipedia("en")
