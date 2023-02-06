@@ -50,8 +50,9 @@ class ChatbotCog(commands.Cog):
                 message.author.id == "295285994607869953"
                 or message.author.id == "439606776187584523"
             ):
-                hl_cmd = self.bot.get_command("hogwarts")
-                await message.channel.invoke(hl_cmd)
+                hl_cmd = await self.bot.get_command("hogwarts")
+                ctx = await self.bot.get_context(message)
+                await ctx.invoke(hl_cmd)
             if message.content.startswith("@waffle") or (
                 len(message.mentions) > 0 and "waffle" in message.mentions[0].name
             ):
