@@ -154,118 +154,90 @@ class DebridCog(commands.Cog):
         else:
             await ctx.reply(f"```{out}```", mention_author=False)
 
-    @commands.command(name="asdasdasd")
-    async def asdasd(self, ctx, *, input: str):
-        self.token = get_token()
-        max_requests = 10
-        input = input.replace(" ", "%20")
-        url = f"https://torrentapi.org/pubapi_v2.php?app_id=waffle&token={self.token}&mode=search&search_string={input}&sort=seeders&format=json_extended&category=18;41;54;50;45;44;17;48;14"
-        counter = 0
-        while counter < max_requests:
-            async with self.session.get(url, timeout=self.timeout) as resp:
-                r = await resp.json()
-                if "torrent_results" in r:
-                    break
-                time.sleep(0.1)
-                counter = counter + 1
-
-        if "error_code" in r:
-            if r["error_code"] == 5:
-                await ctx.send(
-                    "Rate limited. Try again eventually.\n1 req/2s limit. Sometimes it's just tempermental."
-                )
-            await ctx.send("No results. :(")
-        elif len(r["torrent_results"]) > 0:
-            if len(r["torrent_results"]) > 10:
-                results = r["torrent_results"][:10]
-            else:
-                results = r["torrent_results"]
-            em_result = discord.Embed(
-                description=":rotating_light::bangbang:__***YOU HAVE DECLARED A TORRENT EMERGENCY***__:bangbang::rotating_light:"
-            )
-            x = 0
-            for m in results:
-                x = x + 1
-                result_value = f"Seeders: {m['seeders']} | Leechers: {m['leechers']} | Size: {size(int(m['size']))}"
-                em_result.add_field(
-                    name=f"{x}. {m['title']}", value=result_value, inline=False
-                )
-
-            em_result.add_field(
-                name="----------------",
-                value=f"More results, longer timeout. Don't fuck it up cause it probably won't work twice in a row!\n*!pick 1-{len(results)}*",
-                inline=False,
-            )
-            await ctx.send(embed=em_result)
-
-            def check(m):
-                return m.author == ctx.author and m.content.startswith("!pick")
-
-            try:
-                msg = await self.bot.wait_for("message", check=check, timeout=120)
-
-                pick = int(msg.content[6:]) - 1
-                if int(msg.content[6:]) > len(results) or pick < 0:
-                    await ctx.send("WRONG")
-                else:
-                    magnet_link = results[pick]["download"]
-                    # add magnet, get ready, name, id
-                    mag = magnet.upload_magnet(
-                        magnet_link, agent=self.api_host, api_key=self.api_key
-                    )
-                    if mag[2]:
-                        em_links = discord.Embed(description=f"{ctx.author.mention}")
-                        link = f"{config.http_url}magnets/{urllib.parse.quote(mag[1])}/"
-                        em_links.add_field(
-                            name=f"{mag[1]}",
-                            value=f"[Click this shit for files, i am very lazy.]({link})",
-                        )
-                        dl_channel = await self.bot.fetch_channel(config.dl_channel)
-                        await dl_channel.send(embed=em_links)
-                    else:
-                        with open("debrid.txt", "a") as f:
-                            f.write(f"{mag[0]},{ctx.author.id},magnet\n")
-                        await ctx.send("It aint ready. Try !stat.")
-            except asyncio.TimeoutError:
-                await ctx.send("TOO SLOW")
-
     @commands.command(name="search", aliases=["rarbg"])
     async def search(self, ctx, *, input: str):
-        logger.info(ctx.args)
-        logger.info(ctx.kwargs)
-        logger.info(ctx.command)
-        logger.info(ctx.invoked_with)
-        results = torrents.search(input, sortBy="seeders", order="desc")
-        sanitized_results = []
-        for torrent in results["items"]:
-            info = torrents.info(torrentId=torrent["torrentId"])
-            if "xxx".upper() not in info["category"]:
-                sanitized_results.append(torrent)
-            if len(sanitized_results) > 5:
-                break
-        if len(sanitized_results) > 0:
-            em_result = discord.Embed()
-            if len(sanitized_results) > 5:
-                results = sanitized_results[:5]
-            else:
-                results = sanitized_results
+        logger.info(f"{ctx.invoked_with} {input}")
 
-            x = 0
-            for torrent in results:
-                result_value = f"Seeders: {torrent['seeders']} | Leechers: {torrent['leechers']} | Size: {torrent['size']}"
-                em_result.add_field(
-                    name=f"{x+1}. {torrent['name']}", value=result_value, inline=False
+        def check(m):
+            return m.author == ctx.author and m.content.startswith("!pick")
+
+        if ctx.invoked_with == "rarbg":
+            self.token = get_token()
+            max_requests = 10
+            input = input.replace(" ", "%20")
+            url = f"https://torrentapi.org/pubapi_v2.php?app_id=waffle&token={self.token}&mode=search&search_string={input}&sort=seeders&format=json_extended&category=18;41;54;50;45;44;17;48;14"
+            counter = 0
+            while counter < max_requests:
+                async with self.session.get(url, timeout=self.timeout) as resp:
+                    r = await resp.json()
+                    if "torrent_results" in r:
+                        break
+                    time.sleep(0.1)
+                    counter = counter + 1
+
+            if "error_code" in r:
+                if r["error_code"] == 5:
+                    logger.info("rarbg rate-limited.")
+                    await ctx.reply(
+                        "Rate limited. Try again eventually.\n1 req/2s limit. Sometimes it's just tempermental.",
+                        mention_author=False,
+                    )
+                logger.info(f"rarbg:error_code: {r['error_code']}")
+                await ctx.reply("No results. :(", mention_author=False)
+            elif len(r["torrent_results"]) > 0:
+                logger.info(f"{len(r['torrent_results'])} torrent results.")
+                if len(r["torrent_results"]) > 10:
+                    results = r["torrent_results"][:10]
+                else:
+                    results = r["torrent_results"]
+                em_result = discord.Embed(
+                    description=":rotating_light::bangbang:__***YOU HAVE DECLARED A TORRENT EMERGENCY***__:bangbang::rotating_light:"
                 )
-                x = x + 1
-            em_result.add_field(
-                name="----------------",
-                value="You should pick the one with the most seeders and a reasonable filesize. Pay attention to the quality. You dont want a cam or TS.\n*!pick 1-5*",
-                inline=False,
-            )
-            await ctx.send(embed=em_result)
+                x = 0
+                for m in results:
+                    x = x + 1
+                    result_value = f"Seeders: {m['seeders']} | Leechers: {m['leechers']} | Size: {size(int(m['size']))}"
+                    em_result.add_field(
+                        name=f"{x}. {m['title']}", value=result_value, inline=False
+                    )
 
-            def check(m):
-                return m.author == ctx.author and m.content.startswith("!pick")
+                em_result.add_field(
+                    name="----------------",
+                    value=f"More results, longer timeout. Don't fuck it up cause it probably won't work twice in a row!\n*!pick 1-{len(results)}*",
+                    inline=False,
+                )
+                await ctx.reply(embed=em_result)
+        else:
+            results = torrents.search(input, sortBy="seeders", order="desc")
+            sanitized_results = []
+            for torrent in results["items"]:
+                info = torrents.info(torrentId=torrent["torrentId"])
+                if "xxx".upper() not in info["category"]:
+                    sanitized_results.append(torrent)
+                if len(sanitized_results) > 5:
+                    break
+            if len(sanitized_results) > 0:
+                em_result = discord.Embed()
+                if len(sanitized_results) > 5:
+                    results = sanitized_results[:5]
+                else:
+                    results = sanitized_results
+
+                x = 0
+                for torrent in results:
+                    result_value = f"Seeders: {torrent['seeders']} | Leechers: {torrent['leechers']} | Size: {torrent['size']}"
+                    em_result.add_field(
+                        name=f"{x+1}. {torrent['name']}",
+                        value=result_value,
+                        inline=False,
+                    )
+                    x = x + 1
+                em_result.add_field(
+                    name="----------------",
+                    value="You should pick the one with the most seeders and a reasonable filesize. Pay attention to the quality. You dont want a cam or TS.\n*!pick 1-5*",
+                    inline=False,
+                )
+                await ctx.reply(embed=em_result)
 
             try:
                 msg = await self.bot.wait_for("message", check=check, timeout=60)
@@ -274,9 +246,12 @@ class DebridCog(commands.Cog):
                 if int(msg.content[6:]) > 5 or pick < 0:
                     await ctx.send("WRONG")
                 else:
-                    magnet_link = torrents.info(torrentId=results[pick]["torrentId"])[
-                        "magnetLink"
-                    ]
+                    if ctx.invoked_with == "rarbg":
+                        magnet_link = results[pick]["download"]
+                    else:
+                        magnet_link = torrents.info(
+                            torrentId=results[pick]["torrentId"]
+                        )["magnetLink"]
                     # add magnet, get ready, name, id
                     mag = magnet.upload_magnet(
                         magnet_link, agent=self.api_host, api_key=self.api_key
@@ -286,19 +261,21 @@ class DebridCog(commands.Cog):
                         link = f"{config.http_url}magnets/{urllib.parse.quote(mag[1])}/"
                         em_links.add_field(
                             name=f"{mag[1]}",
-                            value=f"[Click this shit for files, i am very lazy.]({link})",
+                            value=f"[{random.choice(LINK_MSG)}]({link})",
                         )
                         dl_channel = await self.bot.fetch_channel(config.dl_channel)
                         await dl_channel.send(embed=em_links)
                     else:
                         with open("debrid.txt", "a") as f:
                             f.write(f"{mag[0]},{ctx.author.id},magnet\n")
-                        await ctx.send("It aint ready. Try !stat.")
+                        await ctx.reply(
+                            "It aint ready. Try !stat.", mention_author=False
+                        )
 
             except asyncio.TimeoutError:
-                await ctx.send("TOO SLOW")
-        else:
-            await ctx.send("Zero results.")
+                await ctx.send("TOO SLOW", mention_author=False)
+            else:
+                await ctx.reply("Zero results.", mention_author=False)
 
 
 def get_token():
