@@ -16,7 +16,10 @@ class DirectDLCog(commands.Cog):
         self.api_key = config.debrid_key
         self.api_host = config.debrid_host
 
-    @commands.command(name="bandcamp")
+    @commands.command(
+        name="bandcamp",
+        description="Download an album from Bandcamp. Gets uploaded to my server for downloading.",
+    )
     async def status(self, ctx, *, url: str):
         title = get_title(url)
         for t in range(len(title)):
@@ -28,7 +31,10 @@ class DirectDLCog(commands.Cog):
         logger.info(f"Downloading {title[0]} by {title[1]}")
         await ctx.message.add_reaction(config.emoji)
 
-    @commands.command(name="unlock")
+    @commands.command(
+        name="unlock",
+        description="At the moment, it only returns the mp3 of a youtube video.",
+    )
     async def unlock(self, ctx, *, input: str):
         agent = self.api_host
         key = self.api_key

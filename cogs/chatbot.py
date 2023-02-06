@@ -14,7 +14,7 @@ class ChatbotCog(commands.Cog):
         self.bot = bot
         # self.previous_messages = []
 
-    @commands.command(name="gpt")
+    @commands.command(name="gpt", description="Send a raw prompt to GPT.")
     async def gpt(self, ctx, *, input: str):
         response = openai.Completion.create(
             temperature=0.9, max_tokens=512, engine=ENGINE, prompt=input
@@ -25,7 +25,7 @@ class ChatbotCog(commands.Cog):
             mention_author=False,
         )
 
-    @commands.command(name="img")
+    @commands.command(name="img", description="Generate an image based on a prompt.")
     async def img(self, ctx, *, input: str):
         try:
             response = openai.Image.create(prompt=input, n=1, size="512x512")

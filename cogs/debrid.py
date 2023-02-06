@@ -42,7 +42,9 @@ class DebridCog(commands.Cog):
         self.session = aiohttp.ClientSession()
         self.timeout = aiohttp.ClientTimeout(total=60)
 
-    @commands.command(name="deletetorrents")
+    @commands.command(
+        name="deletetorrents", description="Delete x amount of old torrents."
+    )
     async def deletetorrents(self, ctx, *, input: int):
         async with self.session.get(
             debrid_url.create(
@@ -66,7 +68,9 @@ class DebridCog(commands.Cog):
         logger.info(f"{input} old torrents deleted.")
         await ctx.reply(f"{input} old torrents deleted.")
 
-    @commands.command(name="ready")
+    @commands.command(
+        name="ready", description="Returns the number of cached torrents."
+    )
     async def ready(self, ctx):
         async with self.session.get(
             debrid_url.create(request="all", agent=self.api_host, api_key=self.api_key),
@@ -76,7 +80,7 @@ class DebridCog(commands.Cog):
         logger.info(f"{len(r)} cached torrents.")
         await ctx.send(f"{len(r)} torrents.\nThe limit is 1000.")
 
-    @commands.command(name="magnet")
+    @commands.command(name="magnet", description="Upload a magnet directly.")
     async def mag(self, ctx, *, input: str):
         if input.startswith("magnet"):
             mag = magnet.upload_magnet(input, agent=self.api_host, api_key=self.api_key)
@@ -100,7 +104,7 @@ class DebridCog(commands.Cog):
             logger.info(f"Invalid link recv'd: {input}")
             await ctx.reply("Not a valid magnet link.", mention_author=False)
 
-    @commands.command(name="stat")
+    @commands.command(name="stat", description="Returns status of active torrents.")
     async def stat(self, ctx):
         all_status = magnet.get_all_magnet_status(
             agent=self.api_host, api_key=self.api_key
@@ -135,14 +139,16 @@ class DebridCog(commands.Cog):
                     em_status.add_field(name="Error", value=f"{ex}", inline=False)
             await ctx.reply(embed=em_status, mention_author=False)
 
-    @commands.command(name="clearqueue")
+    @commands.command(name="clearqueue", description="Clear active torrent queue.")
     async def clearqueue(self, ctx):
         with open("debrid.txt", "w"):
             pass
         logger.info("Debrid queue cleared.")
         await ctx.send("Queue cleared.")
 
-    @commands.command(name="queue")
+    @commands.command(
+        name="queue", description="Returns raw output of active torrent queue."
+    )
     async def queue(self, ctx):
         with open("debrid.txt", "r") as f:
             out = ""
@@ -154,7 +160,11 @@ class DebridCog(commands.Cog):
         else:
             await ctx.reply(f"```{out}```", mention_author=False)
 
-    @commands.command(name="search", aliases=["rarbg"])
+    @commands.command(
+        name="search",
+        aliases=["rarbg"],
+        description="Search 1337x or declare an emergency by searching with !rarbg",
+    )
     async def search(self, ctx, *, input: str):
         logger.info(f"{ctx.invoked_with} {input}")
 
