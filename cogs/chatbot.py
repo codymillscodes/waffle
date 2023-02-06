@@ -38,11 +38,14 @@ class ChatbotCog(commands.Cog):
             if message.content.startswith("@waffle") or (
                 len(message.mentions) > 0 and "waffle" in message.mentions[0].name
             ):
-                split_message = message.content.split(maxsplit=1)
-                if len(split_message) > 1:
-                    input = "Human: " + split_message[1]
+                if message.content.startswith("@waffle"):
+                    split_message = message.content.split(maxsplit=1)
+                    if len(split_message) > 1:
+                        input = "Human: " + split_message[1]
+                    else:
+                        input = "Human: "
                 else:
-                    input = "Human: "
+                    input = "Human: " + message.content
                 # if len(self.previous_messages) >= 10:
                 #     self.previous_messages.pop(0)
                 # self.previous_messages.append(input + " ")
