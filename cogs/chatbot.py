@@ -71,7 +71,7 @@ class ChatbotCog(commands.Cog):
                 logger.info(f"Response recvd: {response}")
                 # self.previous_messages.append("Waffle: " + response + " ")
                 # print(f"previous_messages: {''.join(self.previous_messages)}")
-                await message.channel.send(response)
+                await message.reply(response)
         except Exception as e:
             logger.exception(e)
             await message.channel.send("The server is overloaded or not ready yet.")
