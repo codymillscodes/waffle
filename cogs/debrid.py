@@ -1,17 +1,36 @@
+import time
+import random
+import urllib.parse
+import asyncio
+import aiohttp
+import requests
 import discord
 from discord.ext import commands
 from py1337x import py1337x
-import asyncio
 from loguru import logger
-import config
 from hurry.filesize import size
-import urllib.parse
 from alldebrid_api import magnet
 from alldebrid_api import debrid_url
-import requests
-import time
-import aiohttp
+import config
 
+LINK_MSG = [
+    "Click this shit for files, i am very lazy.",
+    "linky linky",
+    "this is a link",
+    "3=====D~~",
+    "Follow the rabbit hole to the files",
+    "File access granted, click at your own risk",
+    "The files are waiting for you, just one click away",
+    "Get ready for the ride, files incoming",
+    "The files are calling your name, answer the call",
+    "Link to enlightenment (and files)",
+    "It's not just a link, it's an adventure",
+    "Links, files, and good times await",
+    "You can't handle the link, or can you?",
+    "It's a link to remember",
+    "File me away, I'm ready to be clicked",
+    "Buckle up, it's a wild link ride",
+]
 torrents = py1337x(proxy="1337x.to")
 # torrents.search('harry potter', category='movies', sortBy='seeders', order='desc')
 class DebridCog(commands.Cog):
@@ -21,15 +40,18 @@ class DebridCog(commands.Cog):
         self.api_host = config.debrid_host
         self.token = ""
         self.session = aiohttp.ClientSession()
+        self.timeout = aiohttp.ClientTimeout(total=60)
 
     @commands.command(name="deletetorrents")
     async def deletetorrents(self, ctx, *, input: int):
-        r = requests.get(
+        async with self.session.get(
             debrid_url.create(
                 request="ready", agent=self.api_host, api_key=self.api_key
-            )
-        ).json()["data"]["magnets"]
-
+            ),
+            timeout=self.timeout,
+        ) as resp:
+            r = await resp.json()["data"]["magnets"]
+        logger.info(f"{len(r)} torrents cached.")
         mag_slice = []
         for torrent in r:
             mag_slice.append(torrent)
@@ -41,36 +63,42 @@ class DebridCog(commands.Cog):
         for i in ids:
             magnet.delete_magnet(i, agent=self.api_host, api_key=self.api_key)
             time.sleep(0.1)
-        await ctx.send(f"{input} old torrents deleted.")
+        logger.info(f"{input} old torrents deleted.")
+        await ctx.reply(f"{input} old torrents deleted.")
 
     @commands.command(name="ready")
     async def ready(self, ctx):
-        r = requests.get(
-            debrid_url.create(request="all", agent=self.api_host, api_key=self.api_key)
-        )
-        await ctx.send(
-            f"{len(r.json()['data']['magnets'])} torrents.\nThe limit is 1000."
-        )
+        async with self.session.get(
+            debrid_url.create(request="all", agent=self.api_host, api_key=self.api_key),
+            timeout=self.timeout,
+        ) as resp:
+            r = await resp.json()["data"]["magnets"]
+        logger.info(f"{len(r)} cached torrents.")
+        await ctx.send(f"{len(r)} torrents.\nThe limit is 1000.")
 
     @commands.command(name="magnet")
-    async def hosts(self, ctx, *, input: str):
+    async def mag(self, ctx, *, input: str):
         if input.startswith("magnet"):
             mag = magnet.upload_magnet(input, agent=self.api_host, api_key=self.api_key)
+            logger.info(f"Adding magnet for {mag[1]}")
             if mag[2]:
                 em_links = discord.Embed(description=f"{ctx.author.mention}")
                 link = f"{config.http_url}magnets/{urllib.parse.quote(mag[1])}/"
                 em_links.add_field(
                     name=f"{mag[1]}",
-                    value=f"[Click this shit for files, i am very lazy.]({link})",
+                    value=f"[{random.choice(LINK_MSG)}]({link})",
                 )
+                logger.info(f"{mag[1]} is ready.")
                 dl_channel = await self.bot.fetch_channel(config.dl_channel)
                 await dl_channel.send(embed=em_links)
             else:
                 with open("debrid.txt", "a") as f:
                     f.write(f"{mag[0]},{ctx.author.id},magnet\n")
-                await ctx.send("It aint ready. Try !stat.")
+                logger.info(f"{mag[1]} is not ready. Adding to queue.")
+                await ctx.reply("It aint ready. Try !stat.", mention_author=False)
         else:
-            await ctx.send("Not a valid magnet link.")
+            logger.info(f"Invalid link recv'd: {input}")
+            await ctx.reply("Not a valid magnet link.", mention_author=False)
 
     @commands.command(name="stat")
     async def stat(self, ctx):
@@ -102,12 +130,10 @@ class DebridCog(commands.Cog):
                             value=f"{percentage_complete} of {sized_size} | Seeders: {seeders} | Speed: {speed}",
                             inline=False,
                         )
-                except Exception as e:
-                    logger.warning("Error Occured: {e}")
-                    em_status.add_field(
-                        name="Error", value="Error Occured.", inline=False
-                    )
-            await ctx.send(embed=em_status)
+                except Exception as ex:
+                    logger.warning("Error Occured: {ex}")
+                    em_status.add_field(name="Error", value=f"{ex}", inline=False)
+            await ctx.reply(embed=em_status, mention_author=False)
 
     @commands.command(name="clearqueue")
     async def clearqueue(self, ctx):
@@ -122,21 +148,21 @@ class DebridCog(commands.Cog):
             out = ""
             for line in f:
                 out = f"{out + line}\n"
+        logger.info(f"{len(out)} links/magnets in queue.")
         if len(out) < 1:
-            await ctx.send("Queue is empty.")
+            await ctx.reply("Queue is empty.", mention_author=False)
         else:
-            await ctx.send(f"```{out}```")
+            await ctx.reply(f"```{out}```", mention_author=False)
 
-    @commands.command(name="rarbg")
-    async def rarbg(self, ctx, *, input: str):
+    @commands.command(name="asdasdasd")
+    async def asdasd(self, ctx, *, input: str):
         self.token = get_token()
         max_requests = 10
         input = input.replace(" ", "%20")
         url = f"https://torrentapi.org/pubapi_v2.php?app_id=waffle&token={self.token}&mode=search&search_string={input}&sort=seeders&format=json_extended&category=18;41;54;50;45;44;17;48;14"
         counter = 0
         while counter < max_requests:
-            # async with aiohttp.ClientSession() as session:
-            async with self.session.get(url) as resp:
+            async with self.session.get(url, timeout=self.timeout) as resp:
                 r = await resp.json()
                 if "torrent_results" in r:
                     break
@@ -203,8 +229,9 @@ class DebridCog(commands.Cog):
             except asyncio.TimeoutError:
                 await ctx.send("TOO SLOW")
 
-    @commands.command(name="search")
+    @commands.command(name="search", aliases=["rarbg"])
     async def search(self, ctx, *, input: str):
+        logger.info(ctx.args)
         results = torrents.search(input, sortBy="seeders", order="desc")
         sanitized_results = []
         for torrent in results["items"]:
@@ -270,24 +297,18 @@ class DebridCog(commands.Cog):
         else:
             await ctx.send("Zero results.")
 
-    # @commands.command(name="bandcamp")
-    # async def status(self, ctx, *, url: str):
-    #     os.system(f"bandcamp-dl --base-dir=/mnt/ext/music {url}")
-    #     await ctx.send("Done! [ftp link]")
-
-    # @commands.command(name="unlock")
-    # async def unlock(self, ctx, *, input: str):
-    #     await ctx.send(input)
-
 
 def get_token():
     try:
         r = requests.get(
-            f"https://torrentapi.org/pubapi_v2.php?app_id=waffle&get_token=get_token"
+            "https://torrentapi.org/pubapi_v2.php?app_id=waffle&get_token=get_token",
+            timeout=30,
         )
+        logger.info("Got token.")
+        logger.debug(f"Token: {r.json()['token']}")
         return r.json()["token"]
     except IndexError:
-        logger.error(f"Failed to get torrent token.\n{r.json()}")
+        logger.error(f"Failed to get torrent api token.\n{r.json()}")
 
 
 def setup(bot):

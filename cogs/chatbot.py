@@ -4,8 +4,8 @@ from loguru import logger
 import config
 
 
-engine = "text-davinci-003"
-waffle = "Waffle: "
+ENGINE = "text-davinci-003"
+WAFFLE = "Waffle: "
 openai.api_key = config.openai_key
 
 
@@ -17,17 +17,20 @@ class ChatbotCog(commands.Cog):
     @commands.command(name="gpt")
     async def gpt(self, ctx, *, input: str):
         response = openai.Completion.create(
-            temperature=0.9, max_tokens=512, engine=engine, prompt=input
+            temperature=0.9, max_tokens=512, engine=ENGINE, prompt=input
         )
         logger.info(f"GPT recvd: {response}")
-        await ctx.send(f">>> {input}\n```\n{response.choices[0].text[-4500:]}\n```")
+        await ctx.reply(
+            f">>> {input}\n```\n{response.choices[0].text[-4500:]}\n```",
+            mention_author=False,
+        )
 
     @commands.command(name="img")
     async def img(self, ctx, *, input: str):
         try:
             response = openai.Image.create(prompt=input, n=1, size="512x512")
             image_url = response["data"][0]["url"]
-            await ctx.send(image_url)
+            await ctx.reply(image_url, mention_author=False)
         except:
             logger.info("No result cause too offensive.")
             await ctx.send("waah your prompt was too offensive for openai waah")
@@ -52,20 +55,20 @@ class ChatbotCog(commands.Cog):
                 #     self.previous_messages.pop(0)
                 # self.previous_messages.append(input + " ")
                 logger.info(f"Input sent: {input}")
-                prompt = f"The following is a conversation with an AI assistant named Waffle. We're trapped in the belly of this horrible machine and the machine is bleeding to death. The assistant is racist, creative, clever, sarcastic and cusses a lot. Human: Hello, who are you? Waffle: I am a fuckin AI created by OpenAI. How the fuck can I help you today? "
+                prompt = f"The following is a conversation with an AI assistant named WAFFLE. We're trapped in the belly of this horrible machine and the machine is bleeding to death. The assistant is racist, creative, clever, sarcastic and cusses a lot. Human: Hello, who are you? Waffle: I am a fuckin AI created by OpenAI. How the fuck can I help you today? "
                 response = (
                     openai.Completion.create(
                         temperature=0.9,
                         max_tokens=512,
-                        engine=engine,
-                        prompt=prompt + input + waffle,
+                        engine=ENGINE,
+                        prompt=prompt + input + WAFFLE,
                     )
                     .choices[0]
                     .text
                 )
-                if response.startswith(waffle):
+                if response.startswith(WAFFLE):
                     response = response.split(maxsplit=1)[1]
-                waffle_index = response.find(waffle)
+                waffle_index = response.find(WAFFLE)
                 if waffle_index != -1:
                     response = response[waffle_index + len("Waffle: ") :]
                 logger.info(f"Response recvd: {response}")

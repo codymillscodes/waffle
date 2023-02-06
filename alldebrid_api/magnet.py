@@ -5,7 +5,8 @@ import requests
 def upload_magnet(magnet, agent, api_key):
     try:
         r = requests.get(
-            debrid_url.create("upload", magnet=magnet, agent=agent, api_key=api_key)
+            debrid_url.create("upload", magnet=magnet, agent=agent, api_key=api_key),
+            timeout=30,
         ).json()
         magnet_info = [
             r["data"]["magnets"][0]["id"],
@@ -19,7 +20,9 @@ def upload_magnet(magnet, agent, api_key):
 
 
 def get_all_magnet_status(agent, api_key):
-    r = requests.get(debrid_url.create("status", agent=agent, api_key=api_key)).json()
+    r = requests.get(
+        debrid_url.create("status", agent=agent, api_key=api_key), timeout=30
+    ).json()
     if len(r["data"]["magnets"]) <= 0:
         return 0
     else:
@@ -29,7 +32,10 @@ def get_all_magnet_status(agent, api_key):
 def get_magnet_status(magnetid, agent, api_key):
     try:
         r = requests.get(
-            debrid_url.create("status", magnetid=magnetid, agent=agent, api_key=api_key)
+            debrid_url.create(
+                "status", magnetid=magnetid, agent=agent, api_key=api_key
+            ),
+            timeout=30,
         ).json()
         return r["data"]["magnets"]["status"]
     except KeyError:
@@ -39,7 +45,10 @@ def get_magnet_status(magnetid, agent, api_key):
 def delete_magnet(magnetid, agent, api_key):
     try:
         r = requests.get(
-            debrid_url.create("delete", magnetid=magnetid, agent=agent, api_key=api_key)
+            debrid_url.create(
+                "delete", magnetid=magnetid, agent=agent, api_key=api_key
+            ),
+            timeout=30,
         ).json()
         return r["data"]["message"]
     except KeyError:
@@ -52,5 +61,6 @@ def restart_magnet(magnetid):
 
 def instant_magnet(magnet, agent, api_key):
     return requests.get(
-        debrid_url.create("instant", magnet=magnet, agent=agent, api_key=api_key)
+        debrid_url.create("instant", magnet=magnet, agent=agent, api_key=api_key),
+        timeout=30,
     ).json()["data"]["magnets"][0]["instant"]

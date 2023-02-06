@@ -54,6 +54,18 @@ class BGTasks(commands.Cog):
             "linky linky",
             "this is a link",
             "3=====D~~",
+            "Follow the rabbit hole to the files",
+            "File access granted, click at your own risk",
+            "The files are waiting for you, just one click away",
+            "Get ready for the ride, files incoming",
+            "The files are calling your name, answer the call",
+            "Link to enlightenment (and files)",
+            "It's not just a link, it's an adventure",
+            "Links, files, and good times await",
+            "You can't handle the link, or can you?",
+            "It's a link to remember",
+            "File me away, I'm ready to be clicked",
+            "Buckle up, it's a wild link ride",
         ]
         await self.twitch_check()
         with open("debrid.txt") as f:
@@ -75,7 +87,7 @@ class BGTasks(commands.Cog):
                     id=id[0],
                     link="link",
                 )
-                r = requests.get(delay_url).json()
+                r = requests.get(delay_url, timeout=10).json()
                 if r["data"]["status"] == 2:
                     link = r["data"]["link"]
                     link_split = link.split("/")[-2:]
@@ -96,7 +108,9 @@ class BGTasks(commands.Cog):
             else:
                 status_url = f"https://api.alldebrid.com/v4/magnet/status?agent={config.debrid_host}&apikey={config.debrid_key}&id="
                 try:
-                    status_json = json.loads(requests.get(f"{status_url}{id[0]}").text)
+                    status_json = requests.get(
+                        f"{status_url}{id[0]}", timeout=20
+                    ).json()
                 except:
                     pass
                 logger.info(f"Checking: {id[0]}")
@@ -143,7 +157,7 @@ class BGTasks(commands.Cog):
             "client_secret": config.twitch_secret,
             "grant_type": "client_credentials",
         }
-        r = requests.post("https://id.twitch.tv/oauth2/token", body)
+        r = requests.post("https://id.twitch.tv/oauth2/token", body, timeout=20)
         # data output
         keys = r.json()
         # logger.debug(keys)

@@ -1,15 +1,13 @@
 import discord
 from discord.ext import commands
-from discord.ext import tasks
+
+# from discord.ext import tasks
 import config
 from loguru import logger
 import sys
 
 coggers = [
     "cogs.misc",
-    "cogs.meme",
-    "cogs.cat",
-    "cogs.search",
     "cogs.chatbot",
     "cogs.debrid",
     "cogs.bg_tasks",
@@ -36,7 +34,7 @@ async def on_ready():
         f"\n\nLogged in as: {bot.user.name} - {bot.user.id}\nVersion: {discord.__version__}\n"
     )
     await bot.change_presence(activity=discord.Game(name="8=====D~~"))
-    logger.info(f"Successfully logged in and booted...!")
+    logger.info("Successfully logged in and booted...!")
 
 
 bot.run(config.discord_bot_token, bot=True, reconnect=True)
