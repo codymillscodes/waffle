@@ -16,11 +16,15 @@ class MiscCog(commands.Cog):
         self.bot = bot
         self.urban = AsyncUrbanClient()
 
-    @commands.command(name="ping", description="Ping waffle.")
+    @commands.command(name="ping", description="Ping waffle.", brief="Ping waffle.")
     async def ping(self, ctx):
         await ctx.reply("pong", mention_author=False)
 
-    @commands.command(name="log", description="Uploads the most recent logfile.")
+    @commands.command(
+        name="log",
+        description="Uploads the most recent logfile.",
+        brief="Uploads the most recent logfile.",
+    )
     async def log(self, ctx):
         logger.info(f"{ctx.author.name} called log command.")
         if ctx.author.guild_permissions.administrator:
@@ -35,7 +39,8 @@ class MiscCog(commands.Cog):
 
     @commands.command(
         name="waffle",
-        description="Receive a random from a forgotten time, from a forgotten place.",
+        description="Receive a random image from a forgotten time, from a forgotten place.",
+        brief="Random image.",
     )
     async def waffle(self, ctx):
         waffles = "https://randomwaffle.gbs.fm/"
@@ -47,7 +52,12 @@ class MiscCog(commands.Cog):
         logger.info(image)
         await ctx.reply(waffles + image, mention_author=False)
 
-    @commands.command(name="cat", aliases=["catgif", "neb"], description="CAT PICTURE!")
+    @commands.command(
+        name="cat",
+        aliases=["catgif", "neb"],
+        description="CAT PICTURE!",
+        brief="CAT PICTURE!",
+    )
     async def cat(self, ctx):
         cmd = str(ctx.command)
         logger.info(f"Image requested: {cmd}")
@@ -64,7 +74,11 @@ class MiscCog(commands.Cog):
             mention_author=False,
         )
 
-    @commands.command(name="hogwarts", description="Has Hogwarts Legacy been cracked?")
+    @commands.command(
+        name="hogwarts",
+        description="Has Hogwarts Legacy been cracked?",
+        brief="Has Hogwarts Legacy been cracked?",
+    )
     async def hogwarts(self, ctx):
         r = requests.get(
             "https://api.xrel.to/v2/search/releases.json?q=hogwarts%20legacy&scene=true&p2p=true&limit=5",
@@ -82,7 +96,9 @@ class MiscCog(commands.Cog):
             await ctx.reply(embed=results_embed, mention_author=False)
 
     @commands.command(
-        name="wiki", description="Search wikipedia. Kinda iffy for some reason."
+        name="wiki",
+        description="Search wikipedia. Kinda iffy for some reason.",
+        brief="Search wikipedia. Kinda iffy.",
     )
     async def wiki(self, ctx, *, arg):
         wiki_search = wiki.Wikipedia("en")
@@ -101,7 +117,9 @@ class MiscCog(commands.Cog):
             await ctx.reply("Pretty sure you made that up.", mention_author=False)
 
     @commands.command(
-        name="define", description="Get a definition from Urban Dictionary"
+        name="define",
+        description="Get a definition from Urban Dictionary",
+        brief="Get a def from Urban Dictionary.",
     )
     async def define(self, ctx, *, arg):
         logger.info(f"{ctx.author.name} wants {arg} defined.")
