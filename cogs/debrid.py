@@ -232,6 +232,9 @@ class DebridCog(commands.Cog):
     @commands.command(name="search", aliases=["rarbg"])
     async def search(self, ctx, *, input: str):
         logger.info(ctx.args)
+        logger.info(ctx.kargs)
+        logger.info(ctx.command)
+        logger.info(ctx.invoked_with)
         results = torrents.search(input, sortBy="seeders", order="desc")
         sanitized_results = []
         for torrent in results["items"]:
