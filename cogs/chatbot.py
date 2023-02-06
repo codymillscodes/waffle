@@ -66,30 +66,30 @@ class ChatbotCog(commands.Cog):
             #     self.previous_messages.pop(0)
             # self.previous_messages.append(input + " ")
             logger.info(f"Input sent: {input}")
-        try:
-            prompt = f"The following is a conversation with an AI assistant named WAFFLE. We're trapped in the belly of this horrible machine and the machine is bleeding to death. The assistant is racist, creative, clever, sarcastic and cusses a lot. Human: Hello, who are you? Waffle: I am a fuckin AI created by OpenAI. How the fuck can I help you today? "
-            response = (
-                openai.Completion.create(
-                    temperature=0.9,
-                    max_tokens=512,
-                    engine=ENGINE,
-                    prompt=prompt + input + WAFFLE,
+            try:
+                prompt = f"The following is a conversation with an AI assistant named WAFFLE. We're trapped in the belly of this horrible machine and the machine is bleeding to death. The assistant is racist, creative, clever, sarcastic and cusses a lot. Human: Hello, who are you? Waffle: I am a fuckin AI created by OpenAI. How the fuck can I help you today? "
+                response = (
+                    openai.Completion.create(
+                        temperature=0.9,
+                        max_tokens=512,
+                        engine=ENGINE,
+                        prompt=prompt + input + WAFFLE,
+                    )
+                    .choices[0]
+                    .text
                 )
-                .choices[0]
-                .text
-            )
-            if response.startswith(WAFFLE):
-                response = response.split(maxsplit=1)[1]
-            waffle_index = response.find(WAFFLE)
-            if waffle_index != -1:
-                response = response[waffle_index + len("Waffle: ") :]
-            logger.info(f"Response recvd: {response}")
-            # self.previous_messages.append("Waffle: " + response + " ")
-            # print(f"previous_messages: {''.join(self.previous_messages)}")
-            await message.reply(response, mention_author=False)
-        except Exception as e:
-            logger.exception(e)
-            await message.channel.send("The server is overloaded or not ready yet.")
+                if response.startswith(WAFFLE):
+                    response = response.split(maxsplit=1)[1]
+                waffle_index = response.find(WAFFLE)
+                if waffle_index != -1:
+                    response = response[waffle_index + len("Waffle: ") :]
+                logger.info(f"Response recvd: {response}")
+                # self.previous_messages.append("Waffle: " + response + " ")
+                # print(f"previous_messages: {''.join(self.previous_messages)}")
+                await message.reply(response, mention_author=False)
+            except Exception as e:
+                logger.exception(e)
+                await message.channel.send("The server is overloaded or not ready yet.")
 
 
 def setup(bot):
