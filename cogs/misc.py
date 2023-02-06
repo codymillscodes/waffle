@@ -85,7 +85,7 @@ class MiscCog(commands.Cog):
             timeout=30,
         ).json()
         if r["total"] == 0:
-            await ctx.send("No release yet.")
+            await ctx.send("No Hogwarts crack yet.")
         else:
             results = r["p2p_results"]
             results_embed = discord.Embed()

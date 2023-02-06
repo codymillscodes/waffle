@@ -45,10 +45,7 @@ class ChatbotCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if (
-            message.author.id == 295285994607869953
-            or message.author.id == 439606776187584523
-        ):
+        if message.author.id == 295285994607869953:
             hl_cmd = self.bot.get_command("hogwarts")
             ctx = await self.bot.get_context(message)
             await ctx.invoke(hl_cmd)
