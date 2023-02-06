@@ -186,9 +186,6 @@ class DebridCog(commands.Cog):
     async def search(self, ctx, *, input: str):
         logger.info(f"{ctx.invoked_with} {input}")
 
-        def check(m):
-            return m.author == ctx.author and m.content.startswith("!pick")
-
         if ctx.invoked_with == "rarbg":
             self.token = get_token()
             max_requests = 10
@@ -266,6 +263,9 @@ class DebridCog(commands.Cog):
                     inline=False,
                 )
                 await ctx.reply(embed=em_result)
+
+            def check(m):
+                return m.author == ctx.author and m.content.startswith("!pick")
 
             try:
                 msg = await self.bot.wait_for("message", check=check, timeout=60)
