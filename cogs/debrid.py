@@ -263,6 +263,8 @@ class DebridCog(commands.Cog):
                     inline=False,
                 )
                 await ctx.reply(embed=em_result)
+            else:
+                await ctx.reply("Zero results.", mention_author=False)
 
             def check(m):
                 return m.author == ctx.author and m.content.startswith("!pick")
@@ -302,8 +304,6 @@ class DebridCog(commands.Cog):
 
             except asyncio.TimeoutError:
                 await ctx.send("TOO SLOW", mention_author=False)
-            else:
-                await ctx.reply("Zero results.", mention_author=False)
 
 
 def get_token():
