@@ -26,7 +26,7 @@ class BGTasks(commands.Cog):
             stream = requests.get(
                 "https://api.twitch.tv/helix/streams?user_login=" + t,
                 headers=self.twitch_headers,
-                timeout=10,
+                timeout=30,
             )
             stream_data = stream.json()
             if len(stream_data["data"]) == 1:
@@ -87,7 +87,7 @@ class BGTasks(commands.Cog):
                     id=id[0],
                     link="link",
                 )
-                r = requests.get(delay_url, timeout=10).json()
+                r = requests.get(delay_url, timeout=30).json()
                 if r["data"]["status"] == 2:
                     link = r["data"]["link"]
                     link_split = link.split("/")[-2:]
