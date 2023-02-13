@@ -146,7 +146,7 @@ class BGTasks(commands.Cog):
 
         with open("debrid.txt", "w") as f:
             for id in debrid:
-                f.write(f"{id[0]},{id[1]}\n")
+                f.write(f"{id[0]},{id[1]},{id[2]}\n")
 
     @commands.Cog.listener()
     async def on_ready(self):
