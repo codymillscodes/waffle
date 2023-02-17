@@ -9,6 +9,7 @@ import requests
 from loguru import logger
 import wikipediaapi as wiki
 from udpy import AsyncUrbanClient
+import fortnite_api
 import config
 
 TROLL = [
@@ -27,6 +28,7 @@ class MiscCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.urban = AsyncUrbanClient()
+        self.fnapi = fortnite_api.FortniteAPI(api_key=config.fortnite_api)
 
     @commands.command(name="ping", description="Ping waffle.", brief="Ping waffle.")
     async def ping(self, ctx):
@@ -153,6 +155,44 @@ class MiscCog(commands.Cog):
                 "It's not in the urban dictionary. Maybe you should add it.",
                 mention_author=False,
             )
+
+    @commands.command(
+        name="fn", description="Get fortnite stats", brief="Get fortnite stats."
+    )
+    async def fn(self, ctx, *, arg):
+        try:
+            stats = self.fnapi.stats.fetch_by_name(arg)
+            stats_embed = discord.Embed(
+                title=f"{stats.user.name}",
+                description=f"Battle Pass: {stats.battle_pass.level}",
+            )
+            overall = stats.stats.all.overall
+            solo = stats.stats.all.solo
+            duo = stats.stats.all.duo
+            squad = stats.stats.all.squad
+            stats_embed.add_field(
+                name="Overall",
+                value=f"Matches(Win rate): {overall.matches}({overall.win_rate})\nTop 5: {overall.top5} | Top 12: {overall.top12}\nK/D(ratio): {overall.kills}/{overall.deaths}({overall.kd})\nKills\\Match: {overall.kills_per_match} | Kills\\Min: {overall.kills_per_min}\nMinutes Played: {overall.minutes_played} | Players Outlived: {overall.players_outlived}",
+                inline=False,
+            )
+            stats_embed.add_field(
+                name="Solo",
+                value=f"Matches(Win rate): {solo.matches}({solo.win_rate})\nTop 5: {solo.top5} | Top 12: {solo.top12}\nK/D(ratio): {solo.kills}/{solo.deaths}({solo.kd})\nKills\\Match: {solo.kills_per_match} | Kills\\Min: {solo.kills_per_min}\nMinutes Played: {solo.minutes_played} | Players Outlived: {solo.players_outlived}",
+                inline=False,
+            )
+            stats_embed.add_field(
+                name="Duo",
+                value=f"Matches(Win rate): {duo.matches}({duo.win_rate})\nTop 5: {duo.top5} | Top 12: {duo.top12}\nK/D(ratio): {duo.kills}/{duo.deaths}({duo.kd})\nKills\\Match: {duo.kills_per_match} | Kills\\Min: {duo.kills_per_min}\nMinutes Played: {duo.minutes_played} | Players Outlived: {duo.players_outlived}",
+                inline=False,
+            )
+            stats_embed.add_field(
+                name="Squad",
+                value=f"Matches(Win rate): {squad.matches}({squad.win_rate})\nTop 5: {squad.top5} | Top 12: {squad.top12}\nK/D(ratio): {squad.kills}/{squad.deaths}({squad.kd})\nKills\\Match: {squad.kills_per_match} | Kills\\Min: {squad.kills_per_min}\nMinutes Played: {squad.minutes_played} | Players Outlived: {squad.players_outlived}",
+                inline=False,
+            )
+            await ctx.reply(embed=stats_embed, mention_author=False)
+        except fortnite_api.errors.NotFound:
+            ctx.reply("That's not a real player.", mention_author=False)
 
 
 def setup(bot):

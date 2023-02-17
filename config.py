@@ -30,6 +30,6 @@ twitch_client_id = os.environ["twitch_client_id"]
 twitch_secret = os.environ["twitch_secret"]
 twitch_channel = os.environ["twitch_channel"]
 twitch_notify_role = os.environ["twitch_notify_role"]
-
+fortnite_api = os.environ["fortnite_api"]
 music_ip = os.environ["music_ip"]
 emoji = "\N{WAFFLE}"
