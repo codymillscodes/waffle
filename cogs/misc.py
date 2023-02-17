@@ -192,7 +192,7 @@ class MiscCog(commands.Cog):
             )
             await ctx.reply(embed=stats_embed, mention_author=False)
         except fortnite_api.errors.NotFound:
-            ctx.reply("That's not a real player.", mention_author=False)
+            await ctx.reply("That's not a real player.", mention_author=False)
 
 
 def setup(bot):
