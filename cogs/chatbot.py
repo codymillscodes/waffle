@@ -1,5 +1,8 @@
 from discord.ext import commands
+import discord
+import aiohttp
 import openai
+import re
 from loguru import logger
 import config
 
@@ -30,15 +33,30 @@ class ChatbotCog(commands.Cog):
         )
 
     @commands.command(
-        name="img",
+        name="dream",
         brief="Generate an image based on a prompt.",
         description="Generate an image based on a prompt.",
     )
-    async def img(self, ctx, *, input: str):
+    async def dream(self, ctx, *, input: str):
         try:
             response = openai.Image.create(prompt=input, n=1, size="512x512")
             image_url = response["data"][0]["url"]
-            await ctx.reply(image_url, mention_author=False)
+            filename = input
+            if len(filename) > 100:
+                filename = filename[:100]
+            for t in range(len(filename)):
+                filename[t] = re.sub(r"[^\w\s]", "", filename[t].lower())
+                filename[t] = re.sub(r"\s+", "-", filename[t])
+            with aiohttp.ClientSession() as session:
+                async with session.get(image_url) as resp:
+                    if resp.status == 200:
+                        logger.info(f"Image recvd: {image_url}")
+                        image = await resp.read()
+                        with open(f"dreams/{filename}.png", "wb") as f:
+                            f.write(image)
+            await ctx.reply(
+                file=discord.File(f"dreams/{filename}.png"), mention_author=False
+            )
         except:
             logger.info("No result cause too offensive.")
             await ctx.send("waah your prompt was too offensive for openai waah")
