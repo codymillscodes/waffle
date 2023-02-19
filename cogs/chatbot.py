@@ -44,8 +44,8 @@ class ChatbotCog(commands.Cog):
             filename = input
             if len(filename) > 100:
                 filename = filename[:100]
-            filename = re.sub(r"[^\w\s]", "", filename[t].lower())
-            filename = re.sub(r"\s+", "-", filename[t])
+            filename = re.sub(r"[^\w\s]", "", filename.lower())
+            filename = re.sub(r"\s+", "-", filename)
             with aiohttp.ClientSession() as session:
                 async with session.get(image_url) as resp:
                     if resp.status == 200:
