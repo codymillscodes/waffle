@@ -46,11 +46,11 @@ class ChatbotCog(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         async with ctx.typing():
-            #if message.author.id == 295285994607869953:
+            # if message.author.id == 295285994607869953:
             #    hl_cmd = self.bot.get_command("hogwarts")
             #    ctx = await self.bot.get_context(message)
             #    await ctx.invoke(hl_cmd)
-            elif message.content.startswith("@waffle") or (
+            if message.content.startswith("@waffle") or (
                 len(message.mentions) > 0 and "waffle" in message.mentions[0].name
             ):
                 if message.content.startswith(
