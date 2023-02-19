@@ -57,9 +57,11 @@ class ChatbotCog(commands.Cog):
             await ctx.reply(
                 file=discord.File(f"dreams/{filename}.png"), mention_author=False
             )
+        except openai.InvalidRequestError:
+            await ctx.send("Too offensive. :(")
         except Exception as e:
             logger.exception(e)
-            await ctx.send("waah your prompt was too offensive for openai waah")
+            await ctx.send("Something went wrong. :(")
 
     @commands.Cog.listener()
     async def on_message(self, message):
