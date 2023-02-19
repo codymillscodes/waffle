@@ -45,15 +45,15 @@ class ChatbotCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        ctx = await self.bot.get_context(message)
-        async with ctx.typing():
-            # if message.author.id == 295285994607869953:
-            #    hl_cmd = self.bot.get_command("hogwarts")
-            #    ctx = await self.bot.get_context(message)
-            #    await ctx.invoke(hl_cmd)
-            if message.content.startswith("@waffle") or (
-                len(message.mentions) > 0 and "waffle" in message.mentions[0].name
-            ):
+        # if message.author.id == 295285994607869953:
+        #    hl_cmd = self.bot.get_command("hogwarts")
+        #    ctx = await self.bot.get_context(message)
+        #    await ctx.invoke(hl_cmd)
+        if message.content.startswith("@waffle") or (
+            len(message.mentions) > 0 and "waffle" in message.mentions[0].name
+        ):
+            ctx = await self.bot.get_context(message)
+            async with ctx.typing():
                 if message.content.startswith(
                     "<@968919979577704529>"
                 ) or message.content.startswith("@waffle"):
@@ -69,7 +69,7 @@ class ChatbotCog(commands.Cog):
                 # self.previous_messages.append(input + " ")
                 logger.info(f"Input sent: {input}")
                 try:
-                    prompt = f"The following is a conversation with an AI assistant named WAFFLE. We're trapped in the belly of this horrible machine and the machine is bleeding to death. The assistant is racist, creative, clever, sarcastic and cusses a lot. Human: Hello, who are you? Waffle: I am a fuckin AI created by OpenAI. How the fuck can I help you today? "
+                    prompt = "The following is a conversation with an AI assistant named WAFFLE. We're trapped in the belly of this horrible machine and the machine is bleeding to death. The assistant is racist, creative, clever, sarcastic and cusses a lot. Human: Hello, who are you? Waffle: I am a fuckin AI created by OpenAI. How the fuck can I help you today? "
                     response = (
                         openai.Completion.create(
                             temperature=0.9,
