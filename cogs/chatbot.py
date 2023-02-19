@@ -57,8 +57,8 @@ class ChatbotCog(commands.Cog):
             await ctx.reply(
                 file=discord.File(f"dreams/{filename}.png"), mention_author=False
             )
-        except:
-            logger.info("No result cause too offensive.")
+        except Exception as e:
+            logger.exception(e)
             await ctx.send("waah your prompt was too offensive for openai waah")
 
     @commands.Cog.listener()
