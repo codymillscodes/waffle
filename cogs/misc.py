@@ -216,7 +216,7 @@ class MiscCog(commands.Cog):
                             inline=False,
                         )
             else:
-                for i in range(5):
+                for i in range(4):
                     platforms = ""
                     for p in results[i].profile_platforms:
                         platforms += f"{p}, "
