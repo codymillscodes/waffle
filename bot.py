@@ -1,40 +1,37 @@
+import asyncio
 import discord
 from discord.ext import commands
 from discord.ext import tasks
-
+from cogwatch import watch
 import config
 from loguru import logger
 import sys
 
-coggers = [
-    "cogs.misc",
-    "cogs.chatbot",
-    "cogs.debrid",
-    "cogs.bg_tasks",
-    "cogs.direct_dl",
-]
 
-bot = commands.Bot(command_prefix="!", description="waffle")
+class Waffle(commands.Bot):
+    def __init__(self):
+        super().__init__(command_prefix="!")
 
-logger.add(
-    "logs/{time}_waffle.log",
-    rotation="7 MB",
-)
-logger.level("DEBUG")
-logger.info("Logging is set up!")
+    @watch(path="cogs", preload=True, debug=False)
+    async def on_ready(self):
+        logger.add(
+            "logs/{time}_waffle.log",
+            rotation="7 MB",
+        )
+        logger.level("DEBUG")
+        logger.info("Logging is set up!")
+        logger.info(
+            f"\n\nLogged in as: {bot.user.name} - {bot.user.id}\nVersion: {discord.__version__}\n"
+        )
+        await bot.change_presence(activity=discord.Game(name="8=====D~~"))
+        logger.info("Successfully logged in and booted...!")
 
-if __name__ == "__main__":
-    for cog in coggers:
-        bot.load_extension(cog)
-
-
-@bot.event
-async def on_ready():
-    logger.info(
-        f"\n\nLogged in as: {bot.user.name} - {bot.user.id}\nVersion: {discord.__version__}\n"
-    )
-    await bot.change_presence(activity=discord.Game(name="8=====D~~"))
-    logger.info("Successfully logged in and booted...!")
+    async def on_message(self, message):
+        if message.author.bot:
+            return
+        await self.process_commands(message)
 
 
-bot.run(config.discord_bot_token, bot=True, reconnect=True)
+async def main():
+    client = Waffle()
+    await client.start(config.discord_bot_token)
