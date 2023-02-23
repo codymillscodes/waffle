@@ -34,7 +34,7 @@ class MiscCog(commands.Cog):
 
     @commands.command(name="ping", description="Ping waffle.", brief="Ping waffle.")
     async def ping(self, ctx):
-        await ctx.reply("pong", mention_author=False)
+        await ctx.reply("fuck you", mention_author=False)
 
     @commands.command(
         name="log",
