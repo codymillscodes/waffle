@@ -199,7 +199,7 @@ class MiscCog(commands.Cog):
     @commands.command(name="hltb", brief="Get how long to beat stats")
     async def howlong(self, ctx, *, arg):
         try:
-            results = self.hltb.async_search(arg, similarity_case_sensitive=False)
+            results = await self.hltb.async_search(arg, similarity_case_sensitive=False)
             game_embed = discord.Embed(
                 title=f"HLTB Results for {arg}",
                 url="https://howlongtobeat.com",
