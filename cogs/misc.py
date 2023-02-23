@@ -207,6 +207,7 @@ class MiscCog(commands.Cog):
             game_embed.set_image(url=results[0].game_image_url)
             if len(results) < 5:
                 for x in results:
+                    platforms = ""
                     for p in x.profile_platforms:
                         platforms += f"{p}, "
                     game_embed.add_field(
@@ -224,7 +225,7 @@ class MiscCog(commands.Cog):
                         inline=False,
                     )
             await ctx.reply(embed=game_embed, mention_author=False)
-        except self.hltb.HowLongToBeatException:
+        except:
             await ctx.reply("That's not a real game.", mention_author=False)
 
 
