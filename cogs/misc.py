@@ -204,7 +204,7 @@ class MiscCog(commands.Cog):
                 title=f"HLTB Results for {arg}",
                 url="https://howlongtobeat.com",
             )
-            game_embed.set_image(url=results[0].game_image_url)
+            game_embed.set_thumbnail(url=results[0].game_image_url)
             if len(results) < 5:
                 for x in results:
                     platforms = ""
