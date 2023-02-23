@@ -225,7 +225,8 @@ class MiscCog(commands.Cog):
                         inline=False,
                     )
             await ctx.reply(embed=game_embed, mention_author=False)
-        except:
+        except Exception as e:
+            logger.exception(e)
             await ctx.reply("That's not a real game.", mention_author=False)
 
 
