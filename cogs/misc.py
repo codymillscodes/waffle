@@ -210,20 +210,20 @@ class MiscCog(commands.Cog):
                     platforms = ""
                     for p in x.profile_platforms:
                         platforms += f"{p}, "
-                    game_embed.add_field(
-                        name=f"{x.game_name} ({x.release_world})",
-                        value=f"**Dev:** {x.profile_dev}\n**Platforms:** {platforms}\n**Main Story:** {x.main_story}h | **Main + Extras:** {x.main_extra}h\n**Completionist:** {x.completionist}h | **All:** {x.all_styles}h\n{x.game_web_link}",
-                        inline=False,
-                    )
+                        game_embed.add_field(
+                            name=f"{x.game_name} ({x.release_world})",
+                            value=f"**Dev:** {x.profile_dev}\n**Platforms:** {platforms}\n**Main Story:** {x.main_story}h | **Main + Extras:** {x.main_extra}h\n**Completionist:** {x.completionist}h | **All:** {x.all_styles}h\n{x.game_web_link}",
+                            inline=False,
+                        )
             else:
                 for i in range(5):
                     for p in results[i].profile_platforms:
                         platforms += f"{p}, "
-                    game_embed.add_field(
-                        name=f"{results[i].game_name} ({results[i].release_world}))",
-                        value=f"**Dev:** {results[i].profile_dev}\n**Platforms:** {platforms}\n**Main Story:** {results[i].main_story}h | **Main + Extras:** {results[i].main_extra}h\n**Completionist:** {results[i].completionist}h | **All:** {results[i].all_styles}h\n{results[i].game_web_link}",
-                        inline=False,
-                    )
+                        game_embed.add_field(
+                            name=f"{results[i].game_name} ({results[i].release_world}))",
+                            value=f"**Dev:** {results[i].profile_dev}\n**Platforms:** {platforms}\n**Main Story:** {results[i].main_story}h | **Main + Extras:** {results[i].main_extra}h\n**Completionist:** {results[i].completionist}h | **All:** {results[i].all_styles}h\n{results[i].game_web_link}",
+                            inline=False,
+                        )
             await ctx.reply(embed=game_embed, mention_author=False)
         except Exception as e:
             logger.exception(e)
