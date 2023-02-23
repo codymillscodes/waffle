@@ -202,7 +202,7 @@ class MiscCog(commands.Cog):
             results = await self.hltb.async_search(arg, similarity_case_sensitive=False)
             game_embed = discord.Embed(
                 title=f"HLTB Results for {arg}",
-                url="https://howlongtobeat.com",
+                url="https://howlongtobeat.com?q=" + arg.replace(" ", "+"),
             )
             game_embed.set_thumbnail(url=results[0].game_image_url)
             if len(results) < 5:
