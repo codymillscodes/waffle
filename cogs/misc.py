@@ -30,7 +30,7 @@ class MiscCog(commands.Cog):
         self.bot = bot
         self.urban = AsyncUrbanClient()
         self.fnapi = fortnite_api.FortniteAPI(api_key=config.fortnite_api)
-        self.hltb = HowLongToBeat(0.7)
+        self.hltb = HowLongToBeat(0.3)
 
     @commands.command(name="ping", description="Ping waffle.", brief="Ping waffle.")
     async def ping(self, ctx):
