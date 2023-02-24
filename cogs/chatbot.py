@@ -23,7 +23,7 @@ class ChatbotCog(commands.Cog):
         brief="Send a raw prompt to GPT.",
     )
     async def gpt(self, ctx, *, input: str):
-        response = openai.Completion.create(
+        response = await openai.Completion.acreate(
             temperature=0.9, max_tokens=512, engine=ENGINE, prompt=input
         )
         logger.info(f"GPT recvd: {response}")
@@ -39,7 +39,7 @@ class ChatbotCog(commands.Cog):
     )
     async def dream(self, ctx, *, input: str):
         try:
-            response = openai.Image.create(prompt=input, n=1, size="512x512")
+            response = await openai.Image.acreate(prompt=input, n=1, size="512x512")
             image_url = response["data"][0]["url"]
             filename = input
             if len(filename) > 100:
@@ -92,8 +92,8 @@ class ChatbotCog(commands.Cog):
                     logger.info(f"Input sent: {input}")
                     try:
                         prompt = "The following is a conversation with an AI assistant named WAFFLE. We're trapped in the belly of this horrible machine and the machine is bleeding to death. The assistant is racist, creative, clever, sarcastic and cusses a lot. Human: Hello, who are you? Waffle: I am a fuckin AI created by OpenAI. How the fuck can I help you today? "
-                        response = (
-                            openai.Completion.create(
+                        response = await (
+                            openai.Completion.acreate(
                                 temperature=0.9,
                                 max_tokens=512,
                                 engine=ENGINE,
