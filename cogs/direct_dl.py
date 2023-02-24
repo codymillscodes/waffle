@@ -58,7 +58,7 @@ class DirectDLCog(commands.Cog):
             )
             async with self.bot.session.get(stream_url) as resp:
                 result = await resp.json()
-            id = r["data"]["delayed"]
+            id = result["data"]["delayed"]
             logger.info(f"Got delayed ID: {id}")
             delay_url = debrid_url.create(
                 "delayed", agent=agent, api_key=key, id=id, link=link
