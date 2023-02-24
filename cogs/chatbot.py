@@ -16,6 +16,7 @@ class ChatbotCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         # self.previous_messages = []
+        openai.aiosession.set(self.bot.session)
 
     @commands.command(
         name="gpt",
