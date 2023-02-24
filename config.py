@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# convert to uppercase
 # Discord bot settings
 discord_application_id = os.environ["discord_appid"]
 discord_public_key = os.environ["discord_pubkey"]

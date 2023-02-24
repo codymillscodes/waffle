@@ -78,11 +78,12 @@ class DebridCog(commands.Cog):
         brief="Returns the number of cached torrents.",
     )
     async def ready(self, ctx):
-        async with self.session.get(
+        async with self.bot.session.get(
             debrid_url.create(request="all", agent=self.api_host, api_key=self.api_key),
             timeout=self.timeout,
         ) as resp:
-            r = await resp.json()["data"]["magnets"]
+            r = await resp.json()
+            r = r["data"]["magnets"]
         logger.info(f"{len(r)} cached torrents.")
         await ctx.send(f"{len(r)} torrents.\nThe limit is 1000.")
 
