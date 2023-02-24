@@ -1,8 +1,7 @@
 from discord.ext import tasks
 from discord.ext import commands
 import discord
-import requests
-import json
+import aiohttp
 import config
 import urllib.parse
 import random
@@ -16,19 +15,23 @@ class BGTasks(commands.Cog):
         self.twitch_headers = ""
         self.twitchers = []
         self.online = []
+        self.session = aiohttp.ClientSession()
+        self.timeout = aiohttp.ClientTimeout(total=30)
         with open("twitchers.txt") as f:
             for line in f:
                 self.twitchers.append(line.rstrip("\n"))
 
+    @tasks.loop(seconds=30)
     async def twitch_check(self):
         twitch_channel = await self.bot.fetch_channel(config.twitch_channel)
         for t in self.twitchers:
-            stream = requests.get(
+            async with self.session.get(
                 "https://api.twitch.tv/helix/streams?user_login=" + t,
                 headers=self.twitch_headers,
                 timeout=30,
-            )
-            stream_data = stream.json()
+            ) as resp:
+                stream_data = await resp.json()
+                await self.session.close()
             if len(stream_data["data"]) == 1:
                 if t not in self.online:
                     self.online.append(t)
@@ -67,7 +70,7 @@ class BGTasks(commands.Cog):
             "File me away, I'm ready to be clicked",
             "Buckle up, it's a wild link ride",
         ]
-        await self.twitch_check()
+        # await self.twitch_check()
         with open("debrid.txt") as f:
             for line in f:
                 temp_line = line.rstrip("\n").split(",")
@@ -87,7 +90,9 @@ class BGTasks(commands.Cog):
                     id=id[0],
                     link="link",
                 )
-                r = requests.get(delay_url, timeout=30).json()
+                async with self.session.get(delay_url, timeout=self.timeout) as resp:
+                    r = await resp.json()
+                    await self.session.close()
                 if r["data"]["status"] == 2:
                     link = r["data"]["link"]
                     link_split = link.split("/")[-2:]
@@ -108,9 +113,11 @@ class BGTasks(commands.Cog):
             else:
                 status_url = f"https://api.alldebrid.com/v4/magnet/status?agent={config.debrid_host}&apikey={config.debrid_key}&id="
                 try:
-                    status_json = requests.get(
-                        f"{status_url}{id[0]}", timeout=20
-                    ).json()
+                    async with self.session.get(
+                        f"{status_url}{id[0]}", timeout=self.timeout
+                    ) as resp:
+                        status_json = await resp.json()
+                        await self.session.close()
                 except:
                     pass
                 logger.info(f"Checking: {id[0]}")
@@ -152,14 +159,18 @@ class BGTasks(commands.Cog):
     async def on_ready(self):
         logger.info("debridbg() ready!")
         self.debrid_check.start()
+        self.twitch_check.start()
         body = {
             "client_id": config.twitch_client_id,
             "client_secret": config.twitch_secret,
             "grant_type": "client_credentials",
         }
-        r = requests.post("https://id.twitch.tv/oauth2/token", body, timeout=20)
+        async with self.session.post(
+            "https://id.twitch.tv/oauth2/token", data=body, timeout=self.timeout
+        ) as r:
+            keys = await r.json()
+            await self.session.close()
         # data output
-        keys = r.json()
         # logger.debug(keys)
         self.twitch_headers = {
             "Client-ID": config.twitch_client_id,
