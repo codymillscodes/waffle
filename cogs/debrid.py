@@ -54,7 +54,7 @@ class DebridCog(commands.Cog):
             ),
             timeout=self.timeout,
         ) as resp:
-            r = await resp.json()["data"]["magnets"]
+            r = await resp.json()
             r = r["data"]["magnets"]
 
         logger.info(f"{len(r)} torrents cached.")
