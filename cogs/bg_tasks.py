@@ -34,7 +34,6 @@ class BGTasks(commands.Cog):
                 timeout=30,
             ) as resp:
                 stream_data = await resp.json()
-                await self.session.close()
             if len(stream_data["data"]) == 1:
                 if t not in self.online:
                     self.online.append(t)
