@@ -1,6 +1,5 @@
 from discord.ext import commands
 import discord
-import aiohttp
 import openai
 import re
 from loguru import logger

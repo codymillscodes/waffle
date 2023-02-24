@@ -2,8 +2,6 @@ import time
 import random
 import urllib.parse
 import asyncio
-import aiohttp
-import requests
 import discord
 from discord.ext import commands
 from py1337x import py1337x
@@ -39,8 +37,6 @@ class DebridCog(commands.Cog):
         self.api_key = config.debrid_key
         self.api_host = config.debrid_host
         self.token = ""
-        self.session = aiohttp.ClientSession()
-        self.timeout = aiohttp.ClientTimeout(total=60)
 
     @commands.command(
         name="deletetorrents",
@@ -52,7 +48,7 @@ class DebridCog(commands.Cog):
             debrid_url.create(
                 request="ready", agent=self.api_host, api_key=self.api_key
             ),
-            timeout=self.timeout,
+            timeout=self.bot.timeout,
         ) as resp:
             r = await resp.json()
             r = r["data"]["magnets"]
@@ -80,7 +76,7 @@ class DebridCog(commands.Cog):
     async def ready(self, ctx):
         async with self.bot.session.get(
             debrid_url.create(request="all", agent=self.api_host, api_key=self.api_key),
-            timeout=self.timeout,
+            timeout=self.bot.timeout,
         ) as resp:
             r = await resp.json()
             r = r["data"]["magnets"]
@@ -190,13 +186,13 @@ class DebridCog(commands.Cog):
         logger.info(f"{ctx.invoked_with} {input}")
 
         if ctx.invoked_with == "rarbg":
-            self.token = get_token()
+            self.token = self.get_token()
             max_requests = 10
             input = input.replace(" ", "%20")
             url = f"https://torrentapi.org/pubapi_v2.php?app_id=waffle&token={self.token}&mode=search&search_string={input}&sort=seeders&format=json_extended&category=18;41;54;50;45;44;17;48;14"
             counter = 0
             while counter < max_requests:
-                async with self.session.get(url, timeout=self.timeout) as resp:
+                async with self.bot.session.get(url, timeout=self.bot.timeout) as resp:
                     r = await resp.json()
                     if "torrent_results" in r:
                         break
@@ -308,18 +304,18 @@ class DebridCog(commands.Cog):
             except asyncio.TimeoutError:
                 await ctx.send("TOO SLOW", mention_author=False)
 
-
-def get_token():
-    try:
-        r = requests.get(
-            "https://torrentapi.org/pubapi_v2.php?app_id=waffle&get_token=get_token",
-            timeout=30,
-        )
-        logger.info("Got token.")
-        logger.debug(f"Token: {r.json()['token']}")
-        return r.json()["token"]
-    except IndexError:
-        logger.error(f"Failed to get torrent api token.\n{r.json()}")
+    async def get_token(self):
+        try:
+            async with self.bot.session.get(
+                "https://torrentapi.org/pubapi_v2.php?app_id=waffle&get_token=get_token",
+                timeout=30,
+            ) as resp:
+                r = await resp.json()
+            logger.info("Got token.")
+            logger.debug(f"Token: {r.json()['token']}")
+            return r.json()["token"]
+        except IndexError:
+            logger.error(f"Failed to get torrent api token.\n{r.json()}")
 
 
 def setup(bot):
