@@ -64,7 +64,6 @@ class BGTasks(commands.Cog):
         ) as r:
             keys = await r.json()
             logger.info("Twitch token refreshed")
-            await self.session.close()
         # data output
         # logger.debug(keys)
         self.twitch_headers = {
@@ -116,7 +115,6 @@ class BGTasks(commands.Cog):
                 )
                 async with self.session.get(delay_url, timeout=self.timeout) as resp:
                     r = await resp.json()
-                    await self.session.close()
                 if r["data"]["status"] == 2:
                     link = r["data"]["link"]
                     link_split = link.split("/")[-2:]
@@ -141,7 +139,6 @@ class BGTasks(commands.Cog):
                         f"{status_url}{id[0]}", timeout=self.timeout
                     ) as resp:
                         status_json = await resp.json()
-                        await self.session.close()
                 except:
                     pass
                 logger.info(f"Checking: {id[0]}")
