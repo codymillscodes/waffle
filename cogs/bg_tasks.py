@@ -24,7 +24,7 @@ class BGTasks(commands.Cog):
         self.twitch_check.start()
         logger.info("Background tasks started.")
 
-    @tasks.loop(seconds=30)
+    @tasks.loop(seconds=15)
     async def twitch_check(self):
         twitch_channel = await self.bot.fetch_channel(config.twitch_channel)
         for t in self.twitchers:
@@ -71,7 +71,7 @@ class BGTasks(commands.Cog):
         }
         # logger.debug(self.twitch_headers)
 
-    @tasks.loop(minutes=1)
+    @tasks.loop(seconds=20)
     async def debrid_check(self):
         debrid = []
         link_msg = [
