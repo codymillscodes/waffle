@@ -100,9 +100,8 @@ class ChatbotCog(commands.Cog):
                                 engine=ENGINE,
                                 prompt=prompt + input + WAFFLE,
                             )
-                            .choices[0]
-                            .text
                         )
+                        response = response.choices[0].text
                         if response.startswith(WAFFLE):
                             response = response.split(maxsplit=1)[1]
                         waffle_index = response.find(WAFFLE)
