@@ -24,27 +24,6 @@ class BGTasks(commands.Cog):
         self.twitch_check.start()
         logger.info("Background tasks started.")
 
-    @twitch_check.before_loop
-    async def before_twitch_check(self):
-        body = {
-            "client_id": config.twitch_client_id,
-            "client_secret": config.twitch_secret,
-            "grant_type": "client_credentials",
-        }
-        async with self.session.post(
-            "https://id.twitch.tv/oauth2/token", data=body, timeout=self.timeout
-        ) as r:
-            keys = await r.json()
-            logger.info("Twitch token refreshed")
-            await self.session.close()
-        # data output
-        # logger.debug(keys)
-        self.twitch_headers = {
-            "Client-ID": config.twitch_client_id,
-            "Authorization": "Bearer " + keys["access_token"],
-        }
-        # logger.debug(self.twitch_headers)
-
     @tasks.loop(seconds=30)
     async def twitch_check(self):
         twitch_channel = await self.bot.fetch_channel(config.twitch_channel)
@@ -72,6 +51,27 @@ class BGTasks(commands.Cog):
                 if t in self.online:
                     self.online.remove(t)
                     logger.info(f"{t} is offline.")
+
+    @twitch_check.before_loop
+    async def before_twitch_check(self):
+        body = {
+            "client_id": config.twitch_client_id,
+            "client_secret": config.twitch_secret,
+            "grant_type": "client_credentials",
+        }
+        async with self.session.post(
+            "https://id.twitch.tv/oauth2/token", data=body, timeout=self.timeout
+        ) as r:
+            keys = await r.json()
+            logger.info("Twitch token refreshed")
+            await self.session.close()
+        # data output
+        # logger.debug(keys)
+        self.twitch_headers = {
+            "Client-ID": config.twitch_client_id,
+            "Authorization": "Bearer " + keys["access_token"],
+        }
+        # logger.debug(self.twitch_headers)
 
     @tasks.loop(minutes=1)
     async def debrid_check(self):
