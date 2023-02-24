@@ -20,6 +20,9 @@ class BGTasks(commands.Cog):
         with open("twitchers.txt") as f:
             for line in f:
                 self.twitchers.append(line.rstrip("\n"))
+        self.debrid_check.start()
+        self.twitch_check.start()
+        logger.info("Background tasks started.")
 
     @tasks.loop(seconds=30)
     async def twitch_check(self):
@@ -157,9 +160,6 @@ class BGTasks(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        logger.info("debridbg() ready!")
-        self.debrid_check.start()
-        self.twitch_check.start()
         body = {
             "client_id": config.twitch_client_id,
             "client_secret": config.twitch_secret,
@@ -169,6 +169,7 @@ class BGTasks(commands.Cog):
             "https://id.twitch.tv/oauth2/token", data=body, timeout=self.timeout
         ) as r:
             keys = await r.json()
+            logger.info("Twitch token refreshed")
             await self.session.close()
         # data output
         # logger.debug(keys)
