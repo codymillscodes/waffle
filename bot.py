@@ -28,7 +28,7 @@ class Waffle(commands.Bot):
         with open("twitchers.txt") as f:
             for line in f:
                 self.twitchers.append(line.rstrip("\n"))
-        
+
         self.debrid_check.start()
         self.twitch_check.start()
         logger.info("Background tasks started.")
@@ -48,7 +48,7 @@ class Waffle(commands.Bot):
 
         await self.process_commands(message)
 
-     @tasks.loop(seconds=15)
+    @tasks.loop(seconds=15)
     async def twitch_check(self):
         twitch_channel = await self.bot.fetch_channel(config.twitch_channel)
         logger.info("Checking twitchers...")
