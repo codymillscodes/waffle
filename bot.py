@@ -4,7 +4,7 @@ from discord.ext import tasks
 from cogwatch import watch
 import config
 from loguru import logger
-import sys
+import aiohttp
 
 
 class Waffle(commands.Bot):
@@ -17,6 +17,7 @@ class Waffle(commands.Bot):
         )
         logger.level("DEBUG")
         logger.info("Logging is set up!")
+        self.session = aiohttp.ClientSession()
 
     @watch(path="cogs", preload=True)
     async def on_ready(self):

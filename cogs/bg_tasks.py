@@ -15,8 +15,8 @@ class BGTasks(commands.Cog):
         self.twitch_headers = ""
         self.twitchers = []
         self.online = []
-        self.session = aiohttp.ClientSession()
-        self.timeout = aiohttp.ClientTimeout(total=30)
+        # self.session = aiohttp.ClientSession()
+        # self.timeout = aiohttp.ClientTimeout(total=30)
         with open("twitchers.txt") as f:
             for line in f:
                 self.twitchers.append(line.rstrip("\n"))
@@ -28,7 +28,7 @@ class BGTasks(commands.Cog):
     async def twitch_check(self):
         twitch_channel = await self.bot.fetch_channel(config.twitch_channel)
         for t in self.twitchers:
-            async with self.session.get(
+            async with self.bot.session.get(
                 "https://api.twitch.tv/helix/streams?user_login=" + t,
                 headers=self.twitch_headers,
                 timeout=30,
@@ -58,7 +58,7 @@ class BGTasks(commands.Cog):
             "client_secret": config.twitch_secret,
             "grant_type": "client_credentials",
         }
-        async with self.session.post(
+        async with self.bot.session.post(
             "https://id.twitch.tv/oauth2/token", data=body, timeout=self.timeout
         ) as r:
             keys = await r.json()
@@ -112,7 +112,9 @@ class BGTasks(commands.Cog):
                     id=id[0],
                     link="link",
                 )
-                async with self.session.get(delay_url, timeout=self.timeout) as resp:
+                async with self.bot.session.get(
+                    delay_url, timeout=self.timeout
+                ) as resp:
                     r = await resp.json()
                 if r["data"]["status"] == 2:
                     link = r["data"]["link"]
@@ -134,7 +136,7 @@ class BGTasks(commands.Cog):
             else:
                 status_url = f"https://api.alldebrid.com/v4/magnet/status?agent={config.debrid_host}&apikey={config.debrid_key}&id="
                 try:
-                    async with self.session.get(
+                    async with self.bot.session.get(
                         f"{status_url}{id[0]}", timeout=self.timeout
                     ) as resp:
                         status_json = await resp.json()
