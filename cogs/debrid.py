@@ -7,8 +7,7 @@ from discord.ext import commands
 from py1337x import py1337x
 from loguru import logger
 from hurry.filesize import size
-from alldebrid_api import magnet
-from alldebrid_api import debrid_url
+import utils.debrid_urls as debrid_url
 import config
 
 LINK_MSG = [
@@ -63,7 +62,9 @@ class DebridCog(commands.Cog):
             if torrent in mag_slice:
                 ids.append(r[torrent]["id"])
         for i in ids:
-            magnet.delete_magnet(i, agent=self.api_host, api_key=self.api_key)
+            await debrid_url.delete_magnet(
+                i, agent=self.api_host, api_key=self.api_key, bot=self.bot
+            )
             time.sleep(0.1)
         logger.info(f"{input} old torrents deleted.")
         await ctx.reply(f"{input} old torrents deleted.")
@@ -90,7 +91,9 @@ class DebridCog(commands.Cog):
     )
     async def mag(self, ctx, *, input: str):
         if input.startswith("magnet"):
-            mag = magnet.upload_magnet(input, agent=self.api_host, api_key=self.api_key)
+            mag = await debrid_url.upload_magnet(
+                input, agent=self.api_host, api_key=self.api_key, bot=self.bot
+            )
             logger.info(f"Adding magnet for {mag[1]}")
             if mag[2]:
                 em_links = discord.Embed(description=f"{ctx.author.mention}")
@@ -117,8 +120,8 @@ class DebridCog(commands.Cog):
         brief="Returns status of active torrents.",
     )
     async def stat(self, ctx):
-        all_status = magnet.get_all_magnet_status(
-            agent=self.api_host, api_key=self.api_key
+        all_status = await debrid_url.get_all_magnet_status(
+            agent=self.api_host, api_key=self.api_key, bot=self.bot
         )
         if all_status == 0:
             await ctx.send("No active downloads.")
@@ -282,8 +285,11 @@ class DebridCog(commands.Cog):
                             torrentId=results[pick]["torrentId"]
                         )["magnetLink"]
                     # add magnet, get ready, name, id
-                    mag = magnet.upload_magnet(
-                        magnet_link, agent=self.api_host, api_key=self.api_key
+                    mag = await debrid_url.upload_magnet(
+                        magnet_link,
+                        agent=self.api_host,
+                        api_key=self.api_key,
+                        bot=self.bot,
                     )
                     if mag[2]:
                         em_links = discord.Embed(description=f"{ctx.author.mention}")
