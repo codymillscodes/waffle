@@ -1,6 +1,7 @@
 from discord.ext import tasks
 from discord.ext import commands
 import discord
+from bot import Waffle
 import aiohttp
 import config
 import urllib.parse
@@ -10,7 +11,7 @@ from alldebrid_api import debrid_url
 
 
 class BGTasks(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: Waffle):
         self.bot = bot
         self.twitch_headers = ""
         self.twitchers = []
