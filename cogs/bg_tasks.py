@@ -28,6 +28,7 @@ class BGTasks(commands.Cog):
     @tasks.loop(seconds=15)
     async def twitch_check(self):
         twitch_channel = await self.bot.fetch_channel(config.twitch_channel)
+        logger.info("Checking twitchers...")
         for t in self.twitchers:
             async with self.bot.session.get(
                 "https://api.twitch.tv/helix/streams?user_login=" + t,
