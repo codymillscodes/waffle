@@ -51,7 +51,7 @@ class Waffle(commands.Bot):
     @tasks.loop(seconds=15)
     async def twitch_check(self):
         twitch_channel = await self.fetch_channel(config.twitch_channel)
-        logger.info("Checking twitchers...")
+        logger.debug("Checking twitchers...")
         for t in self.twitchers:
             async with self.session.get(
                 "https://api.twitch.tv/helix/streams?user_login=" + t,
