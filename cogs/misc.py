@@ -13,17 +13,6 @@ from udpy import AsyncUrbanClient
 import fortnite_api
 import config
 
-TROLL = [
-    "I am a wizard, not a baboon brandishing a stick.",
-    "Don’t put your wand there, boy! … Better wizards than you have lost buttocks, you know.",
-    "Why are you worrying about YOU-KNOW-WHO, when you should be worrying about YOU-NO-POO? The constipation sensation that’s gripping the nation!",
-    "Anyone can speak Troll. All you have to do is point and grunt.",
-    "Alas! Ear wax!",
-    "A troll in the dungeon is worth two in the Forbidden Forest.",
-    "Trolls, theyre just misunderstood boulders with attitudes.",
-    "Trolls and toilets, they both have problems with clogging.",
-]
-
 
 class MiscCog(commands.Cog):
     def __init__(self, bot):
@@ -89,30 +78,6 @@ class MiscCog(commands.Cog):
             (requests.get(cat_search, timeout=20).json())[0]["url"],
             mention_author=False,
         )
-
-    @commands.command(
-        name="hogwarts",
-        description="Has Hogwarts Legacy been cracked?",
-        brief="Has Hogwarts Legacy been cracked?",
-    )
-    async def hogwarts(self, ctx):
-        try:
-            r = requests.get(
-                "https://api.xrel.to/v2/search/releases.json?q=hogwarts%20legacy&scene=true&p2p=true&limit=5",
-                timeout=30,
-            ).json()
-            if r["total"] == 0:
-                await ctx.send("No Hogwarts crack yet.")
-            else:
-                results = r["p2p_results"]
-                results_embed = discord.Embed()
-                for x in results:
-                    results_embed.add_field(
-                        name=f"{x['dirname']}", value=f"{x['link_href']},", inline=False
-                    )
-                await ctx.reply(embed=results_embed, mention_author=False)
-        except requests.exceptions.JSONDecodeError:
-            await ctx.reply(random.choice(TROLL), mention_author=False)
 
     @commands.command(
         name="wiki",
