@@ -7,6 +7,7 @@ from loguru import logger
 import aiohttp
 from alldebrid_api import debrid_url
 import urllib.parse
+import random
 
 class Waffle(commands.Bot):
     def __init__(self):
