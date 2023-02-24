@@ -47,8 +47,7 @@ class ChatbotCog(commands.Cog):
                 filename = filename[:100]
             filename = re.sub(r"[^\w\s]", "", filename.lower())
             filename = re.sub(r"\s+", "-", filename)
-            async with aiohttp.ClientSession() as session:
-                async with session.get(image_url) as resp:
+                async with self.bot.session.get(image_url) as resp:
                     if resp.status == 200:
                         logger.info(f"Image recvd: {image_url}")
                         image = await resp.read()
