@@ -48,7 +48,7 @@ class MiscCog(commands.Cog):
     async def waffle(self, ctx):
         waffles = "https://randomwaffle.gbs.fm/"
         async with self.bot.session.get(waffles) as resp:
-            r = resp.content()
+            r = await resp.text()
         image = BeautifulSoup(r, "html.parser").find("img").attrs["src"]
         logger.info(image)
         await ctx.reply(waffles + image, mention_author=False)
