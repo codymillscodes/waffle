@@ -5,7 +5,7 @@ from cogwatch import watch
 import config
 from loguru import logger
 import aiohttp
-
+from alldebrid_api import debrid_url
 
 class Waffle(commands.Bot):
     def __init__(self):
