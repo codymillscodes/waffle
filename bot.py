@@ -50,10 +50,10 @@ class Waffle(commands.Bot):
 
     @tasks.loop(seconds=15)
     async def twitch_check(self):
-        twitch_channel = await self.bot.fetch_channel(config.twitch_channel)
+        twitch_channel = await self.fetch_channel(config.twitch_channel)
         logger.info("Checking twitchers...")
         for t in self.twitchers:
-            async with self.bot.session.get(
+            async with self.session.get(
                 "https://api.twitch.tv/helix/streams?user_login=" + t,
                 headers=self.twitch_headers,
                 timeout=30,
@@ -83,7 +83,7 @@ class Waffle(commands.Bot):
             "client_secret": config.twitch_secret,
             "grant_type": "client_credentials",
         }
-        async with self.bot.session.post(
+        async with self.session.post(
             "https://id.twitch.tv/oauth2/token", data=body, timeout=self.timeout
         ) as r:
             keys = await r.json()
@@ -137,9 +137,7 @@ class Waffle(commands.Bot):
                     id=id[0],
                     link="link",
                 )
-                async with self.bot.session.get(
-                    delay_url, timeout=self.timeout
-                ) as resp:
+                async with self.session.get(delay_url, timeout=self.timeout) as resp:
                     r = await resp.json()
                 if r["data"]["status"] == 2:
                     link = r["data"]["link"]
@@ -156,12 +154,12 @@ class Waffle(commands.Bot):
                         name=f"{filename}",
                         value=f"[{random.choice(link_msg)}]({link})",
                     )
-                    dl_channel = await self.bot.fetch_channel(config.dl_channel)
+                    dl_channel = await self.fetch_channel(config.dl_channel)
                     await dl_channel.send(embed=em_links)
             else:
                 status_url = f"https://api.alldebrid.com/v4/magnet/status?agent={config.debrid_host}&apikey={config.debrid_key}&id="
                 try:
-                    async with self.bot.session.get(
+                    async with self.session.get(
                         f"{status_url}{id[0]}", timeout=self.timeout
                     ) as resp:
                         status_json = await resp.json()
@@ -192,7 +190,7 @@ class Waffle(commands.Bot):
                         )
                         debrid.remove(id)
                         logger.info(f"Removed: {id}")
-                        dl_channel = await self.bot.fetch_channel(config.dl_channel)
+                        dl_channel = await self.fetch_channel(config.dl_channel)
                         await dl_channel.send(embed=em_links)
 
                 except:
