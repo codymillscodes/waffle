@@ -48,7 +48,7 @@ class DebridCog(commands.Cog):
         brief="Delete x amount of old torrents.",
     )
     async def deletetorrents(self, ctx, *, input: int):
-        async with self.session.get(
+        async with self.bot.session.get(
             debrid_url.create(
                 request="ready", agent=self.api_host, api_key=self.api_key
             ),
