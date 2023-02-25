@@ -1,11 +1,9 @@
 import datetime
 import glob
 import os
-import random
 import discord
 from discord.ext import commands
 from bs4 import BeautifulSoup
-import requests
 from loguru import logger
 import wikipediaapi as wiki
 from howlongtobeatpy import HowLongToBeat
@@ -80,11 +78,9 @@ class MiscCog(commands.Cog):
     )
     async def waffle(self, ctx):
         waffles = "https://randomwaffle.gbs.fm/"
-        image = (
-            BeautifulSoup(requests.get(waffles, timeout=30).content, "html.parser")
-            .find("img")
-            .attrs["src"]
-        )
+        async with self.bot.session.get(waffles) as resp:
+            r = await resp.text()
+        image = BeautifulSoup(r, "html.parser").find("img").attrs["src"]
         logger.info(image)
         await ctx.reply(waffles + image, mention_author=False)
 
@@ -105,10 +101,11 @@ class MiscCog(commands.Cog):
             cat_search = f"https://api.thecatapi.com/v1/images/search?mime_types=gif&api_key={config.cat_auth}"
         elif cmd == "neb":
             cat_search = f"https://api.thecatapi.com/v1/images/search?breed_ids=nebe&api_key={config.cat_auth}"
-        await ctx.reply(
-            (requests.get(cat_search, timeout=20).json())[0]["url"],
-            mention_author=False,
-        )
+
+        async with self.bot.session.get(cat_search) as resp:
+            j = await resp.json()
+        image = j[0]["url"]
+        await ctx.reply(image, mention_author=False)
 
     @commands.command(
         name="wiki",
