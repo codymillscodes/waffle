@@ -65,10 +65,10 @@ class MiscCog(commands.Cog):
 
         stats_embed = discord.Embed(name=f"{arg}'s stats", color=0x00FF00)
         stats_embed.add_field(name=f"__Overall__: {stats['Overall']}",value='', inline=False)
-        stats_embed.add_field(name='__Combat__', value=f"**Combat Level**\n**Attack**: {stats['Attack']} **Strength:** {stats['Strength']}\n**Defence:** {stats['Defence']} **Constitution:** {stats['Constitution']}\n**Ranged:** {stats['Ranged']} **Magic:** {stats['Magic']}\n**Prayer:** {stats['Prayer']} **Summoning:** {stats['Summoning']}", inline=False)
-        stats_embed.add_field(name="__Gathering__", value=f"**Mining:** {stats['Mining']} **Woodcutting:** {stats['Woodcutting']}\n**Fishing:** {stats['Fishing']} **Farming:** {stats['Farming']}\n**Hunter:** {stats['Hunter']} **Divination:** {stats['Divination']}\n**Archaeology:** {stats['Archaeology']}", inline=False)
-        stats_embed.add_field(name="__Crafting__", value=f"**Smithing:** {stats['Smithing']} **Crafting:** {stats['Crafting']}\n**Fletching:** {stats['Fletching']} **Runecrafting:** {stats['Runecrafting']}\n**Construction:** {stats['Construction']} **Herblore:** {stats['Herblore']}\n**Cooking:** {stats['Cooking']} **Firemaking:** {stats['Firemaking']}", inline=False)
-        stats_embed.add_field(name="__Other__", value=f"**Slayer:** {stats['Slayer']} **Dungeoneering:** {stats['Dungeoneering']}\n**Agility:** {stats['Agility']} **Thieving:** {stats['Thieving']}\n**Invention:** {stats['Invention']}", inline=False)
+        stats_embed.add_field(name='__Combat__', value=f"**Combat Level**\n**Attack**: {stats['Attack']} **Strength:** {stats['Strength']}\n**Defence:** {stats['Defence']} **Constitution:** {stats['Constitution']}\n**Ranged:** {stats['Ranged']} **Magic:** {stats['Magic']}\n**Prayer:** {stats['Prayer']} **Summoning:** {stats['Summoning']}", inline=True)
+        stats_embed.add_field(name="__Gathering__", value=f"**Mining:** {stats['Mining']} **Woodcutting:** {stats['Woodcutting']}\n**Fishing:** {stats['Fishing']} **Farming:** {stats['Farming']}\n**Hunter:** {stats['Hunter']} **Divination:** {stats['Divination']}\n**Archaeology:** {stats['Archaeology']}", inline=True)
+        stats_embed.add_field(name="__Crafting__", value=f"**Smithing:** {stats['Smithing']} **Crafting:** {stats['Crafting']}\n**Fletching:** {stats['Fletching']} **Runecrafting:** {stats['Runecrafting']}\n**Construction:** {stats['Construction']} **Herblore:** {stats['Herblore']}\n**Cooking:** {stats['Cooking']} **Firemaking:** {stats['Firemaking']}", inline=True)
+        stats_embed.add_field(name="__Other__", value=f"**Slayer:** {stats['Slayer']} **Dungeoneering:** {stats['Dungeoneering']}\n**Agility:** {stats['Agility']} **Thieving:** {stats['Thieving']}\n**Invention:** {stats['Invention']}", inline=True)
         await ctx.reply(embed=stats_embed, mention_author=False)
 
     @commands.command(
