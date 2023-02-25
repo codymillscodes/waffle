@@ -109,7 +109,7 @@ class MiscCog(commands.Cog):
         )
         stats_embed.add_field(
             name="__Combat__",
-            value=f"**Combat Level:** {combat_level}\n**Attack**: {stats['Attack']} **Strength:** {stats['Strength']}\n**Defence:** {stats['Defence']} **Constitution:** {stats['Constitution']}\n**Ranged:** {stats['Ranged']} **Magic:** {stats['Magic']}\n**Prayer:** {stats['Prayer']} **Summoning:** {stats['Summoning']}",
+            value=f"**Combat Level:** {int(combat_level)}\n**Attack**: {stats['Attack']} **Strength:** {stats['Strength']}\n**Defence:** {stats['Defence']} **Constitution:** {stats['Constitution']}\n**Ranged:** {stats['Ranged']} **Magic:** {stats['Magic']}\n**Prayer:** {stats['Prayer']} **Summoning:** {stats['Summoning']}",
             inline=True,
         )
         stats_embed.add_field(
