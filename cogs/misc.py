@@ -62,7 +62,7 @@ class MiscCog(commands.Cog):
         stats = {}
         for i in range(len(char_stats)):
             stats[stat_array[i]] = char_stats[i][1]
-
+        # combat level = ((Math.max((str + atk), (mag * 2), (rng * 2)) * 1.3) + def + hp + (pray / 2) + (sum / 2)) / 4;
         stats_embed = discord.Embed(name=f"{arg}'s stats", color=0x00FF00)
         stats_embed.add_field(name=f"__Overall__: {stats['Overall']}",value='', inline=False)
         stats_embed.add_field(name='__Combat__', value=f"**Combat Level**\n**Attack**: {stats['Attack']} **Strength:** {stats['Strength']}\n**Defence:** {stats['Defence']} **Constitution:** {stats['Constitution']}\n**Ranged:** {stats['Ranged']} **Magic:** {stats['Magic']}\n**Prayer:** {stats['Prayer']} **Summoning:** {stats['Summoning']}", inline=True)
