@@ -109,23 +109,23 @@ class MiscCog(commands.Cog):
         )
         stats_embed.add_field(
             name="__Combat__",
-            value=f"**Combat Level:** {int(combat_level)}\n**Attack**: {stats['Attack']} **Strength:** {stats['Strength']}\n**Defence:** {stats['Defence']} **Constitution:** {stats['Constitution']}\n**Ranged:** {stats['Ranged']} **Magic:** {stats['Magic']}\n**Prayer:** {stats['Prayer']} **Summoning:** {stats['Summoning']}",
+            value=f"**Combat Level:** {int(combat_level)}\n**Attack**: {stats['Attack']}\n**Strength:** {stats['Strength']}\n**Defence:** {stats['Defence']}\n**Constitution:** {stats['Constitution']}\n**Ranged:** {stats['Ranged']}\n**Magic:** {stats['Magic']}\n**Prayer:** {stats['Prayer']}\n**Summoning:** {stats['Summoning']}",
             inline=True,
         )
         stats_embed.add_field(
             name="__Gathering__",
-            value=f"**Mining:** {stats['Mining']} **Woodcutting:** {stats['Woodcutting']}\n**Fishing:** {stats['Fishing']} **Farming:** {stats['Farming']}\n**Hunter:** {stats['Hunter']} **Divination:** {stats['Divination']}\n**Archaeology:** {stats['Archaeology']}",
+            value=f"**Mining:** {stats['Mining']}\n**Woodcutting:** {stats['Woodcutting']}\n**Fishing:** {stats['Fishing']}\n**Farming:** {stats['Farming']}\n**Hunter:** {stats['Hunter']}\n**Divination:** {stats['Divination']}\n**Archaeology:** {stats['Archaeology']}",
             inline=True,
         )
         stats_embed.add_field(
             name="__Crafting__",
-            value=f"**Smithing:** {stats['Smithing']} **Crafting:** {stats['Crafting']}\n**Fletching:** {stats['Fletching']} **Runecrafting:** {stats['Runecrafting']}\n**Construction:** {stats['Construction']} **Herblore:** {stats['Herblore']}\n**Cooking:** {stats['Cooking']} **Firemaking:** {stats['Firemaking']}",
+            value=f"**Smithing:** {stats['Smithing']}\n**Crafting:** {stats['Crafting']}\n**Fletching:** {stats['Fletching']}\n**Runecrafting:** {stats['Runecrafting']}\n**Construction:** {stats['Construction']}\n**Herblore:** {stats['Herblore']}\n**Cooking:** {stats['Cooking']}\n**Firemaking:** {stats['Firemaking']}",
             inline=True,
         )
         stats_embed.add_field(
             name="__Other__",
-            value=f"**Slayer:** {stats['Slayer']} **Dungeoneering:** {stats['Dungeoneering']}\n**Agility:** {stats['Agility']} **Thieving:** {stats['Thieving']}\n**Invention:** {stats['Invention']}",
-            inline=True,
+            value=f"**Slayer:** {stats['Slayer']} **Dungeoneering:** {stats['Dungeoneering']} **Agility:** {stats['Agility']}\n**Thieving:** {stats['Thieving']} **Invention:** {stats['Invention']}",
+            inline=False,
         )
         await ctx.reply(embed=stats_embed, mention_author=False)
 
