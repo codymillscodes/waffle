@@ -42,6 +42,37 @@ class MiscCog(commands.Cog):
 
             await ctx.reply("lol youre not allowed to do this", mention_author=False)
 
+    @commands.command(name="rs", description="Get runescape stats", brief="Get rs stats")
+    async def runescape(self, ctx, *, arg):
+        arg = arg.replace(" ","+")
+        url = f"https://secure.runescape.com/m=hiscore/index_lite.ws?player={arg}"
+        stat_array = ['Overall', 'Attack', 'Defence', 'Strength', 
+                      'Constitution', 'Ranged', 'Prayer', 'Magic', 
+                      'Cooking', 'Woodcutting', 'Fletching', 'Fishing', 
+                      'Firemaking', 'Crafting', 'Smithing', 'Mining', 
+                      'Herblore', 'Agility', 'Thieving', 'Slayer', 'Farming', 
+                      'Runecrafting', 'Hunter', 'Construction', 'Summoning', 
+                      'Dungeoneering', 'Divination', 'Invention', 'Archaeology']
+        char_stats = []
+        async with self.bot.session.get(url) as resp:
+            rs = await resp.text()
+            
+        for line in rs.splitlines():
+            char_stats.append(line.split(","))
+
+        char_stats = char_stats[0:len(stat_array)]
+        stats = {}
+        for i in range(len(char_stats)):
+            stats[stat_array[i]] = char_stats[i][1]
+
+        stats_embed = discord.Embed(name=f"{arg}'s stats", color=0x00FF00)
+        stats_embed.add_field(name=f"__Overall__: {stats['Overall']}",value='', inline=False)
+        stats_embed.add_field(name='__Combat__', value=f"**Combat Level**\n**Attack**: {stats['Attack']} **Strength:** {stats['Strength']}\n**Defence:** {stats['Defence']} **Constitution:** {stats['Constitution']}\n**Ranged:** {stats['Ranged']} **Magic:** {stats['Magic']}\n**Prayer:** {stats['Prayer']} **Summoning:** {stats['Summoning']}", inline=False)
+        stats_embed.add_field(name="__Gathering__", value=f"**Mining:** {stats['Mining']} **Woodcutting:** {stats['Woodcutting']}\n**Fishing:** {stats['Fishing']} **Farming:** {stats['Farming']}\n**Hunter:** {stats['Hunter']} **Divination:** {stats['Divination']}\n**Archaeology:** {stats['Archaeology']}", inline=False)
+        stats_embed.add_field(name="__Crafting__", value=f"**Smithing:** {stats['Smithing']} **Crafting:** {stats['Crafting']}\n**Fletching:** {stats['Fletching']} **Runecrafting:** {stats['Runecrafting']}\n**Construction:** {stats['Construction']} **Herblore:** {stats['Herblore']}\n**Cooking:** {stats['Cooking']} **Firemaking:** {stats['Firemaking']}", inline=False)
+        stats_embed.add_field(name="__Other__", value=f"**Slayer:** {stats['Slayer']} **Dungeoneering:** {stats['Dungeoneering']}\n**Agility:** {stats['Agility']} **Thieving:** {stats['Thieving']}\n**Invention:** {stats['Invention']}", inline=False)
+        await ctx.reply(embed=stats_embed, mention_author=False)
+
     @commands.command(
         name="waffle",
         description="Receive a random image from a forgotten time, from a forgotten place.",
