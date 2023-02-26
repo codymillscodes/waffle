@@ -34,8 +34,8 @@ def runescape_embed(name, char_stats):
         "Invention",
         "Archaeology",
     ]
-    stats = char_stats[0 : len(stat_names)]
     stats = {}
+    char_stats = char_stats[0 : len(stat_names)]
     for i in range(len(char_stats)):
         stats[stat_names[i]] = char_stats[i][1]
         # combat level = ((max((str + atk), (mag * 2), (rng * 2)) * 1.3) + def + hp + (pray / 2) + (sum / 2)) / 4;
