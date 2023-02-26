@@ -1,8 +1,8 @@
-from enum import Enum
+from enum import StrEnum
 import config
 
 
-class Urls(Enum):
+class Urls(StrEnum):
     # debrid urls
     DEBRID_BASE_URL = "https://api.alldebrid.com/v4/"
     DEBRID_CRED = f"agent={config.DEBRID_AGENT}&apikey={config.DEBRID_KEY}"
