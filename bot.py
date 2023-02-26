@@ -20,7 +20,9 @@ from utils.embed import download_ready
 
 class Waffle(commands.Bot):
     def __init__(self):
-        super().__init__(command_prefix="!", description="waffle")
+        super().__init__(
+            command_prefix="!", description="waffle", intents=discord.Intents.all()
+        )
 
         logger.add(
             "logs/{time}_waffle.log",
