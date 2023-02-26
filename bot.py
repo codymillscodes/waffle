@@ -39,6 +39,7 @@ class Waffle(commands.Bot):
             for line in f:
                 self.twitchers.append(line.rstrip("\n"))
 
+    async def setup_hook(self):
         self.debrid_check.start()
         self.twitch_check.start()
         logger.info("Background tasks started.")
