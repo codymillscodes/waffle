@@ -171,27 +171,8 @@ class DebridCog(commands.Cog):
                 await ctx.reply("No results. :(", mention_author=False)
             elif len(r["torrent_results"]) > 0:
                 logger.info(f"{len(r['torrent_results'])} torrent results.")
-                if len(r["torrent_results"]) > 10:
-                    results = r["torrent_results"][:10]
-                else:
-                    results = r["torrent_results"]
-                em_result = discord.Embed(
-                    description=":rotating_light::bangbang:__***YOU HAVE DECLARED A TORRENT EMERGENCY***__:bangbang::rotating_light:"
-                )
-                x = 0
-                for m in results:
-                    x = x + 1
-                    result_value = f"Seeders: {m['seeders']} | Leechers: {m['leechers']} | Size: {size(int(m['size']))}"
-                    em_result.add_field(
-                        name=f"{x}. {m['title']}", value=result_value, inline=False
-                    )
-
-                em_result.add_field(
-                    name="----------------",
-                    value=f"More results, longer timeout. Don't fuck it up cause it probably won't work twice in a row!\n*!pick 1-{len(results)}*",
-                    inline=False,
-                )
-                e = await ctx.reply(embed=em_result)
+                embed = utils.embed.torrent_results(r, emergency=True)
+                e = await ctx.reply(embed=embed, mention_author=False)
         else:
             results = torrents.search(input, sortBy="seeders", order="desc")
             sanitized_results = []
@@ -202,27 +183,8 @@ class DebridCog(commands.Cog):
                 if len(sanitized_results) > 5:
                     break
             if len(sanitized_results) > 0:
-                em_result = discord.Embed()
-                if len(sanitized_results) > 5:
-                    results = sanitized_results[:5]
-                else:
-                    results = sanitized_results
-
-                x = 0
-                for torrent in results:
-                    result_value = f"Seeders: {torrent['seeders']} | Leechers: {torrent['leechers']} | Size: {torrent['size']}"
-                    em_result.add_field(
-                        name=f"{x+1}. {torrent['name']}",
-                        value=result_value,
-                        inline=False,
-                    )
-                    x = x + 1
-                em_result.add_field(
-                    name="----------------",
-                    value="You should pick the one with the most seeders and a reasonable filesize. Pay attention to the quality. You dont want a cam or TS.\n*!pick 1-5*",
-                    inline=False,
-                )
-                e = await ctx.reply(embed=em_result)
+                embed = utils.embed.torrent_results(sanitized_results)
+                e = await ctx.reply(embed=embed, mention_author=False)
             else:
                 await ctx.reply("Zero results.", mention_author=False)
 
@@ -250,14 +212,9 @@ class DebridCog(commands.Cog):
                         bot=self.bot,
                     )
                     if mag[2]:
-                        em_links = discord.Embed(description=f"{ctx.author.mention}")
-                        link = f"{config.http_url}magnets/{urllib.parse.quote(mag[1])}/"
-                        em_links.add_field(
-                            name=f"{mag[1]}",
-                            value=f"[{random.choice(LINK_MSG)}]({link})",
-                        )
+                        embed = utils.embed.download_ready(ctx.author, mag)
                         dl_channel = await self.bot.fetch_channel(config.dl_channel)
-                        await dl_channel.send(embed=em_links)
+                        await dl_channel.send(embed=embed)
                     else:
                         with open("debrid.txt", "a") as f:
                             f.write(f"{mag[0]},{ctx.author.id},magnet\n")

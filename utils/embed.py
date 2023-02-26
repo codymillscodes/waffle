@@ -192,3 +192,43 @@ def download_ready(author, magnet):
     return embed
 
 def torrent_results(results, emergency:bool = False):
+    if emergency:
+        embed = Embed(description=":rotating_light::bangbang:__***YOU HAVE DECLARED A TORRENT EMERGENCY***__:bangbang::rotating_light:")
+        if len(results["torrent_results"]) > 10:
+            results = results["torrent_results"][:10]
+        else:
+            results = results["torrent_results"]
+        x = 0
+        for m in results:
+            x = x + 1
+            result_value = f"Seeders: {m['seeders']} | Leechers: {m['leechers']} | Size: {size(int(m['size']))}"
+            embed.add_field(
+                name=f"{x}. {m['title']}", value=result_value, inline=False
+            )
+
+        embed.add_field(
+            name="----------------",
+            value=f"More results, longer timeout. Don't fuck it up cause it probably won't work twice in a row!\n*!pick 1-{len(results)}*",
+            inline=False,
+        )
+        return embed
+    else:
+        embed = Embed()
+        if len(results) > 5:
+            results = results[:5]
+        x = 0
+        for torrent in results:
+            result_value = f"Seeders: {torrent['seeders']} | Leechers: {torrent['leechers']} | Size: {torrent['size']}"
+            embed.add_field(
+                name=f"{x+1}. {torrent['name']}",
+                value=result_value,
+                inline=False,
+            )
+            x = x + 1
+        embed.add_field(
+            name="----------------",
+            value="You should pick the one with the most seeders and a reasonable filesize. Pay attention to the quality. You dont want a cam or TS.\n*!pick 1-5*",
+            inline=False,
+        )
+        return embed
+        
