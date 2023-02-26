@@ -98,8 +98,7 @@ class Waffle(commands.Bot):
                 "grant_type": "client_credentials",
             }
             async with Conn() as resp:
-                keys = await resp.get_json(Urls.TWITCH_TOKEN_REQUEST, data=body)
-            logger.info("Keys: " + str(keys))
+                keys = await resp.post_json(Urls.TWITCH_TOKEN_REQUEST, data=body)
             logger.info("Twitch token refreshed")
             self.twitch_headers = {
                 "Client-ID": TWITCH_CLIENT_ID,

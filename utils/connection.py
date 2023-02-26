@@ -24,6 +24,16 @@ class Connection:
         async with self.session.get(url, timeout=self.timeout) as resp:
             return await resp.read()
 
+    async def post_json(self, url, headers=None, data=None):
+        if headers is None:
+            headers = {}
+        if data is None:
+            data = {}
+        async with self.session.post(
+            url, headers=headers, data=data, timeout=self.timeout
+        ) as resp:
+            return await resp.json()
+
     async def close(self):
         await self.session.close()
 
