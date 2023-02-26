@@ -181,11 +181,11 @@ class DebridCog(commands.Cog):
                     await ctx.send("WRONG")
                 else:
                     if ctx.invoked_with == "rarbg":
-                        magnet_link = results["items"][pick]["download"]
+                        magnet_link = results[pick]["download"]
                     else:
                         logger.info(f"results: {results}")
                         magnet_link = torrents.info(
-                            torrentId=results[pick]["torrentId"]
+                            torrentId=results["items"][pick]["torrentId"]
                         )["magnetLink"]
                     # add magnet, get ready, name, id
                     mag = await deb.upload_magnet(magnet_link)
