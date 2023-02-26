@@ -61,43 +61,51 @@ class Waffle(commands.Bot):
 
     @tasks.loop(seconds=15)
     async def twitch_check(self):
-        twitch_channel = await self.fetch_channel(TWITCH_CHANNEL)
-        # logger.debug("Checking twitchers...")
-        for t in self.twitchers:
-            async with Conn() as resp:
-                stream_data = await resp.get_json(
-                    Urls.TWITCH_URL + t, headers=self.twitch_headers
-                )
-            if len(stream_data["data"]) == 1:
-                if t not in self.online:
-                    self.online.append(t)
-                    em_twitch = discord.Embed(description=f"<@&{TWITCH_NOTIFY_ROLE}>")
-                    em_twitch.add_field(
-                        name=f"""{t} is live: {stream_data["data"][0]["title"]} playing {stream_data["data"][0]["game_name"]}""",
-                        value=f"{Urls.TWITCH_CHANNEL}{t}",
+        try:
+            twitch_channel = await self.fetch_channel(TWITCH_CHANNEL)
+            # logger.debug("Checking twitchers...")
+            for t in self.twitchers:
+                async with Conn() as resp:
+                    stream_data = await resp.get_json(
+                        Urls.TWITCH_URL + t, headers=self.twitch_headers
                     )
-                    logger.info(f"{self.online} is online.")
-                    await twitch_channel.send(embed=em_twitch)
-            else:
-                if t in self.online:
-                    self.online.remove(t)
-                    logger.info(f"{t} is offline.")
+                if len(stream_data["data"]) == 1:
+                    if t not in self.online:
+                        self.online.append(t)
+                        em_twitch = discord.Embed(
+                            description=f"<@&{TWITCH_NOTIFY_ROLE}>"
+                        )
+                        em_twitch.add_field(
+                            name=f"""{t} is live: {stream_data["data"][0]["title"]} playing {stream_data["data"][0]["game_name"]}""",
+                            value=f"{Urls.TWITCH_CHANNEL}{t}",
+                        )
+                        logger.info(f"{self.online} is online.")
+                        await twitch_channel.send(embed=em_twitch)
+                else:
+                    if t in self.online:
+                        self.online.remove(t)
+                        logger.info(f"{t} is offline.")
+        except Exception as e:
+            logger.exception(e)
 
     @twitch_check.before_loop
     async def before_twitch_check(self):
         await self.wait_until_ready()
-        body = {
-            "client_id": TWITCH_CLIENT_ID,
-            "client_secret": TWITCH_SECRET,
-            "grant_type": "client_credentials",
-        }
-        async with Conn() as resp:
-            keys = await resp.get_json(Urls.TWITCH_TOKEN_REQUEST, data=body)
-        logger.info("Twitch token refreshed")
-        self.twitch_headers = {
-            "Client-ID": TWITCH_CLIENT_ID,
-            "Authorization": "Bearer " + keys["access_token"],
-        }
+        try:
+            body = {
+                "client_id": TWITCH_CLIENT_ID,
+                "client_secret": TWITCH_SECRET,
+                "grant_type": "client_credentials",
+            }
+            async with Conn() as resp:
+                keys = await resp.get_json(Urls.TWITCH_TOKEN_REQUEST, data=body)
+            logger.info("Twitch token refreshed")
+            self.twitch_headers = {
+                "Client-ID": TWITCH_CLIENT_ID,
+                "Authorization": "Bearer " + keys["access_token"],
+            }
+        except Exception as e:
+            logger.exception(e)
 
     @tasks.loop(seconds=20)
     async def debrid_check(self):
