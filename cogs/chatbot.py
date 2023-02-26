@@ -108,6 +108,9 @@ class ChatbotCog(commands.Cog):
                         logger.info(f"Response recvd: {response}")
                         # self.previous_messages.append("Waffle: " + response + " ")
                         # print(f"previous_messages: {''.join(self.previous_messages)}")
+                        # chat limit is 2000 chars
+                        if len(response) > 2000:
+                            response = response[:2000]
                         await message.reply(response, mention_author=False)
                     except Exception as e:
                         logger.exception(e)
