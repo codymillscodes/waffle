@@ -85,6 +85,7 @@ class Waffle(commands.Bot):
 
     @twitch_check.before_loop
     async def before_twitch_check(self):
+        await self.wait_until_ready()
         body = {
             "client_id": TWITCH_CLIENT_ID,
             "client_secret": TWITCH_SECRET,
