@@ -121,7 +121,7 @@ def fortnite(stats):
     return embed
 
 
-def htlb(results):
+def hltb(results):
     logger.info(f"Building embed for {results[0].game_name}")
     embed = Embed(
         title=f"HLTB Results for {arg}",
