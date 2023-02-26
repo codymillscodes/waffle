@@ -181,7 +181,7 @@ class DebridCog(commands.Cog):
                     await ctx.send("WRONG")
                 else:
                     if ctx.invoked_with == "rarbg":
-                        magnet_link = results[pick]["download"]
+                        magnet_link = results["items"][pick]["download"]
                     else:
                         logger.info(f"results: {results}")
                         magnet_link = torrents.info(
