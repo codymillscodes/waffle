@@ -38,7 +38,6 @@ class MiscCog(commands.Cog):
             )
             await ctx.reply(file=discord.File(log_file), mention_author=False)
         else:
-
             await ctx.reply("lol youre not allowed to do this", mention_author=False)
 
     @commands.command(
@@ -53,7 +52,7 @@ class MiscCog(commands.Cog):
         for line in rs.splitlines():
             char_stats.append(line.split(","))
         logger.info(char_stats)
-        stats_embed = utils.embed.runescape_embed(arg, char_stats)
+        stats_embed = utils.embed.runescape(arg, char_stats)
         await ctx.reply(embed=stats_embed, mention_author=False)
 
     @commands.command(
@@ -102,14 +101,8 @@ class MiscCog(commands.Cog):
         page = wiki_search.page(arg)
 
         if page.exists():
-            wiki_embed = discord.Embed()
-            wiki_embed.set_footer(
-                text=f"{ctx.author} | {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
-            )
-            wiki_embed.description = (
-                f"[**{page.title}**]({page.fullurl})\n{page.summary[0:500]}..."
-            )
-            await ctx.reply(embed=wiki_embed, mention_author=False)
+            embed = utils.embed.wikipedia(page)
+            await ctx.reply(embed=embed, mention_author=False)
         else:
             await ctx.reply("Pretty sure you made that up.", mention_author=False)
 
@@ -142,35 +135,8 @@ class MiscCog(commands.Cog):
     async def fn(self, ctx, *, arg):
         try:
             stats = self.fnapi.stats.fetch_by_name(arg)
-            stats_embed = discord.Embed(
-                title=f"{stats.user.name}",
-                description=f"**Battle Pass:** {stats.battle_pass.level}",
-            )
-            overall = stats.stats.all.overall
-            solo = stats.stats.all.solo
-            duo = stats.stats.all.duo
-            squad = stats.stats.all.squad
-            stats_embed.add_field(
-                name="__Overall__",
-                value=f"**Matches(Win rate):** {overall.matches} (*{overall.win_rate}%*)\n**K/D(ratio):** {overall.kills}/{overall.deaths} (*{overall.kd}*)\n**Kills\\Match:** {overall.kills_per_match} | **Kills\\Min:** {overall.kills_per_min}\n**Minutes Played:** {overall.minutes_played} | **Players Outlived:** {overall.players_outlived}",
-                inline=False,
-            )
-            stats_embed.add_field(
-                name="__Solo__",
-                value=f"**Matches(Win rate):** {solo.matches} (*{solo.win_rate}%*)\n**K/D(ratio):** {solo.kills}/{solo.deaths} (*{solo.kd}*)\n**Kills\\Match:** {solo.kills_per_match} | **Kills\\Min:** {solo.kills_per_min}\n**Minutes Played:** {solo.minutes_played} | **Players Outlived:** {solo.players_outlived}",
-                inline=False,
-            )
-            stats_embed.add_field(
-                name="__Duo__",
-                value=f"**Matches(Win rate):** {duo.matches} (*{duo.win_rate}%*)\n**K/D(ratio):** {duo.kills}/{duo.deaths} (*{duo.kd}*)\n**Kills\\Match:** {duo.kills_per_match} | **Kills\\Min:** {duo.kills_per_min}\n**Minutes Played:** {duo.minutes_played} | **Players Outlived:** {duo.players_outlived}",
-                inline=False,
-            )
-            stats_embed.add_field(
-                name="__Squad__",
-                value=f"**Matches(Win rate):** {squad.matches} (*{squad.win_rate}%*)\n**K/D(ratio):** {squad.kills}/{squad.deaths} (*{squad.kd}*)\n**Kills\\Match:** {squad.kills_per_match} | **Kills\\Min:** {squad.kills_per_min}\n**Minutes Played:** {squad.minutes_played} | **Players Outlived:** {squad.players_outlived}",
-                inline=False,
-            )
-            await ctx.reply(embed=stats_embed, mention_author=False)
+            embed = utils.embed.fortnite(stats)
+            await ctx.reply(embed=embed, mention_author=False)
         except fortnite_api.errors.NotFound:
             await ctx.reply("That's not a real player.", mention_author=False)
 

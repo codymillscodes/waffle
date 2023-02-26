@@ -2,7 +2,7 @@ from discord import Embed
 from loguru import logger
 
 
-def runescape_embed(name, char_stats):
+def runescape(name, char_stats):
     embed = Embed(name=f"{name}'s stats", color=0x00FF00)
     logger.info(f"Building embed for {name}")
     stat_names = [
@@ -78,3 +78,48 @@ def runescape_embed(name, char_stats):
     )
     logger.info(f"Built embed for {name}")
     return embed
+
+
+def wikipedia(page):
+    embed = Embed(title=page.title, url=page.fullurl, color=0x00FF00)
+    embed.description = f"{page.summary[0:500]}..."
+    logger.info(f"Built embed for {page.title}")
+    return embed
+
+
+def fortnite(stats):
+    logger.info(f"Building embed for {stats.user.name}")
+    embed = Embed(
+        title=f"{stats.user.name}",
+        description=f"**Battle Pass:** {stats.battle_pass.level}",
+    )
+    overall = stats.stats.all.overall
+    solo = stats.stats.all.solo
+    duo = stats.stats.all.duo
+    squad = stats.stats.all.squad
+    stats_embed.add_field(
+        name="__Overall__",
+        value=f"**Matches(Win rate):** {overall.matches} (*{overall.win_rate}%*)\n**K/D(ratio):** {overall.kills}/{overall.deaths} (*{overall.kd}*)\n**Kills\\Match:** {overall.kills_per_match} | **Kills\\Min:** {overall.kills_per_min}\n**Minutes Played:** {overall.minutes_played} | **Players Outlived:** {overall.players_outlived}",
+        inline=False,
+    )
+    stats_embed.add_field(
+        name="__Solo__",
+        value=f"**Matches(Win rate):** {solo.matches} (*{solo.win_rate}%*)\n**K/D(ratio):** {solo.kills}/{solo.deaths} (*{solo.kd}*)\n**Kills\\Match:** {solo.kills_per_match} | **Kills\\Min:** {solo.kills_per_min}\n**Minutes Played:** {solo.minutes_played} | **Players Outlived:** {solo.players_outlived}",
+        inline=False,
+    )
+    stats_embed.add_field(
+        name="__Duo__",
+        value=f"**Matches(Win rate):** {duo.matches} (*{duo.win_rate}%*)\n**K/D(ratio):** {duo.kills}/{duo.deaths} (*{duo.kd}*)\n**Kills\\Match:** {duo.kills_per_match} | **Kills\\Min:** {duo.kills_per_min}\n**Minutes Played:** {duo.minutes_played} | **Players Outlived:** {duo.players_outlived}",
+        inline=False,
+    )
+    stats_embed.add_field(
+        name="__Squad__",
+        value=f"**Matches(Win rate):** {squad.matches} (*{squad.win_rate}%*)\n**K/D(ratio):** {squad.kills}/{squad.deaths} (*{squad.kd}*)\n**Kills\\Match:** {squad.kills_per_match} | **Kills\\Min:** {squad.kills_per_min}\n**Minutes Played:** {squad.minutes_played} | **Players Outlived:** {squad.players_outlived}",
+        inline=False,
+    )
+    logger.info(f"Built embed for {stats.user.name}")
+    return embed
+
+
+def htlb():
+    pass
