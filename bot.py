@@ -18,7 +18,7 @@ from utils.random import get_link_msg
 from utils.embed import download_ready
 
 
-class Waffle(commands.Bot):
+class Waffle(discord.Client):
     def __init__(self):
         super().__init__(
             command_prefix="!", description="waffle", intents=discord.Intents.all()
