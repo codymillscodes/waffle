@@ -1,5 +1,10 @@
 from discord import Embed
 from loguru import logger
+from hurry.filesize import size
+from utils.helpers import percentage
+from utils.random import get_link_msg
+from config import http_url
+from urllib.parse import quote
 
 
 def runescape(name, char_stats):
@@ -149,4 +154,39 @@ def hltb(name, results):
                 inline=False,
             )
     logger.info(f"Built embed for {results[0].game_name}")
+    return embed
+
+
+# debrid embeds
+def debrid_status(all_status):
+    embed = Embed(title="Debrid Status", color=0x00FF00)
+    for m in all_status:
+        name = all_status[m].get("filename", "")
+        dlsize = float(all_status[m].get("size", 0))
+        seeders = all_status[m].get("seeders", 0)
+        speed = all_status[m].get("downloadSpeed", 0)
+        complete = float(all_status[m].get("downloaded", 0))
+        sized_size = 0
+        percentage_complete = "0%"
+        if dlsize > 0:
+            sized_size = size(int(dlsize))
+        if speed > 0:
+            speed = size(int(speed))
+        if complete > 0:
+            percentage_complete = percentage(complete, dlsize)
+        embed.add_field(
+            name=name,
+            value=f"{percentage_complete} of {sized_size} | Seeders: {seeders} | Speed: {speed}",
+            inline=False,
+        )
+    return embed
+
+
+def download_ready(author, magnet):
+    embed = Embed(description=f"{author.mention}")
+    link = f"{http_url}magnets/{quote(magnet[1])}/"
+    embed.add_field(
+        name=f"{magnet[1]}",
+        value=f"[{get_link_msg()}]({link})",
+    )
     return embed

@@ -8,26 +8,9 @@ from py1337x import py1337x
 from loguru import logger
 from hurry.filesize import size
 import utils.debrid_urls as debrid_url
+import utils.embed
 import config
 
-LINK_MSG = [
-    "Click this shit for files, i am very lazy.",
-    "linky linky",
-    "this is a link",
-    "3=====D~~",
-    "Follow the rabbit hole to the files",
-    "File access granted, click at your own risk",
-    "The files are waiting for you, just one click away",
-    "Get ready for the ride, files incoming",
-    "The files are calling your name, answer the call",
-    "Link to enlightenment (and files)",
-    "It's not just a link, it's an adventure",
-    "Links, files, and good times await",
-    "You can't handle the link, or can you?",
-    "It's a link to remember",
-    "File me away, I'm ready to be clicked",
-    "Buckle up, it's a wild link ride",
-]
 torrents = py1337x(proxy="1337x.to")
 # torrents.search('harry potter', category='movies', sortBy='seeders', order='desc')
 class DebridCog(commands.Cog):
@@ -96,15 +79,10 @@ class DebridCog(commands.Cog):
             )
             logger.info(f"Adding magnet for {mag[1]}")
             if mag[2]:
-                em_links = discord.Embed(description=f"{ctx.author.mention}")
-                link = f"{config.http_url}magnets/{urllib.parse.quote(mag[1])}/"
-                em_links.add_field(
-                    name=f"{mag[1]}",
-                    value=f"[{random.choice(LINK_MSG)}]({link})",
-                )
+                embed = utils.embed.download_ready(ctx.author, mag)
                 logger.info(f"{mag[1]} is ready.")
                 dl_channel = await self.bot.fetch_channel(config.dl_channel)
-                await dl_channel.send(embed=em_links)
+                await dl_channel.send(embed=embed)
             else:
                 with open("debrid.txt", "a") as f:
                     f.write(f"{mag[0]},{ctx.author.id},magnet\n")
@@ -126,32 +104,12 @@ class DebridCog(commands.Cog):
         if all_status == 0:
             await ctx.send("No active downloads.")
         else:
-            if all_status:
-                em_status = discord.Embed(description="Active downloads:")
-                try:
-                    for m in all_status:
-                        name = all_status[m].get("filename", "")
-                        dlsize = float(all_status[m].get("size", 0))
-                        seeders = all_status[m].get("seeders", 0)
-                        speed = all_status[m].get("downloadSpeed", 0)
-                        complete = float(all_status[m].get("downloaded", 0))
-                        sized_size = 0
-                        percentage_complete = "0%"
-                        if dlsize > 0:
-                            sized_size = size(int(dlsize))
-                        if speed > 0:
-                            speed = size(int(speed))
-                        if complete > 0:
-                            percentage_complete = percentage(complete, dlsize)
-                        em_status.add_field(
-                            name=name,
-                            value=f"{percentage_complete} of {sized_size} | Seeders: {seeders} | Speed: {speed}",
-                            inline=False,
-                        )
-                except Exception as ex:
-                    logger.warning("Error Occured: {ex}")
-                    em_status.add_field(name="Error", value=f"{ex}", inline=False)
-            await ctx.reply(embed=em_status, mention_author=False)
+            try:
+                embed = utils.embed.debrid_status(all_status)
+            except Exception as ex:
+                logger.warning(f"Error Occured: {ex}")
+                await ctx.reply("Error occured. Try again later.")
+        await ctx.reply(embed=embed, mention_author=False)
 
     @commands.command(
         name="clearqueue",
@@ -329,12 +287,3 @@ class DebridCog(commands.Cog):
 
 def setup(bot):
     bot.add_cog(DebridCog(bot))
-
-
-def percentage(curr, total):
-    if not (isinstance(curr, (int, float)) and isinstance(total, (int, float))):
-        raise ValueError("Both curr and total should be numerical values")
-    if total == 0:
-        raise ValueError("Total can not be zero")
-    num = curr / total
-    return f"{num:.2%}"
