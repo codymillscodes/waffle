@@ -308,7 +308,8 @@ class DebridCog(commands.Cog):
                         )
 
             except asyncio.TimeoutError:
-                await ctx.send("TOO SLOW", mention_author=False)
+                # await ctx.send("TOO SLOW", mention_author=False)
+                await ctx.message.add_reaction("❌")
 
     async def get_token(self):
         try:
