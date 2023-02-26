@@ -144,32 +144,8 @@ class MiscCog(commands.Cog):
     async def howlong(self, ctx, *, arg):
         try:
             results = await self.hltb.async_search(arg, similarity_case_sensitive=False)
-            game_embed = discord.Embed(
-                title=f"HLTB Results for {arg}",
-                url="https://howlongtobeat.com?q=" + arg.replace(" ", "+"),
-            )
-            game_embed.set_thumbnail(url=results[0].game_image_url)
-            if len(results) < 5:
-                for x in results:
-                    platforms = ""
-                    for p in x.profile_platforms:
-                        platforms += f"{p}, "
-                    game_embed.add_field(
-                        name=f"{x.game_name} ({x.release_world})",
-                        value=f"**Dev:** {x.profile_dev}\n**Platforms:** {platforms[:-2]}\n**Main Story:** {x.main_story}h | **Main + Extras:** {x.main_extra}h\n**Completionist:** {x.completionist}h | **All:** {x.all_styles}h\n{x.game_web_link}",
-                        inline=False,
-                    )
-            else:
-                for i in range(4):
-                    platforms = ""
-                    for p in results[i].profile_platforms:
-                        platforms += f"{p}, "
-                    game_embed.add_field(
-                        name=f"{results[i].game_name} ({results[i].release_world}))",
-                        value=f"**Dev:** {results[i].profile_dev}\n**Platforms:** {platforms[:-2]}\n**Main Story:** {results[i].main_story}h | **Main + Extras:** {results[i].main_extra}h\n**Completionist:** {results[i].completionist}h | **All:** {results[i].all_styles}h\n{results[i].game_web_link}",
-                        inline=False,
-                    )
-            await ctx.reply(embed=game_embed, mention_author=False)
+            embed = utils.embed.hltb(results)
+            await ctx.reply(embed=embed, mention_author=False)
         except IndexError:
             await ctx.reply("That's not a real game.", mention_author=False)
         except Exception as e:
