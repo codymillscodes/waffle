@@ -4,7 +4,7 @@ import openai
 import re
 from loguru import logger
 import config
-
+from utils.connection import Connection as Conn
 
 ENGINE = "text-davinci-003"
 WAFFLE = "Waffle: "
@@ -15,7 +15,7 @@ class ChatbotCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         # self.previous_messages = []
-        openai.aiosession.set(self.bot.session)
+        openai.aiosession.set(Conn())
 
     @commands.command(
         name="gpt",
