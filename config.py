@@ -5,32 +5,30 @@ load_dotenv()
 
 # convert to uppercase
 # Discord bot settings
-discord_application_id = os.environ["discord_appid"]
-discord_public_key = os.environ["discord_pubkey"]
-discord_bot_name = "waffle"
-discord_bot_token = os.environ["discord_token"]
-discord_oauth_id = os.environ["discord_oauthid"]
-discord_oauth_secret = os.environ["discord_oauth_secret"]
-log_channel = os.environ["log_channel"]
-dl_channel = os.environ["dl_channel"]
-restart_role = os.environ["restart_role"]
+DISCORD_APPID = os.environ["discord_appid"]
+DISCORD_PUBKEY = os.environ["discord_pubkey"]
+BOT_NAME = "waffle"
+BOT_TOKEN = os.environ["discord_token"]
+DISCORD_OAUTH_ID = os.environ["discord_oauthid"]
+DISCORD_OAUTH_SECRET = os.environ["discord_oauth_secret"]
+LOG_CHANNEL = os.environ["log_channel"]
+DL_CHANNEL = os.environ["dl_channel"]
+RESTART_ROLE = os.environ["restart_role"]
 
 # debrid settings
-debrid_host = os.environ["debrid_host"]
-debrid_key = os.environ["debrid_key"]
-debrid_session = os.environ["debrid_session"]
-http_url = os.environ["http_url"]
-# dog api
-dog_auth = os.environ["dog_auth"]
+DEBRID_AGENT = os.environ["debrid_host"]
+DEBRID_KEY = os.environ["debrid_key"]
+DEBRID_SESSION = os.environ["debrid_session"]
+DEBRID_WEBDAV = os.environ["http_url"]
 # cat api key
-cat_auth = os.environ["cat_auth"]
+CAT_KEY = os.environ["cat_auth"]
 # openai key
-openai_key = os.environ["openai_key"]
+OPENAI_KEY = os.environ["openai_key"]
 # dbs
-twitch_client_id = os.environ["twitch_client_id"]
-twitch_secret = os.environ["twitch_secret"]
-twitch_channel = os.environ["twitch_channel"]
-twitch_notify_role = os.environ["twitch_notify_role"]
-fortnite_api = os.environ["fortnite_api"]
-music_ip = os.environ["music_ip"]
-emoji = "\N{WAFFLE}"
+TWITCH_CLIENT_ID = os.environ["twitch_client_id"]
+TWITCH_SECRET = os.environ["twitch_secret"]
+TWITCH_CHANNEL = os.environ["twitch_channel"]
+TWITCH_NOTIFY_ROLE = os.environ["twitch_notify_role"]
+FORTNITE_API = os.environ["fortnite_api"]
+#MUSIC_API = os.environ["music_ip"]
+WAFFLE_EMOJI = "\N{WAFFLE}"

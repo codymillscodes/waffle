@@ -2,39 +2,6 @@
 from bot import Waffle
 
 
-def create(
-    request, link="", magnet="", magnetid="", agent="", api_key="", stream="", id=""
-):
-    base_url = "https://api.alldebrid.com/v4/"
-    cred = f"agent={agent}&apikey={api_key}"
-
-    if link != "":
-        if request in {"infos", "unlock", "streaming", "delayed"}:
-            if request == "streaming":
-                return f"{base_url}link/{request}?{cred}&id={id}&stream={stream}"
-            if request == "delayed":
-                return f"{base_url}link/{request}?{cred}&id={id}"
-            return f"{base_url}link/{request}?{cred}&link={link}"
-        return "request must be infos, unlock, streaming or delayed"
-    if magnetid != "":
-        if request in {"status", "delete", "restart"}:
-            return f"{base_url}magnet/{request}?{cred}&id={magnetid}"
-        return "request must be status, delete or restart"
-    if magnet != "":
-        if request in {"upload", "instant"}:
-            return f"{base_url}magnet/{request}?{cred}&magnets[]={magnet}"
-        return "request must be upload or instant"
-    elif request == "status":
-        return f"{base_url}magnet/{request}?{cred}&status=active"
-    elif request == "ready":
-        return f"{base_url}magnet/status?{cred}&status=ready"
-    elif request == "all":
-        return f"{base_url}magnet/status?{cred}"
-    elif request == "ping":
-        return f"{base_url}ping?agent={agent}"
-    elif request == "hosts":
-        return f"{base_url}hosts?agent={agent}"
-
 
 async def upload_magnet(magnet, agent, api_key, bot: Waffle):
     try:

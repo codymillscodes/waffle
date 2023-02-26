@@ -8,6 +8,7 @@ import aiohttp
 from alldebrid_api import debrid_url
 import urllib.parse
 import random
+from urls import Urls
 
 class Waffle(commands.Bot):
     def __init__(self):
@@ -52,11 +53,11 @@ class Waffle(commands.Bot):
 
     @tasks.loop(seconds=15)
     async def twitch_check(self):
-        twitch_channel = await self.fetch_channel(config.twitch_channel)
+        twitch_channel = await self.fetch_channel(config.TWITCH_CHANNEL)
         # logger.debug("Checking twitchers...")
         for t in self.twitchers:
             async with self.session.get(
-                "https://api.twitch.tv/helix/streams?user_login=" + t,
+                Urls.TWITCH_URL + t,
                 headers=self.twitch_headers,
                 timeout=30,
             ) as resp:
@@ -65,7 +66,7 @@ class Waffle(commands.Bot):
                 if t not in self.online:
                     self.online.append(t)
                     em_twitch = discord.Embed(
-                        description=f"<@&{config.twitch_notify_role}>"
+                        description=f"<@&{config.TWITCH_NOTIFY_ROLE}>"
                     )
                     em_twitch.add_field(
                         name=f"""{t} is live: {stream_data["data"][0]["title"]} playing {stream_data["data"][0]["game_name"]}""",
