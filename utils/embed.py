@@ -4,7 +4,7 @@ from loguru import logger
 
 def runescape_embed(name, char_stats):
     embed = Embed(name=f"{name}'s stats", color=0x00FF00)
-    print(char_stats)
+    logger.info(f"Building embed for {name}")
     stat_names = [
         "Overall",
         "Attack",
@@ -38,10 +38,6 @@ def runescape_embed(name, char_stats):
     ]
     stats = {}
     char_stats = char_stats[0 : len(stat_names)]
-    print(char_stats)
-    logger.info(
-        f"char_stats: {char_stats} | stat_names: {stat_names} | len: {len(stat_names)} | len2: {len(char_stats)} | stats: {stats}"
-    )
     for i in range(len(char_stats)):
         stats[stat_names[i]] = char_stats[i][1]
         # combat level = ((max((str + atk), (mag * 2), (rng * 2)) * 1.3) + def + hp + (pray / 2) + (sum / 2)) / 4;
@@ -80,4 +76,5 @@ def runescape_embed(name, char_stats):
         value=f"**Slayer:** {stats['Slayer']} **Dungeoneering:** {stats['Dungeoneering']} **Agility:** {stats['Agility']}\n**Thieving:** {stats['Thieving']} **Invention:** {stats['Invention']}",
         inline=False,
     )
+    logger.info(f"Built embed for {name}")
     return embed
