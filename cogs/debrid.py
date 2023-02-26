@@ -233,7 +233,7 @@ class DebridCog(commands.Cog):
                     value=f"More results, longer timeout. Don't fuck it up cause it probably won't work twice in a row!\n*!pick 1-{len(results)}*",
                     inline=False,
                 )
-                await ctx.reply(embed=em_result)
+                e = await ctx.reply(embed=em_result)
         else:
             results = torrents.search(input, sortBy="seeders", order="desc")
             sanitized_results = []
@@ -264,7 +264,7 @@ class DebridCog(commands.Cog):
                     value="You should pick the one with the most seeders and a reasonable filesize. Pay attention to the quality. You dont want a cam or TS.\n*!pick 1-5*",
                     inline=False,
                 )
-                await ctx.reply(embed=em_result)
+                e = await ctx.reply(embed=em_result)
             else:
                 await ctx.reply("Zero results.", mention_author=False)
 
@@ -309,7 +309,9 @@ class DebridCog(commands.Cog):
 
             except asyncio.TimeoutError:
                 # await ctx.send("TOO SLOW", mention_author=False)
-                await ctx.message.add_reaction("❌")
+                # add reaction to previously sent em_result embed
+                await e.add_reaction("❌")
+                # await ctx.message.add_reaction("❌")
 
     async def get_token(self):
         try:
