@@ -8,7 +8,7 @@ from urllib.parse import quote
 
 
 def runescape(name, char_stats):
-    embed = Embed(name=f"{name}'s stats", color=0x00FF00)
+    embed = Embed(title=f"{name}'s stats", color=0x00FF00)
     logger.info(f"Building embed for {name}")
     stat_names = [
         "Overall",
