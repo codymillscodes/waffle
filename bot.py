@@ -165,3 +165,7 @@ class Waffle(commands.Bot):
         with open("debrid.txt", "w") as f:
             for id in debrid:
                 f.write(f"{id[0]},{id[1]},{id[2]}\n")
+
+    @debrid_check.before_loop
+    async def before_task(self):
+        await self.wait_until_ready()
