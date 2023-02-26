@@ -99,6 +99,7 @@ class Waffle(commands.Bot):
             }
             async with Conn() as resp:
                 keys = await resp.get_json(Urls.TWITCH_TOKEN_REQUEST, data=body)
+            logger.info("Keys: " + str(keys))
             logger.info("Twitch token refreshed")
             self.twitch_headers = {
                 "Client-ID": TWITCH_CLIENT_ID,
