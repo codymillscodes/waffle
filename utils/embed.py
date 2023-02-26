@@ -3,7 +3,7 @@ from loguru import logger
 from hurry.filesize import size
 from utils.helpers import percentage
 from utils.random import get_link_msg
-from config import http_url
+from config import DEBRID_WEBDAV
 from urllib.parse import quote
 
 
@@ -182,18 +182,22 @@ def debrid_status(all_status):
     return embed
 
 
-def download_ready(author, magnet):
+def download_ready(author, magnet, link=None):
     embed = Embed(description=f"{author.mention}")
-    link = f"{http_url}magnets/{quote(magnet[1])}/"
+    if link is None:
+        link = f"{DEBRID_WEBDAV}magnets/{quote(magnet)}/"
     embed.add_field(
-        name=f"{magnet[1]}",
+        name=f"{magnet}",
         value=f"[{get_link_msg()}]({link})",
     )
     return embed
 
-def torrent_results(results, emergency:bool = False):
+
+def torrent_results(results, emergency: bool = False):
     if emergency:
-        embed = Embed(description=":rotating_light::bangbang:__***YOU HAVE DECLARED A TORRENT EMERGENCY***__:bangbang::rotating_light:")
+        embed = Embed(
+            description=":rotating_light::bangbang:__***YOU HAVE DECLARED A TORRENT EMERGENCY***__:bangbang::rotating_light:"
+        )
         if len(results["torrent_results"]) > 10:
             results = results["torrent_results"][:10]
         else:
@@ -202,9 +206,7 @@ def torrent_results(results, emergency:bool = False):
         for m in results:
             x = x + 1
             result_value = f"Seeders: {m['seeders']} | Leechers: {m['leechers']} | Size: {size(int(m['size']))}"
-            embed.add_field(
-                name=f"{x}. {m['title']}", value=result_value, inline=False
-            )
+            embed.add_field(name=f"{x}. {m['title']}", value=result_value, inline=False)
 
         embed.add_field(
             name="----------------",
@@ -231,4 +233,3 @@ def torrent_results(results, emergency:bool = False):
             inline=False,
         )
         return embed
-        

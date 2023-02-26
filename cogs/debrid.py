@@ -1,23 +1,21 @@
 import time
-import random
-import urllib.parse
 import asyncio
-import discord
 from discord.ext import commands
 from py1337x import py1337x
 from loguru import logger
-from hurry.filesize import size
-import utils.debrid_urls as debrid_url
+import utils.debrid as deb
 import utils.embed
+from utils.urls import Urls
 import config
+from utils.connection import Connection as Conn
 
 torrents = py1337x(proxy="1337x.to")
 # torrents.search('harry potter', category='movies', sortBy='seeders', order='desc')
 class DebridCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.api_key = config.debrid_key
-        self.api_host = config.debrid_host
+        self.api_key = config.DEBRID_KEY
+        self.api_host = config.DEBRID_AGENT
         self.token = ""
 
     @commands.command(
@@ -26,13 +24,8 @@ class DebridCog(commands.Cog):
         brief="Delete x amount of old torrents.",
     )
     async def deletetorrents(self, ctx, *, input: int):
-        async with self.bot.session.get(
-            debrid_url.create(
-                request="ready", agent=self.api_host, api_key=self.api_key
-            ),
-            timeout=self.bot.timeout,
-        ) as resp:
-            r = await resp.json()
+        async with Conn() as resp:
+            r = await resp.get_json(Urls.DEBRID_STATUS_READY)
             r = r["data"]["magnets"]
 
         logger.info(f"{len(r)} torrents cached.")
@@ -45,9 +38,7 @@ class DebridCog(commands.Cog):
             if torrent in mag_slice:
                 ids.append(r[torrent]["id"])
         for i in ids:
-            await debrid_url.delete_magnet(
-                i, agent=self.api_host, api_key=self.api_key, bot=self.bot
-            )
+            await deb.delete_magnet(i)
             time.sleep(0.1)
         logger.info(f"{input} old torrents deleted.")
         await ctx.reply(f"{input} old torrents deleted.")
@@ -58,12 +49,7 @@ class DebridCog(commands.Cog):
         brief="Returns the number of cached torrents.",
     )
     async def ready(self, ctx):
-        async with self.bot.session.get(
-            debrid_url.create(request="all", agent=self.api_host, api_key=self.api_key),
-            timeout=self.bot.timeout,
-        ) as resp:
-            r = await resp.json()
-            r = r["data"]["magnets"]
+        r = await deb.get_all_magnet_status()
         logger.info(f"{len(r)} cached torrents.")
         await ctx.send(f"{len(r)} torrents.\nThe limit is 1000.")
 
@@ -74,14 +60,12 @@ class DebridCog(commands.Cog):
     )
     async def mag(self, ctx, *, input: str):
         if input.startswith("magnet"):
-            mag = await debrid_url.upload_magnet(
-                input, agent=self.api_host, api_key=self.api_key, bot=self.bot
-            )
+            mag = await deb.upload_magnet(input)
             logger.info(f"Adding magnet for {mag[1]}")
             if mag[2]:
                 embed = utils.embed.download_ready(ctx.author, mag)
                 logger.info(f"{mag[1]} is ready.")
-                dl_channel = await self.bot.fetch_channel(config.dl_channel)
+                dl_channel = await self.bot.fetch_channel(config.DL_CHANNEL)
                 await dl_channel.send(embed=embed)
             else:
                 with open("debrid.txt", "a") as f:
@@ -98,10 +82,8 @@ class DebridCog(commands.Cog):
         brief="Returns status of active torrents.",
     )
     async def stat(self, ctx):
-        all_status = await debrid_url.get_all_magnet_status(
-            agent=self.api_host, api_key=self.api_key, bot=self.bot
-        )
-        if all_status == 0:
+        all_status = await deb.get_active_magnets()
+        if len(all_status) <= 0:
             await ctx.send("No active downloads.")
         else:
             try:
@@ -150,11 +132,11 @@ class DebridCog(commands.Cog):
             self.token = self.get_token()
             max_requests = 10
             input = input.replace(" ", "%20")
-            url = f"https://torrentapi.org/pubapi_v2.php?app_id=waffle&token={self.token}&mode=search&search_string={input}&sort=seeders&format=json_extended&category=18;41;54;50;45;44;17;48;14"
+            url = f"{Urls.RARBG_API}{self.token}&search_string={input}"
             counter = 0
             while counter < max_requests:
-                async with self.bot.session.get(url, timeout=self.bot.timeout) as resp:
-                    r = await resp.json()
+                async with Conn() as resp:
+                    r = await resp.get_json(url)
                     if "torrent_results" in r:
                         break
                     time.sleep(0.1)
@@ -176,7 +158,7 @@ class DebridCog(commands.Cog):
         else:
             results = torrents.search(input, sortBy="seeders", order="desc")
             sanitized_results = []
-            for torrent in results["items"]:
+            for torrent in results["items"][:30]:
                 info = torrents.info(torrentId=torrent["torrentId"])
                 if "xxx".upper() not in info["category"]:
                     sanitized_results.append(torrent)
@@ -205,15 +187,10 @@ class DebridCog(commands.Cog):
                             torrentId=results[pick]["torrentId"]
                         )["magnetLink"]
                     # add magnet, get ready, name, id
-                    mag = await debrid_url.upload_magnet(
-                        magnet_link,
-                        agent=self.api_host,
-                        api_key=self.api_key,
-                        bot=self.bot,
-                    )
+                    mag = await deb.upload_magnet(magnet_link)
                     if mag[2]:
-                        embed = utils.embed.download_ready(ctx.author, mag)
-                        dl_channel = await self.bot.fetch_channel(config.dl_channel)
+                        embed = utils.embed.download_ready(ctx.author, mag[1])
+                        dl_channel = await self.bot.fetch_channel(config.DL_CHANNEL)
                         await dl_channel.send(embed=embed)
                     else:
                         with open("debrid.txt", "a") as f:
@@ -230,11 +207,8 @@ class DebridCog(commands.Cog):
 
     async def get_token(self):
         try:
-            async with self.bot.session.get(
-                "https://torrentapi.org/pubapi_v2.php?app_id=waffle&get_token=get_token",
-                timeout=30,
-            ) as resp:
-                r = await resp.json()
+            async with Conn() as resp:
+                r = await resp.get_json(Urls.TOKEN_URL)
             logger.info("Got token.")
             logger.debug(f"Token: {r.json()['token']}")
             return r.json()["token"]

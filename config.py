@@ -3,32 +3,32 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# convert to uppercase
 # Discord bot settings
-DISCORD_APPID = os.environ["discord_appid"]
-DISCORD_PUBKEY = os.environ["discord_pubkey"]
-BOT_NAME = "waffle"
-BOT_TOKEN = os.environ["discord_token"]
-DISCORD_OAUTH_ID = os.environ["discord_oauthid"]
-DISCORD_OAUTH_SECRET = os.environ["discord_oauth_secret"]
-LOG_CHANNEL = os.environ["log_channel"]
-DL_CHANNEL = os.environ["dl_channel"]
-RESTART_ROLE = os.environ["restart_role"]
+DISCORD_APPID = os.environ["DISCORD_APPID"]
+DISCORD_PUBKEY = os.environ["DISCORD_PUBKEY"]
+BOT_NAME = os.environ["BOT_NAME"]
+BOT_TOKEN = os.environ["BOT_TOKEN"]
+DISCORD_OAUTH_ID = os.environ["DISCORD_OAUTH_ID"]
+DISCORD_OAUTH_SECRET = os.environ["DISCORD_OAUTH_SECRET"]
+LOG_CHANNEL = os.environ["LOG_CHANNEL"]
+DL_CHANNEL = os.environ["DL_CHANNEL"]
+RESTART_ROLE = os.environ["RESTART_ROLE"]
 
 # debrid settings
-DEBRID_AGENT = os.environ["debrid_host"]
-DEBRID_KEY = os.environ["debrid_key"]
-DEBRID_SESSION = os.environ["debrid_session"]
-DEBRID_WEBDAV = os.environ["http_url"]
+DEBRID_AGENT = os.environ["DEBRID_AGENT"]
+DEBRID_KEY = os.environ["DEBRID_KEY"]
+DEBRID_SESSION = os.environ["DEBRID_SESSION"]
+DEBRID_WEBDAV = os.environ["DEBRID_WEBDAV"]
 # cat api key
-CAT_KEY = os.environ["cat_auth"]
+CAT_KEY = os.environ["CAT_KEY"]
 # openai key
-OPENAI_KEY = os.environ["openai_key"]
-# dbs
-TWITCH_CLIENT_ID = os.environ["twitch_client_id"]
-TWITCH_SECRET = os.environ["twitch_secret"]
-TWITCH_CHANNEL = os.environ["twitch_channel"]
-TWITCH_NOTIFY_ROLE = os.environ["twitch_notify_role"]
-FORTNITE_API = os.environ["fortnite_api"]
-#MUSIC_API = os.environ["music_ip"]
+OPENAI_KEY = os.environ["OPENAI_KEY"]
+# twitch settings
+TWITCH_CLIENT_ID = os.environ["TWITCH_CLIENT_ID"]
+TWITCH_SECRET = os.environ["TWITCH_SECRET"]
+TWITCH_CHANNEL = os.environ["TWITCH_CHANNEL"]
+TWITCH_NOTIFY_ROLE = os.environ["TWITCH_NOTIFY_ROLE"]
+# fortnite settings
+FORTNITE_API_KEY = os.environ["FORTNITE_API_KEY"]
+# MUSIC_API = os.environ["music_ip"]
 WAFFLE_EMOJI = "\N{WAFFLE}"

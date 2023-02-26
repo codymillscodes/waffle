@@ -2,18 +2,17 @@ import os
 import re
 import urllib.parse
 from discord.ext import commands
-import discord
 from bs4 import BeautifulSoup
 from loguru import logger
-from alldebrid_api import debrid_url
-from config import debrid_host, debrid_key, emoji, dl_channel
+from config import DL_CHANNEL, WAFFLE_EMOJI
+from utils.embed import download_ready
+from utils.urls import Urls
+from utils.connection import Connection as Conn
 
 
 class DirectDLCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.api_key = debrid_key
-        self.api_host = debrid_host
 
     @commands.command(
         name="bandcamp",
@@ -29,7 +28,7 @@ class DirectDLCog(commands.Cog):
             f"sh /mnt/thumb/waffle/scripts/bandcamp.sh {url} {title[1]} {title[0]} &"
         )
         logger.info(f"Downloading {title[0]} by {title[1]}")
-        await ctx.message.add_reaction(emoji)
+        await ctx.message.add_reaction(WAFFLE_EMOJI)
 
     @commands.command(
         name="unlock",
@@ -37,34 +36,22 @@ class DirectDLCog(commands.Cog):
         brief="Get mp3 of YT video.",
     )
     async def unlock(self, ctx, *, input: str):
-        agent = self.api_host
-        key = self.api_key
         if "youtube" in input:
             link = input
-            url = debrid_url.create(
-                "unlock",
-                link=link,
-                agent=agent,
-                api_key=key,
-            )
-            async with self.bot.session.get(url) as resp:
-                result = await resp.json()
+            async with Conn() as resp:
+                result = await resp.get_json(Urls.DEBRID_UNLOCK + link)
             id = result["data"]["id"]
             filename = result["data"]["filename"]
             logger.info(f"Unlocking ({id}) : {filename}")
             stream = urllib.parse.quote(result["data"]["streams"][0]["id"])
-            stream_url = debrid_url.create(
-                "streaming", agent=agent, api_key=key, id=id, stream=stream, link=link
-            )
-            async with self.bot.session.get(stream_url) as resp:
-                result = await resp.json()
+            async with Conn() as resp:
+                result = await resp.get_json(
+                    f"{Urls.DEBRID_STREAMING}{id}&stream={stream}"
+                )
             id = result["data"]["delayed"]
             logger.info(f"Got delayed ID: {id}")
-            delay_url = debrid_url.create(
-                "delayed", agent=agent, api_key=key, id=id, link=link
-            )
-            async with self.bot.session.get(delay_url) as resp:
-                re = await resp.json()
+            async with Conn() as resp:
+                re = await resp.get_json(Urls.DEBRID_DELAYED + id)
             if re["data"]["status"] != 2:
                 with open("debrid.txt", "a") as f:
                     f.write(f"{id},{ctx.author.id},link\n")
@@ -72,25 +59,22 @@ class DirectDLCog(commands.Cog):
                 await ctx.send("It's not ready and there's no !stat for this.")
             elif re["data"]["status"] == 2:
                 link = re["data"]["link"]
-                dlchannel = await self.bot.fetch_channel(dl_channel)
-                em_links = discord.Embed(description=f"{ctx.author.mention}")
-                em_links.add_field(
-                    name={filename},
-                    value=f"[Click this shit for files, i am very lazy.]({link})",
-                )
+                dlchannel = await self.bot.fetch_channel(DL_CHANNEL)
+                embed = download_ready(ctx.author, filename, link)
                 logger.info(f"{id} ready.")
-                await dlchannel.send(embed=em_links)
+                await dlchannel.send(embed=embed)
         else:
             await ctx.reply("Only supports youtube for now.", mention_author=False)
 
     async def get_title(self, url):
-        async with self.bot.session.get(url) as resp:
-            r = await resp.text()
+        async with Conn() as resp:
+            r = await resp.get_text(url)
         soup = BeautifulSoup(r, "html.parser")
         s = soup.find("meta", property="og:title")
         title = s["content"].split(", by ")
         logger.info(f"Got title: {title}")
         return title
+
 
 def setup(bot):
     bot.add_cog(DirectDLCog(bot))
