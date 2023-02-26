@@ -121,11 +121,11 @@ def fortnite(stats):
     return embed
 
 
-def hltb(results):
+def hltb(name, results):
     logger.info(f"Building embed for {results[0].game_name}")
     embed = Embed(
-        title=f"HLTB Results for {arg}",
-        url="https://howlongtobeat.com?q=" + arg.replace(" ", "+"),
+        title=f"HLTB Results for {name}",
+        url="https://howlongtobeat.com?q=" + name.replace(" ", "+"),
     )
     embed.set_thumbnail(url=results[0].game_image_url)
     if len(results) < 5:

@@ -144,7 +144,7 @@ class MiscCog(commands.Cog):
     async def howlong(self, ctx, *, arg):
         try:
             results = await self.hltb.async_search(arg, similarity_case_sensitive=False)
-            embed = utils.embed.hltb(results)
+            embed = utils.embed.hltb(arg, results)
             await ctx.reply(embed=embed, mention_author=False)
         except IndexError:
             await ctx.reply("That's not a real game.", mention_author=False)
