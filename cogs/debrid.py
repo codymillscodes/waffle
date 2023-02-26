@@ -158,7 +158,7 @@ class DebridCog(commands.Cog):
         else:
             results = torrents.search(input, sortBy="seeders", order="desc")
             sanitized_results = []
-            for torrent in results["items"][:30]:
+            for torrent in results["items"]:
                 info = torrents.info(torrentId=torrent["torrentId"])
                 if "xxx".upper() not in info["category"]:
                     sanitized_results.append(torrent)
