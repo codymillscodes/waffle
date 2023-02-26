@@ -76,5 +76,5 @@ class DirectDLCog(commands.Cog):
         return title
 
 
-def setup(bot):
-    bot.add_cog(DirectDLCog(bot))
+async def setup(bot):
+    await bot.add_cog(DirectDLCog(bot))

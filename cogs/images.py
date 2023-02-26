@@ -45,5 +45,5 @@ class ImagesCog(commands.Cog):
         await ctx.reply(image, mention_author=False)
 
 
-def setup(bot):
-    bot.add_cog(ImagesCog(bot))
+async def setup(bot):
+    await bot.add_cog(ImagesCog(bot))

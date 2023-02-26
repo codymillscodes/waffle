@@ -216,5 +216,5 @@ class DebridCog(commands.Cog):
             logger.error(f"Failed to get torrent api token.\n{r.json()}")
 
 
-def setup(bot):
-    bot.add_cog(DebridCog(bot))
+async def setup(bot):
+    await bot.add_cog(DebridCog(bot))

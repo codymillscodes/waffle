@@ -30,5 +30,5 @@ class SystemCog(commands.Cog):
             await ctx.reply("lol youre not allowed to do this", mention_author=False)
 
 
-def setup(bot):
-    bot.add_cog(SystemCog(bot))
+async def setup(bot):
+    await bot.add_cog(SystemCog(bot))
