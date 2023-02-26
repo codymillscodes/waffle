@@ -190,3 +190,5 @@ def download_ready(author, magnet):
         value=f"[{get_link_msg()}]({link})",
     )
     return embed
+
+def torrent_results(results, emergency:bool = False):
