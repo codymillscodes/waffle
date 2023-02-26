@@ -1,4 +1,5 @@
 from discord import Embed
+from loguru import logger
 
 
 def runescape_embed(name, char_stats):
@@ -36,6 +37,9 @@ def runescape_embed(name, char_stats):
     ]
     stats = {}
     char_stats = char_stats[0 : len(stat_names)]
+    logger.info(
+        f"char_stats: {char_stats} | stat_names: {stat_names} | len: {len(stat_names)} | len2: {len(char_stats)} | stats: {stats}"
+    )
     for i in range(len(char_stats)):
         stats[stat_names[i]] = char_stats[i][1]
         # combat level = ((max((str + atk), (mag * 2), (rng * 2)) * 1.3) + def + hp + (pray / 2) + (sum / 2)) / 4;
