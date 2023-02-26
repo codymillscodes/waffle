@@ -52,7 +52,7 @@ class MiscCog(commands.Cog):
             rs = await resp.text()
         for line in rs.splitlines():
             char_stats.append(line.split(","))
-
+        logger.info(char_stats)
         stats_embed = utils.embed.runescape_embed(char_stats, arg)
         await ctx.reply(embed=stats_embed, mention_author=False)
 
