@@ -32,7 +32,7 @@ class ButtCog(commands.Cog):
 
         if "roll tide" in message.content.lower():
             await message.channel.send("Roll tide!")
-        elif random.randint(1, 100) <= 30:
+        elif random.randint(1, 100) <= 20:
             logger.info(f"Buttifying {message.content}")
             for word in words:
                 if word.startswith(":"):
