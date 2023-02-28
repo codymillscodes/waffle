@@ -30,17 +30,18 @@ class ButtCog(commands.Cog):
         new_message = ""
         words = message.content.split()
 
-        
-        if random.randint(1, 1000) <= 200:  # randomly decide whether to add "butt" to end of message
+        if (
+            random.randint(1, 1000) <= 200
+        ):  # randomly decide whether to add "butt" to end of message
             logger.info(f"Buttifying {message.content}")
             for word in words:
                 if word.startswith(":"):  # check if word is an emoji
                     new_word = word
                 elif "-" in word:  # check if word is hyphenated
                     parts = word.split("-")
-                    if random.choice(
-                        [True, False]
-                    ) and random.randint(1, 1000) <= 50"  # randomly decide which side to replace
+                    if (
+                        random.choice([True, False]) and random.randint(1, 1000) <= 50
+                    ):  # randomly decide which side to replace
                         new_word = "butt-" + parts[1]
                     else:
                         new_word = parts[0] + "-butt"
@@ -58,7 +59,9 @@ class ButtCog(commands.Cog):
 
                 new_message += new_word + " "
 
-            if (new_message != message.content):  # only send new message if it's different from original and random chance
+            if (
+                new_message != message.content
+            ):  # only send new message if it's different from original and random chance
                 await message.channel.send(new_message)
                 message_count += 1
                 if message_count >= 3:  # randomly pause after every 3 messages
