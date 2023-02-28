@@ -57,7 +57,7 @@ class ButtCog(commands.Cog):
                             new_word = word
 
                     new_message += new_word + " "
-
+                new_message = new_message.rstrip()
                 if new_message != message.content:
                     logger.info(f"New message: {new_message}")
                     logger.info(f"Original message: {message.content}")
