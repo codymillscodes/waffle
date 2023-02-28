@@ -30,6 +30,8 @@ class ButtCog(commands.Cog):
         new_message = ""
         words = message.content.split()
 
+        if "roll tide" in message.content.lower():
+            await message.channel.send("Roll tide!")
         if random.randint(1, 100) <= 30:
             logger.info(f"Buttifying {message.content}")
             for word in words:
