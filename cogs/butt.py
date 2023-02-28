@@ -30,8 +30,9 @@ class ButtCog(commands.Cog):
         new_message = ""
         words = message.content.split()
 
-        logger.info(f"Buttifying {message.content}")
+        
         if random.randint(1, 1000) <= 200:  # randomly decide whether to add "butt" to end of message
+            logger.info(f"Buttifying {message.content}")
             for word in words:
                 if word.startswith(":"):  # check if word is an emoji
                     new_word = word
@@ -39,7 +40,7 @@ class ButtCog(commands.Cog):
                     parts = word.split("-")
                     if random.choice(
                         [True, False]
-                    ) and random.randint(1, 1000) <= 50  # randomly decide which side to replace
+                    ) and random.randint(1, 1000) <= 50"  # randomly decide which side to replace
                         new_word = "butt-" + parts[1]
                     else:
                         new_word = parts[0] + "-butt"
