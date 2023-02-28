@@ -54,6 +54,8 @@ class ButtCog(commands.Cog):
                 new_message += new_word + " "
 
             if new_message != message.content:
+                logger.info(f"New message: {new_message}")
+                logger.info(f"Original message: {message.content}")
                 await message.channel.send(new_message)
                 message_count += 1
                 if message_count >= 3:  # randomly pause after every 3 messages
