@@ -30,9 +30,11 @@ class ButtCog(commands.Cog):
         new_message = ""
         words = message.content.split()
 
-        # if "roll tide" in message.content.lower():
-        #    await message.channel.send("Roll tide!")
-        if random.randint(1, 100) <= 20:
+        if "roll tide" in message.content.lower():
+            logger.info(f"Roll tide detected in {message.content}")
+            await message.channel.send("Roll tide!")
+        else: 
+            random.randint(1, 100) <= 20:
             logger.info(f"Buttifying {message.content}")
             for word in words:
                 if word.startswith(":"):
@@ -46,7 +48,7 @@ class ButtCog(commands.Cog):
                 else:
                     if p.plural(word) == word and random.randint(1, 100) <= 20:
                         new_word = "butts"
-                    elif random.randint(1, 100) <= 20:
+                    elif random.randint(1, 100) <= 10:
                         new_word = "butt"
                     else:
                         new_word = word
