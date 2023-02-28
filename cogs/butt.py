@@ -33,36 +33,39 @@ class ButtCog(commands.Cog):
         if "roll tide" in message.content.lower():
             logger.info(f"Roll tide detected in {message.content}")
             await message.channel.send("Roll tide!")
-        else: 
-            random.randint(1, 100) <= 20:
-            logger.info(f"Buttifying {message.content}")
-            for word in words:
-                if word.startswith(":"):
-                    new_word = word
-                elif "-" in word:
-                    parts = word.split("-")
-                    if random.choice([True, False]) and random.randint(1, 100) <= 50:
-                        new_word = "butt-" + parts[1]
-                    else:
-                        new_word = parts[0] + "-butt"
-                else:
-                    if p.plural(word) == word and random.randint(1, 100) <= 20:
-                        new_word = "butts"
-                    elif random.randint(1, 100) <= 10:
-                        new_word = "butt"
-                    else:
+        else:
+            if random.randint(1, 100) <= 20:
+                logger.info(f"Buttifying {message.content}")
+                for word in words:
+                    if word.startswith(":"):
                         new_word = word
+                    elif "-" in word:
+                        parts = word.split("-")
+                        if (
+                            random.choice([True, False])
+                            and random.randint(1, 100) <= 50
+                        ):
+                            new_word = "butt-" + parts[1]
+                        else:
+                            new_word = parts[0] + "-butt"
+                    else:
+                        if p.plural(word) == word and random.randint(1, 100) <= 20:
+                            new_word = "butts"
+                        elif random.randint(1, 100) <= 10:
+                            new_word = "butt"
+                        else:
+                            new_word = word
 
-                new_message += new_word + " "
+                    new_message += new_word + " "
 
-            if new_message != message.content:
-                logger.info(f"New message: {new_message}")
-                logger.info(f"Original message: {message.content}")
-                await message.channel.send(new_message)
-                message_count += 1
-                if message_count >= 3:  # randomly pause after every 3 messages
-                    pause_count = random.randint(1, 20)
-                    message_count = 0
+                if new_message != message.content:
+                    logger.info(f"New message: {new_message}")
+                    logger.info(f"Original message: {message.content}")
+                    await message.channel.send(new_message)
+                    message_count += 1
+                    if message_count >= 3:  # randomly pause after every 3 messages
+                        pause_count = random.randint(1, 20)
+                        message_count = 0
 
 
 async def setup(bot):
