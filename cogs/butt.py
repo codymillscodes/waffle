@@ -56,10 +56,10 @@ class ButtCog(commands.Cog):
                         else:
                             if (
                                 p.plural(word) == word
-                                and random.randint(1, 100) <= self.chance
+                                and random.randint(1, 100) <= self.chance - 5
                             ):
                                 new_word = "butts"
-                            elif random.randint(1, 100) <= self.chance:
+                            elif random.randint(1, 100) <= self.chance - 5:
                                 new_word = "butt"
                             else:
                                 new_word = word
