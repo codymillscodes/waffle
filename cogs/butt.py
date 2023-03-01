@@ -12,6 +12,7 @@ pause_count = 0
 class ButtCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.chance = 20
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -47,15 +48,18 @@ class ButtCog(commands.Cog):
                             parts = word.split("-")
                             if (
                                 random.choice([True, False])
-                                and random.randint(1, 100) <= 10
+                                and random.randint(1, 100) <= self.chance
                             ):
                                 new_word = "butt-" + parts[1]
                             else:
                                 new_word = parts[0] + "-butt"
                         else:
-                            if p.plural(word) == word and random.randint(1, 100) <= 10:
+                            if (
+                                p.plural(word) == word
+                                and random.randint(1, 100) <= self.chance
+                            ):
                                 new_word = "butts"
-                            elif random.randint(1, 100) <= 10:
+                            elif random.randint(1, 100) <= self.chance:
                                 new_word = "butt"
                             else:
                                 new_word = word
