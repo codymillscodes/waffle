@@ -38,7 +38,7 @@ class ButtCog(commands.Cog):
                 not message.content.startswith("!")
                 and not "https://" in message.content
             ):
-                if random.randint(1, 100) <= 10:
+                if random.randint(1, 100) <= 20:
                     logger.info(f"Buttifying {message.content}")
                     for word in words:
                         if word.startswith(":"):
