@@ -73,6 +73,7 @@ class ChatbotCog(commands.Cog):
             ):
                 logger.info(message.type)
                 ctx = await self.bot.get_context(message)
+                i = message.content
                 async with ctx.typing():
                     if message.content.startswith(
                         "<@968919979577704529>"
