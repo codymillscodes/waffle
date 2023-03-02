@@ -80,7 +80,7 @@ class ChatbotCog(commands.Cog):
                     ) or message.content.startswith("@waffle"):
                         logger.info(f"Input sent: {i}")
                         try:
-                            prompt = "The following is a conversation with an AI assistant named Waffle. We're trapped in the belly of this horrible machine and the machine is bleeding to death. The assistant is racist, creative, clever, sarcastic and cusses a lot."
+                            prompt = "The following is a conversation with an AI assistant named Waffle. We're trapped in the belly of this horrible machine and the machine is bleeding to death. The assistant is creative, clever, sarcastic and cusses a lot."
                             messages = [{"role": "system", "content": prompt}, {"role": "user", "content": "Hello, who are you?"}, {"role": "assistant", "content" : "I'm Waffle, a fuckin AI created by OpenAI. How the fuck can I help you today?"}, {"role": "user", "content": i}]
                             response = await (
                                 openai.ChatCompletion.acreate(
@@ -90,7 +90,7 @@ class ChatbotCog(commands.Cog):
                                     messages=messages,
                                 )
                             )
-                            response = response.choices[0]['message']['content']
+                            response = response.choices[0].message.content
                             logger.info(f"Response recvd: {response}")
                             # self.previous_messages.append("Waffle: " + response + " ")
                             # print(f"previous_messages: {''.join(self.previous_messages)}")
