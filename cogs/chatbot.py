@@ -86,7 +86,7 @@ class ChatbotCog(commands.Cog):
                                 openai.ChatCompletion.acreate(
                                     temperature=0.9,
                                     max_tokens=1024,
-                                    engine=CHAT_ENGINE,
+                                    model=CHAT_ENGINE,
                                     messages=messages,
                                 )
                             )
