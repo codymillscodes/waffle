@@ -7,7 +7,7 @@ import config
 from utils.connection import Connection as Conn
 
 ENGINE = "text-davinci-003"
-WAFFLE = "Waffle: "
+CHAT_ENGINE = "gpt-3.5-turbo"
 openai.api_key = config.OPENAI_KEY
 
 
@@ -73,49 +73,36 @@ class ChatbotCog(commands.Cog):
             ):
                 logger.info(message.type)
                 ctx = await self.bot.get_context(message)
+                i = message.content
                 async with ctx.typing():
                     if message.content.startswith(
                         "<@968919979577704529>"
                     ) or message.content.startswith("@waffle"):
-                        split_message = message.content.split(maxsplit=1)
-                        if len(split_message) > 1:
-                            i = "Human: " + split_message[1]
-                        else:
-                            i = "Human: "
-                    else:
-                        i = "Human: " + message.content
-                    # if len(self.previous_messages) >= 10:
-                    #     self.previous_messages.pop(0)
-                    # self.previous_messages.append(input + " ")
-                    logger.info(f"Input sent: {i}")
-                    try:
-                        prompt = "The following is a conversation with an AI assistant named WAFFLE. We're trapped in the belly of this horrible machine and the machine is bleeding to death. The assistant is racist, creative, clever, sarcastic and cusses a lot. Human: Hello, who are you? Waffle: I am a fuckin AI created by OpenAI. How the fuck can I help you today? "
-                        response = await (
-                            openai.Completion.acreate(
-                                temperature=0.9,
-                                max_tokens=512,
-                                engine=ENGINE,
-                                prompt=prompt + i + WAFFLE,
+                        logger.info(f"Input sent: {i}")
+                        try:
+                            prompt = "The following is a conversation with an AI assistant named Waffle. We're trapped in the belly of this horrible machine and the machine is bleeding to death. The assistant is creative, clever, sarcastic and cusses a lot."
+                            messages = [{"role": "system", "content": prompt}, {"role": "user", "content": "Hello, who are you?"}, {"role": "assistant", "content" : "I'm Waffle, a fuckin AI created by OpenAI. How the fuck can I help you today?"}, {"role": "user", "content": i}]
+                            response = await (
+                                openai.ChatCompletion.acreate(
+                                    temperature=0.9,
+                                    max_tokens=1024,
+                                    model=CHAT_ENGINE,
+                                    messages=messages,
+                                )
                             )
-                        )
-                        response = response.choices[0].text
-                        if response.startswith(WAFFLE):
-                            response = response.split(maxsplit=1)[1]
-                        waffle_index = response.find(WAFFLE)
-                        if waffle_index != -1:
-                            response = response[waffle_index + len("Waffle: ") :]
-                        logger.info(f"Response recvd: {response}")
-                        # self.previous_messages.append("Waffle: " + response + " ")
-                        # print(f"previous_messages: {''.join(self.previous_messages)}")
-                        # chat limit is 2000 chars
-                        if len(response) > 2000:
-                            response = response[:2000]
-                        await message.reply(response, mention_author=False)
-                    except Exception as e:
-                        logger.exception(e)
-                        await message.channel.send(
-                            "The server is overloaded or not ready yet."
-                        )
+                            response = response.choices[0].message.content
+                            logger.info(f"Response recvd: {response}")
+                            # self.previous_messages.append("Waffle: " + response + " ")
+                            # print(f"previous_messages: {''.join(self.previous_messages)}")
+                            # chat limit is 2000 chars
+                            if len(response) > 2000:
+                                response = response[:2000]
+                            await message.reply(response, mention_author=False)
+                        except Exception as e:
+                            logger.exception(e)
+                            await message.channel.send(
+                                "The server is overloaded or not ready yet."
+                            )
 
 
 async def setup(bot):
