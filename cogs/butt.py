@@ -60,7 +60,7 @@ class ButtCog(commands.Cog):
                     and "butt" not in message.content.lower()
                     and len(message.content.split()) > 3
                 ):
-                    new_message = self.buttify(message)
+                    new_message = self.buttify(message.content)
 
                     if new_message != message.content:
                         self.pause_count = random.randint(5, 15)
