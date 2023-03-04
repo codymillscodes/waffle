@@ -244,5 +244,7 @@ def stream_embed(name, title=None, game=None):
             value=f"{Urls.TWITCH_CHANNEL}{name}",
         )
     else:
-        embed.add_field(name=f"{name} is live in the voice channel!", value=None)
-    return embed
+        embed.add_field(
+            name=f"{name} is live in the voice channel!",
+            value="this field is not optional",
+        )
