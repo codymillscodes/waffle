@@ -13,7 +13,7 @@ pause_count = 0
 class ButtCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.chance = 100
+        self.chance = 5
         self.filter = filter
         self.pause_count = 0
 
