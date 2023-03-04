@@ -7,13 +7,17 @@ from loguru import logger
 class EventsCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.stream_flag = 0
 
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
         if before.channel and after.channel:
             if before.self_stream != after.self_stream:
-                twitch_channel = await self.bot.fetch_channel(TWITCH_CHANNEL)
-                await twitch_channel.send(embed=stream_embed(member.name))
+                if self.stream_flag == 0:
+                    twitch_channel = await self.bot.fetch_channel(TWITCH_CHANNEL)
+                    await twitch_channel.send(embed=stream_embed(member.name))
+                else:
+                    self.stream_flag = 0
                 # logger.info(f"{member.name} stopped streaming")
 
 
