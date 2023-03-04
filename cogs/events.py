@@ -14,6 +14,7 @@ class EventsCog(commands.Cog):
         if before.channel and after.channel:
             if before.self_stream != after.self_stream:
                 if self.stream_flag == 0:
+                    self.stream_flag = 1
                     twitch_channel = await self.bot.fetch_channel(TWITCH_CHANNEL)
                     await twitch_channel.send(embed=stream_embed(member.id))
                 else:
