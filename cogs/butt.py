@@ -19,7 +19,7 @@ class ButtCog(commands.Cog):
 
     def buttify(self, message):
         words = message.split()
-        logger.info(f"Buttifying {message.content}")
+        logger.info(f"Buttifying {message}")
         butt_num = random.randint(1, len(words) - 1)
         while words[butt_num] in self.filter or words[butt_num].startswith(":"):
             butt_num = random.randint(1, len(words) - 1)
