@@ -245,7 +245,7 @@ def stream_embed(name, title=None, game=None):
         )
     else:
         embed.add_field(
-            name=f"hi",
+            name=f"----------------",
             value=f"<@{name}> is live in the voice channel!",
         )
     return embed
