@@ -10,7 +10,7 @@ class EventsCog(commands.Cog):
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
         if before.channel and after.channel:
-            twitch_channel = await self.fetch_channel(TWITCH_CHANNEL)
+            twitch_channel = await self.bot.fetch_channel(TWITCH_CHANNEL)
             await twitch_channel.send(stream_embed(member.name))
             # if before.self_stream and not after.self_stream:
             #    print(f"{member.name} stopped streaming")
