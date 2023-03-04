@@ -1,6 +1,7 @@
 from discord.ext import commands
 from config import TWITCH_NOTIFY_ROLE, TWITCH_CHANNEL
 from utils.embed import stream_embed
+from loguru import logger
 
 
 class EventsCog(commands.Cog):
@@ -12,8 +13,8 @@ class EventsCog(commands.Cog):
         if before.channel and after.channel:
             twitch_channel = await self.bot.fetch_channel(TWITCH_CHANNEL)
             await twitch_channel.send(embed=stream_embed(member.name))
-            # if before.self_stream and not after.self_stream:
-            #    print(f"{member.name} stopped streaming")
+            if before.self_stream and not after.self_stream:
+                logger.info(f"{member.name} stopped streaming")
 
 
 async def setup(bot):
