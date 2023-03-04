@@ -13,7 +13,7 @@ pause_count = 0
 class ButtCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.chance = 5
+        self.chance = 100
         self.filter = filter
         self.pause_count = 0
 
@@ -35,7 +35,6 @@ class ButtCog(commands.Cog):
                 words[butt_num] = "butts"
             else:
                 words[butt_num] = "butt"
-        words[butt_num] = mod_word.lower()
         return " ".join(words)
 
     @commands.Cog.listener()
