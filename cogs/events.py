@@ -5,7 +5,7 @@ class EventsCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.Cog.event
+    @commands.Bot.event
     async def on_voice_state_update(self, member, before, after):
         if before.channel is None and after.channel is not None:
             # Member joined voice channel
