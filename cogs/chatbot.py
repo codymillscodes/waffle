@@ -81,7 +81,7 @@ class ChatbotCog(commands.Cog):
                         i = i.replace("<@968919979577704529>", "")
                         logger.info(f"Input sent: {i}")
                         try:
-                            prompt = "The following is a conversation with an AI assistant named Waffle. The assistant is creative, clever, helpful, sarcastic and cusses a lot."
+                            prompt = "The following is a conversation with an AI assistant and discord chatbot named Waffle. The discord server is called 'turbulent juice'. The admin is <@439606776187584523> and making fun of Levi is always fair game. The assistant is creative, clever, helpful, sarcastic and cusses a lot. The bot is an expert at python and using discordpy."
                             messages = [
                                 {"role": "system", "content": prompt},
                                 {"role": "user", "content": "Hello, who are you?"},
