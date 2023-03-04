@@ -15,7 +15,7 @@ from utils.connection import Connection as Conn
 import urllib.parse
 from utils.urls import Urls
 from utils.random import get_link_msg
-from utils.embed import download_ready
+from utils.embed import download_ready, stream_embed
 
 
 class Waffle(commands.Bot):
@@ -72,15 +72,20 @@ class Waffle(commands.Bot):
                 if len(stream_data["data"]) == 1:
                     if t not in self.online:
                         self.online.append(t)
-                        em_twitch = discord.Embed(
-                            description=f"<@&{TWITCH_NOTIFY_ROLE}>"
+                        embed = stream_embed(
+                            t,
+                            stream_data["data"][0]["title"],
+                            stream_data["data"][0]["game_name"],
                         )
-                        em_twitch.add_field(
-                            name=f"""{t} is live: {stream_data["data"][0]["title"]} playing {stream_data["data"][0]["game_name"]}""",
-                            value=f"{Urls.TWITCH_CHANNEL}{t}",
-                        )
+                        # em_twitch = discord.Embed(
+                        #     description=f"<@&{TWITCH_NOTIFY_ROLE}>"
+                        # )
+                        # em_twitch.add_field(
+                        #     name=f"""{t} is live: {stream_data["data"][0]["title"]} playing {stream_data["data"][0]["game_name"]}""",
+                        #     value=f"{Urls.TWITCH_CHANNEL}{t}",
+                        # )
                         logger.info(f"{self.online} is online.")
-                        await twitch_channel.send(embed=em_twitch)
+                        await twitch_channel.send(embed=embed)
                 else:
                     if t in self.online:
                         self.online.remove(t)

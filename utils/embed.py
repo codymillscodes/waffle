@@ -3,8 +3,9 @@ from loguru import logger
 from hurry.filesize import size
 from utils.helpers import percentage
 from utils.random import get_link_msg
-from config import DEBRID_WEBDAV
+from config import DEBRID_WEBDAV, TWITCH_NOTIFY_ROLE
 from urllib.parse import quote
+from utils.urls import Urls
 
 
 def runescape(name, char_stats):
@@ -233,3 +234,15 @@ def torrent_results(results, emergency: bool = False):
             inline=False,
         )
         return embed
+
+
+def stream_embed(name, title=None, game=None):
+    embed = Embed(description=f"<@&{TWITCH_NOTIFY_ROLE}>")
+    if title is not None:
+        embed.add_field(
+            name=f"""{name} is live: {title} playing {game}""",
+            value=f"{Urls.TWITCH_CHANNEL}{name}",
+        )
+    else:
+        embed.add_field(name=f"{name} is live in the voice channel!", value=None)
+    return embed

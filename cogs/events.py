@@ -1,4 +1,6 @@
 from discord.ext import commands
+from config import TWITCH_NOTIFY_ROLE, TWITCH_CHANNEL
+from utils.embed import stream_embed
 
 
 class EventsCog(commands.Cog):
@@ -8,11 +10,10 @@ class EventsCog(commands.Cog):
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
         if before.channel and after.channel:
-            print(
-                f"{member.name} moved from {before.channel.name} to {after.channel.name}"
-            )
-            if before.self_stream and not after.self_stream:
-                print(f"{member.name} stopped streaming")
+            twitch_channel = await self.fetch_channel(TWITCH_CHANNEL)
+            await twitch_channel.send(stream_embed(member.name))
+            # if before.self_stream and not after.self_stream:
+            #    print(f"{member.name} stopped streaming")
 
 
 async def setup(bot):
