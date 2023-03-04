@@ -78,8 +78,8 @@ class ChatbotCog(commands.Cog):
                     if message.content.startswith(
                         "<@968919979577704529>"
                     ) or message.content.startswith("@waffle"):
-                        logger.info(f"Input sent: {i}")
                         i = i.replace("<@968919979577704529>", "")
+                        logger.info(f"Input sent: {i}")
                         try:
                             prompt = "The following is a conversation with an AI assistant named Waffle. The assistant is creative, clever, helpful, sarcastic and cusses a lot."
                             messages = [
