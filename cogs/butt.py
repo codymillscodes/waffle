@@ -35,8 +35,8 @@ class ButtCog(commands.Cog):
                 words[butt_num] = "butts"
             else:
                 words[butt_num] = "butt"
-        words[butt_num] = words[butt_num].lower()
-        return words.join(" ")
+        words[butt_num] = mod_word.lower()
+        return " ".join(words)
 
     @commands.Cog.listener()
     async def on_message(self, message):
