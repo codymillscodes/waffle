@@ -13,7 +13,7 @@ class EventsCog(commands.Cog):
         if before.channel and after.channel:
             if before.self_stream != after.self_stream:
                 twitch_channel = await self.bot.fetch_channel(TWITCH_CHANNEL)
-                await twitch_channel.send(embed=stream_embed(member.name))
+                await twitch_channel.send(embed=stream_embed(name=member.name))
                 # logger.info(f"{member.name} stopped streaming")
 
 
