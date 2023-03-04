@@ -248,3 +248,4 @@ def stream_embed(name, title=None, game=None):
             name=f"<@{name}> is live in the voice channel!",
             value="this field is not optional",
         )
+    return embed
