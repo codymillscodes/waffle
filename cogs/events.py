@@ -7,16 +7,9 @@ class EventsCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
-        if before.channel is None and after.channel is not None:
-            # Member joined voice channel
-            voice_client = await after.channel.connect()
-            # see if there is a stream
-            stream = voice_client.stream
-        if stream is not None:
-            print("There is a stream in voice channel {0.name}".format(after.channel))
-        else:
-            print("There is no stream in voice channel {0.name}".format(after.channel))
-        await voice_client.disconnect()
+        if before.channel and after.channel:
+            if before.self_stream and not after.self_stream:
+                await member.send("You stopped streaming.")
 
 
 async def setup(bot):
