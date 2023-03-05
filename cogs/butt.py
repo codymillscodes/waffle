@@ -62,7 +62,7 @@ class ButtCog(commands.Cog):
                     new_message = self.buttify(message.content)
 
                     if new_message != message.content:
-                        self.pause_count = random.randint(5, 15)
+                        self.pause_count = random.randint(15, 50)
                         await message.channel.send(new_message)
                 else:
                     if self.pause_count > 0:
