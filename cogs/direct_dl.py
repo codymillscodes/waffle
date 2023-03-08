@@ -8,6 +8,7 @@ from config import DL_CHANNEL, WAFFLE_EMOJI
 from utils.embed import download_ready
 from utils.urls import Urls
 from utils.connection import Connection as Conn
+from utils.db import DB
 
 
 class DirectDLCog(commands.Cog):
@@ -53,8 +54,7 @@ class DirectDLCog(commands.Cog):
             async with Conn() as resp:
                 re = await resp.get_json(Urls.DEBRID_DELAYED + id)
             if re["data"]["status"] != 2:
-                with open("debrid.txt", "a") as f:
-                    f.write(f"{id},{ctx.author.id},link\n")
+                await DB().add_to_queue([id, filename, ctx.author.id, "link"])
                 logger.info(f"{id} not ready, added to queue.")
                 await ctx.send("It's not ready and there's no !stat for this.")
             elif re["data"]["status"] == 2:

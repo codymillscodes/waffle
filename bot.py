@@ -16,6 +16,7 @@ import urllib.parse
 from utils.urls import Urls
 from utils.random import get_link_msg
 from utils.embed import download_ready, stream_embed
+from utils.db import DB
 
 
 class Waffle(commands.Bot):
@@ -114,19 +115,14 @@ class Waffle(commands.Bot):
 
     @tasks.loop(seconds=20)
     async def debrid_check(self):
-        debrid = []
         # await self.twitch_check()
-        with open("debrid.txt") as f:
-            for line in f:
-                temp_line = line.rstrip("\n").split(",")
-                # temp_line[0] = re.sub("\D", '', temp_line[0])
-                # temp_line[1] = re.sub("\D", '', temp_line[1])
-                debrid.append(temp_line)
-            f.close()
-        if len(debrid) > 0:
-            logger.info(f"{debrid}")
-        for id in debrid:
-            if id[2] == "link":
+
+        queue = await DB().get_active_queue()
+        queue = list(queue)
+        if len(queue) > 0:
+            logger.info(f"{queue}")
+        for id in queue:
+            if "active" in id["status"]:
                 logger.info(f"Checking: {id[0]}")
                 async with Conn() as resp:
                     r = await resp.get_json(Urls.DEBRID_DELAYED + id[0])
@@ -134,13 +130,8 @@ class Waffle(commands.Bot):
                     link = r["data"]["link"]
                     link_split = link.split("/")[-2:]
                     filename = urllib.parse.unquote(link_split[1])
-                    debrid.remove(id)
                     logger.info(f"removing {id[0]}")
-                    with open("debrid.txt", "w") as f:
-                        for line in debrid:
-                            if line != f"{id[0]},{id[1]},{id[2]}":
-                                f.write(f"{id[0]},{id[1]},{id[2]}")
-
+                    await DB().set_status(id[0], "complete")
                     embed = download_ready(id[1], filename, link)
                     dl_channel = await self.fetch_channel(DL_CHANNEL)
                     await dl_channel.send(embed=embed)
@@ -158,27 +149,18 @@ class Waffle(commands.Bot):
                         status_json["status"] == "error"
                         or status_json["data"]["magnets"]["statusCode"] > 4
                     ):
-                        debrid.remove(id)
+                        await DB.set_status(task_id=id[0], status="failed")
                         logger.info(f"removing {id[0]}")
 
                     if "Ready" in status_json["data"]["magnets"]["status"]:
-                        with open("debrid.txt", "w") as f:
-                            for line in debrid:
-                                if line != f"{id[0]},{id[1]},magnet":
-                                    f.write(f"{id[0]},{id[1]},magnet")
-
+                        await DB.set_status(task_id=id[0], status="complete")
                         filename = status_json["data"]["magnets"]["filename"]
                         embed = download_ready(id[1], filename)
-                        debrid.remove(id)
                         logger.info(f"Removed: {id}")
                         dl_channel = await self.fetch_channel(DL_CHANNEL)
                         await dl_channel.send(embed=embed)
                 except:
                     pass
-
-        with open("debrid.txt", "w") as f:
-            for id in debrid:
-                f.write(f"{id[0]},{id[1]},{id[2]}\n")
 
     @debrid_check.before_loop
     async def before_task(self):

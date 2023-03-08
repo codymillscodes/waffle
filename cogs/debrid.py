@@ -8,6 +8,7 @@ import utils.embed
 from utils.urls import Urls
 import config
 from utils.connection import Connection as Conn
+from utils.db import DB
 
 torrents = py1337x(proxy="1337x.to")
 # torrents.search('harry potter', category='movies', sortBy='seeders', order='desc')
@@ -68,8 +69,8 @@ class DebridCog(commands.Cog):
                 dl_channel = await self.bot.fetch_channel(config.DL_CHANNEL)
                 await dl_channel.send(embed=embed)
             else:
-                with open("debrid.txt", "a") as f:
-                    f.write(f"{mag[0]},{ctx.author.id},magnet\n")
+                data = [mag[0], "magnet", ctx.author.id, "magnet"]
+                await DB().add_to_queue(data)
                 logger.info(f"{mag[1]} is not ready. Adding to queue.")
                 await ctx.reply("It aint ready. Try !stat.", mention_author=False)
         else:
@@ -93,16 +94,16 @@ class DebridCog(commands.Cog):
                 await ctx.reply("Error occured. Try again later.")
         await ctx.reply(embed=embed, mention_author=False)
 
-    @commands.command(
-        name="clearqueue",
-        description="Clear active torrent queue.",
-        brief="Clear active torrent queue.",
-    )
-    async def clearqueue(self, ctx):
-        with open("debrid.txt", "w"):
-            pass
-        logger.info("Debrid queue cleared.")
-        await ctx.send("Queue cleared.")
+    # @commands.command(
+    #     name="clearqueue",
+    #     description="Clear active torrent queue.",
+    #     brief="Clear active torrent queue.",
+    # )
+    # async def clearqueue(self, ctx):
+    #     with open("debrid.txt", "w"):
+    #         pass
+    #     logger.info("Debrid queue cleared.")
+    #     await ctx.send("Queue cleared.")
 
     @commands.command(
         name="queue",
@@ -110,15 +111,16 @@ class DebridCog(commands.Cog):
         brief="Returns raw output of active torrent queue.",
     )
     async def queue(self, ctx):
-        with open("debrid.txt", "r") as f:
-            out = ""
-            for line in f:
-                out = f"{out + line}\n"
-        logger.info(f"{len(out)} links/magnets in queue.")
-        if len(out) < 1:
+        queue = await DB().get_active_queue()
+        queue = list(queue)
+        logger.info(f"{len(queue)} links/magnets in queue.")
+        if len(queue) < 1:
             await ctx.reply("Queue is empty.", mention_author=False)
         else:
-            await ctx.reply(f"```{out}```", mention_author=False)
+            await ctx.reply(
+                "```{}```".format("\n".join([str(i) for i in queue])),
+                mention_author=False,
+            )
 
     @commands.command(
         name="search",
@@ -194,8 +196,9 @@ class DebridCog(commands.Cog):
                         dl_channel = await self.bot.fetch_channel(config.DL_CHANNEL)
                         await dl_channel.send(embed=embed)
                     else:
-                        with open("debrid.txt", "a") as f:
-                            f.write(f"{mag[0]},{ctx.author.id},magnet\n")
+                        await DB().add_to_queue(
+                            [mag[0], input, ctx.author.id, "magnet"]
+                        )
                         await ctx.reply(
                             "It aint ready. Try !stat.", mention_author=False
                         )
