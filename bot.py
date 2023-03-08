@@ -124,20 +124,23 @@ class Waffle(commands.Bot):
         for id in queue:
             if "active" in id["status"]:
                 logger.info(f"Checking: {id['task_id']}")
-                async with Conn() as resp:
-                    r = await resp.get_json(Urls.DEBRID_DELAYED + str(id["task_id"]))
-                    logger.info(Urls.DEBRID_DELAYED + str(id["task_id"]))
-                    logger.debug(r)
+                if "link" in id["type"]:
+                    async with Conn() as resp:
+                        r = await resp.get_json(
+                            Urls.DEBRID_DELAYED + str(id["task_id"])
+                        )
+                        logger.info(Urls.DEBRID_DELAYED + str(id["task_id"]))
+                        logger.debug(r)
 
-                if r["data"]["status"] == 2:
-                    link = r["data"]["link"]
-                    link_split = link.split("/")[-2:]
-                    filename = urllib.parse.unquote(link_split[1])
-                    logger.info(f"removing {id['task_id']}")
-                    await DB().set_status(id["task_id"], "complete")
-                    embed = download_ready(id["user_id"], filename, link)
-                    dl_channel = await self.fetch_channel(DL_CHANNEL)
-                    await dl_channel.send(embed=embed)
+                    if r["data"]["status"] == 2:
+                        link = r["data"]["link"]
+                        link_split = link.split("/")[-2:]
+                        filename = urllib.parse.unquote(link_split[1])
+                        logger.info(f"removing {id['task_id']}")
+                        await DB().set_status(id["task_id"], "complete")
+                        embed = download_ready(id["user_id"], filename, link)
+                        dl_channel = await self.fetch_channel(DL_CHANNEL)
+                        await dl_channel.send(embed=embed)
             else:
                 try:
                     async with Conn() as resp:
