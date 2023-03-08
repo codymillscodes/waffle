@@ -1,5 +1,6 @@
 import pymongo
 from config import MONGO_USER, MONGO_PASS
+from datetime import datetime
 
 client = pymongo.MongoClient(
     f"mongodb+srv://{MONGO_USER}:{MONGO_PASS}@waffle.i2tnxdm.mongodb.net/?retryWrites=true&w=majority"
@@ -23,7 +24,7 @@ class DB:
             "task_id": d[0],
             "task_name": d[1],
             "user_id": d[2],
-            "updated_at": "$$CLUSTER_TIME",
+            "updated_at": self.get_time(),
             "status": "active",
             "type": d[3],
             "completed_at": "",
@@ -34,9 +35,13 @@ class DB:
         self.queue.update_one(
             {"task_id": task_id},
             {
-                "$set": {"status": status, "updated_at": "$$CLUSTER_TIME"},
+                "$set": {"status": status, "updated_at": self.get_time()},
             },
         )
+
+    async def get_time(self):
+        now = datetime.now()
+        return now.strftime("%d/%m/%Y %H:%M:%S")
 
     async def get_twitchers(self):
         pass
