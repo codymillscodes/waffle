@@ -39,34 +39,36 @@ class ButtCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.author == self.bot.user:
-            return
+        on = False
+        if on:
+            if message.author == self.bot.user:
+                return
 
-        if self.bot.user in message.mentions:
-            return
+            if self.bot.user in message.mentions:
+                return
 
-        if "roll tide" in message.content.lower():
-            logger.info(f"Roll tide detected in {message.content}")
-            await message.channel.send("Roll tide!")
-        else:
-            if (
-                not message.content.startswith("!")
-                and not "https://" in message.content
-            ):
+            if "roll tide" in message.content.lower():
+                logger.info(f"Roll tide detected in {message.content}")
+                await message.channel.send("Roll tide!")
+            else:
                 if (
-                    random.randint(1, 100) <= self.chance
-                    and self.pause_count == 0
-                    and "butt" not in message.content.lower()
-                    and len(message.content.split()) > 3
+                    not message.content.startswith("!")
+                    and not "https://" in message.content
                 ):
-                    new_message = self.buttify(message.content)
+                    if (
+                        random.randint(1, 100) <= self.chance
+                        and self.pause_count == 0
+                        and "butt" not in message.content.lower()
+                        and len(message.content.split()) > 3
+                    ):
+                        new_message = self.buttify(message.content)
 
-                    if new_message != message.content:
-                        self.pause_count = random.randint(15, 50)
-                        await message.channel.send(new_message)
-                else:
-                    if self.pause_count > 0:
-                        self.pause_count -= 1
+                        if new_message != message.content:
+                            self.pause_count = random.randint(15, 50)
+                            await message.channel.send(new_message)
+                    else:
+                        if self.pause_count > 0:
+                            self.pause_count -= 1
 
 
 async def setup(bot):

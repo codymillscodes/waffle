@@ -24,7 +24,7 @@ class DB:
             "task_id": d[0],
             "task_name": d[1],
             "user_id": d[2],
-            "updated_at": self.get_time(),
+            "updated_at": await self.get_time(),
             "status": "active",
             "type": d[3],
             "completed_at": "",
