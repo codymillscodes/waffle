@@ -52,7 +52,7 @@ class DirectDLCog(commands.Cog):
             id = result["data"]["delayed"]
             logger.info(f"Got delayed ID: {id}")
             async with Conn() as resp:
-                re = await resp.get_json(Urls.DEBRID_DELAYED + id)
+                re = await resp.get_json(Urls.DEBRID_DELAYED + str(id))
             if re["data"]["status"] != 2:
                 await DB().add_to_queue([id, filename, ctx.author.id, "link"])
                 logger.info(f"{id} not ready, added to queue.")
