@@ -27,7 +27,6 @@ class DB:
             "updated_at": await self.get_time(),
             "status": "active",
             "type": d[3],
-            "completed_at": "",
         }
         self.queue.insert_one(data)
 
