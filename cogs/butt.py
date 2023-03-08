@@ -30,8 +30,10 @@ class ButtCog(commands.Cog):
                 words[butt_num] = "butt-" + parts[1]
             else:
                 words[butt_num] = parts[0] + "-butt"
+        elif "ing" in mod_word:
+            mod_word = "butting"
         else:
-            if p.plural(mod_word) == mod_word:
+            if p.singular_noun(mod_word) is not False:
                 words[butt_num] = "butts"
             else:
                 words[butt_num] = "butt"
@@ -39,7 +41,7 @@ class ButtCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        on = False
+        on = True
         if on:
             if message.author == self.bot.user:
                 return
