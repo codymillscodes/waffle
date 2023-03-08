@@ -125,38 +125,38 @@ class Waffle(commands.Bot):
             if "active" in id["status"]:
                 logger.info(f"Checking: {id['task_id']}")
                 async with Conn() as resp:
-                    r = await resp.get_json(Urls.DEBRID_DELAYED + id[0])
+                    r = await resp.get_json(Urls.DEBRID_DELAYED + id["task_id"])
                 if r["data"]["status"] == 2:
                     link = r["data"]["link"]
                     link_split = link.split("/")[-2:]
                     filename = urllib.parse.unquote(link_split[1])
-                    logger.info(f"removing {id[0]}")
-                    await DB().set_status(id[0], "complete")
-                    embed = download_ready(id[1], filename, link)
+                    logger.info(f"removing {id['task_id']}")
+                    await DB().set_status(id["task_id"], "complete")
+                    embed = download_ready(id["user_id"], filename, link)
                     dl_channel = await self.fetch_channel(DL_CHANNEL)
                     await dl_channel.send(embed=embed)
             else:
                 try:
                     async with Conn() as resp:
                         status_json = await resp.get_json(
-                            Urls.DEBRID_STATUS_ONE + id[0]
+                            Urls.DEBRID_STATUS_ONE + id["task_id"]
                         )
                 except:
                     pass
-                logger.info(f"Checking: {id[0]}")
+                logger.info(f"Checking: {id['task_id']}")
                 try:
                     if (
                         status_json["status"] == "error"
                         or status_json["data"]["magnets"]["statusCode"] > 4
                     ):
-                        await DB.set_status(task_id=id[0], status="failed")
-                        logger.info(f"removing {id[0]}")
+                        await DB.set_status(task_id=id["task_id"], status="failed")
+                        logger.info(f"removing {id['task_id']}")
 
                     if "Ready" in status_json["data"]["magnets"]["status"]:
-                        await DB.set_status(task_id=id[0], status="complete")
+                        await DB.set_status(task_id=id["task_id"], status="complete")
                         filename = status_json["data"]["magnets"]["filename"]
-                        embed = download_ready(id[1], filename)
-                        logger.info(f"Removed: {id}")
+                        embed = download_ready(id["user_id"], filename)
+                        logger.info(f"Removed: {id['task_id']}")
                         dl_channel = await self.fetch_channel(DL_CHANNEL)
                         await dl_channel.send(embed=embed)
                 except:
