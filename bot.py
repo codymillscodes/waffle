@@ -36,10 +36,6 @@ class Waffle(commands.Bot):
         self.twitchers = []
         self.online = []
 
-        with open("twitchers.txt") as f:
-            for line in f:
-                self.twitchers.append(line.rstrip("\n"))
-
     async def setup_hook(self):
         self.debrid_check.start()
         self.twitch_check.start()
@@ -68,7 +64,7 @@ class Waffle(commands.Bot):
             for t in self.twitchers:
                 async with Conn() as resp:
                     stream_data = await resp.get_json(
-                        Urls.TWITCH_URL + t, headers=self.twitch_headers
+                        Urls.TWITCH_URL + t["user"], headers=self.twitch_headers
                     )
                 if len(stream_data["data"]) == 1:
                     if t not in self.online:
@@ -97,6 +93,8 @@ class Waffle(commands.Bot):
     @twitch_check.before_loop
     async def before_twitch_check(self):
         await self.wait_until_ready()
+        self.twitchers = await DB().get_twitchers()
+        self.twitchers = list(self.twitchers)
         try:
             body = {
                 "client_id": TWITCH_CLIENT_ID,

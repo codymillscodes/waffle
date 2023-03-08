@@ -43,4 +43,4 @@ class DB:
         return now.strftime("%d/%m/%Y %H:%M:%S")
 
     async def get_twitchers(self):
-        pass
+        return self.users.find({"twitcher": {"$eq": True}})
