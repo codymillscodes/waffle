@@ -123,7 +123,7 @@ class Waffle(commands.Bot):
             logger.info(f"{queue}")
         for id in queue:
             if "active" in id["status"]:
-                logger.info(f"Checking: {id[0]}")
+                logger.info(f"Checking: {id["task_id"]}")
                 async with Conn() as resp:
                     r = await resp.get_json(Urls.DEBRID_DELAYED + id[0])
                 if r["data"]["status"] == 2:
