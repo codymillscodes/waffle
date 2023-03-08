@@ -125,7 +125,7 @@ class Waffle(commands.Bot):
             if "active" in id["status"]:
                 logger.info(f"Checking: {id['task_id']}")
                 async with Conn() as resp:
-                    r = await resp.get_json(Urls.DEBRID_DELAYED + id["task_id"])
+                    r = await resp.get_json(Urls.DEBRID_DELAYED + str(id["task_id"]))
                 if r["data"]["status"] == 2:
                     link = r["data"]["link"]
                     link_split = link.split("/")[-2:]
@@ -139,7 +139,7 @@ class Waffle(commands.Bot):
                 try:
                     async with Conn() as resp:
                         status_json = await resp.get_json(
-                            Urls.DEBRID_STATUS_ONE + id["task_id"]
+                            Urls.DEBRID_STATUS_ONE + str(id["task_id"])
                         )
                 except:
                     pass
