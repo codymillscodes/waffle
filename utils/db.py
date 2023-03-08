@@ -23,7 +23,7 @@ class DB:
             "task_id": d[0],
             "task_name": d[1],
             "user_id": d[2],
-            "created_at": "$$CLUSTER_TIME",
+            "updated_at": "$$CLUSTER_TIME",
             "status": "active",
             "type": d[3],
             "completed_at": "",
@@ -34,7 +34,7 @@ class DB:
         self.queue.update_one(
             {"task_id": task_id},
             {
-                "$set": {"status": status, "completed_at": "$$CLUSTER_TIME"},
+                "$set": {"status": status, "updated_at": "$$CLUSTER_TIME"},
             },
         )
 

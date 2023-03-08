@@ -94,16 +94,17 @@ class DebridCog(commands.Cog):
                 await ctx.reply("Error occured. Try again later.")
         await ctx.reply(embed=embed, mention_author=False)
 
-    # @commands.command(
-    #     name="clearqueue",
-    #     description="Clear active torrent queue.",
-    #     brief="Clear active torrent queue.",
-    # )
-    # async def clearqueue(self, ctx):
-    #     with open("debrid.txt", "w"):
-    #         pass
-    #     logger.info("Debrid queue cleared.")
-    #     await ctx.send("Queue cleared.")
+    @commands.command(
+        name="clearqueue",
+        description="Clear active torrent queue.",
+        brief="Clear active torrent queue.",
+    )
+    async def clearqueue(self, ctx):
+        queue = await DB().get_active_queue()
+        for q in queue:
+            await DB().set_status(task_id=q[0], status="cancelled")
+        logger.info("Debrid queue cleared.")
+        await ctx.send("Queue cleared.")
 
     @commands.command(
         name="queue",
