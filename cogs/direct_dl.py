@@ -21,7 +21,7 @@ class DirectDLCog(commands.Cog):
         brief="Download ANY album from bandcamp.",
     )
     async def bandcamp(self, ctx, *, url: str):
-        title = self.get_title(url)
+        title = await self.get_title(url)
         for t in range(len(title)):
             title[t] = re.sub(r"[^\w\s]", "", title[t].lower())
             title[t] = re.sub(r"\s+", "-", title[t])
