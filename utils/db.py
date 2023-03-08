@@ -2,7 +2,7 @@ import pymongo
 from config import MONGO_USER, MONGO_PASS
 
 client = pymongo.MongoClient(
-    f"mongodb+srv://waffle:5oaw7kQStm7pcd0P@waffle.i2tnxdm.mongodb.net/?retryWrites=true&w=majority"
+    f"mongodb+srv://{MONGO_USER}:{MONGO_PASS}@waffle.i2tnxdm.mongodb.net/?retryWrites=true&w=majority"
 )
 
 
