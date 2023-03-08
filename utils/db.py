@@ -35,7 +35,7 @@ class DB:
         self.queue.update_one(
             {"task_id": task_id},
             {
-                "$set": {"status": status, "updated_at": self.get_time()},
+                "$set": {"status": status, "updated_at": await self.get_time()},
             },
         )
 
