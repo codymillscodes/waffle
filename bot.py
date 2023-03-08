@@ -126,6 +126,9 @@ class Waffle(commands.Bot):
                 logger.info(f"Checking: {id['task_id']}")
                 async with Conn() as resp:
                     r = await resp.get_json(Urls.DEBRID_DELAYED + str(id["task_id"]))
+                    logger.info(str(id("task_id")))
+                    logger.debug(r)
+
                 if r["data"]["status"] == 2:
                     link = r["data"]["link"]
                     link_split = link.split("/")[-2:]
