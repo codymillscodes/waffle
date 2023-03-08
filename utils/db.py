@@ -18,8 +18,12 @@ class DB:
     async def get_active_queue(self):
         return self.queue.find({"status": "active"})
 
-    async def add_to_queue(self, data):
+    async def add_to_queue(self, d):
+        data = {'task_id': d[0], 'task_name': d[1], 'user_id': d[2], 'created_at': '', 'status': 'active', 'completed_at': ''}
         self.queue.insert_one(data)
+
+    async def set_status(self, task_id):
+        self.queue.update_one({"task_id": task_id}, {"$set": {"status": "completed"}, "$currentDate": {"type": "timestamp"}})
 
     async def get_twitchers(self):
         pass
