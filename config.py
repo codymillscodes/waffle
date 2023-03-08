@@ -32,3 +32,6 @@ TWITCH_NOTIFY_ROLE = os.environ["TWITCH_NOTIFY_ROLE"]
 FORTNITE_API_KEY = os.environ["FORTNITE_API_KEY"]
 # MUSIC_API = os.environ["music_ip"]
 WAFFLE_EMOJI = "\N{WAFFLE}"
+# mongo settings
+MONGO_USER = os.environ["MONGO_USER"]
+MONGO_PASS = os.environ["MONGO_PASS"]
