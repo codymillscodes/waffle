@@ -102,7 +102,7 @@ class DebridCog(commands.Cog):
     async def clearqueue(self, ctx):
         queue = await DB().get_active_queue()
         for q in queue:
-            await DB().set_status(task_id=q[0], status="cancelled")
+            await DB().set_status(task_id=q["task_id"], status="cancelled")
         logger.info("Debrid queue cleared.")
         await ctx.send("Queue cleared.")
 
@@ -119,7 +119,7 @@ class DebridCog(commands.Cog):
             await ctx.reply("Queue is empty.", mention_author=False)
         else:
             await ctx.reply(
-                "```{}```".format("\n".join([str(i) for i in queue])),
+                "```{}```".format("\n".join([str(i["task_name"]) for i in queue])),
                 mention_author=False,
             )
 
