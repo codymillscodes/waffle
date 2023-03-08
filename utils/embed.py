@@ -184,7 +184,7 @@ def debrid_status(all_status):
 
 
 def download_ready(author, magnet, link=None):
-    embed = Embed(description=f"{author.mention}")
+    embed = Embed(description=f"<@{author}>")
     if link is None:
         link = f"{DEBRID_WEBDAV}magnets/{quote(magnet)}/"
     embed.add_field(
