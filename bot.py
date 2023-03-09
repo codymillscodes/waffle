@@ -67,7 +67,7 @@ class Waffle(commands.Bot):
                         Urls.TWITCH_URL + t["user"], headers=self.twitch_headers
                     )
                 if len(stream_data["data"]) == 1:
-                    if t not in self.online:
+                    if t["user"] not in self.online:
                         self.online.append(t["user"])
                         embed = stream_embed(
                             t["user"],
@@ -85,8 +85,8 @@ class Waffle(commands.Bot):
                         await twitch_channel.send(embed=embed)
                 else:
                     if t in self.online:
-                        self.online.remove(t)
-                        logger.info(f"{t} is offline.")
+                        self.online.remove(t["user"])
+                        logger.info(f"{t['user']} is offline.")
         except Exception as e:
             logger.exception(e)
 
