@@ -68,9 +68,9 @@ class Waffle(commands.Bot):
                     )
                 if len(stream_data["data"]) == 1:
                     if t not in self.online:
-                        self.online.append(t)
+                        self.online.append(t["user"])
                         embed = stream_embed(
-                            t,
+                            t["user"],
                             stream_data["data"][0]["title"],
                             stream_data["data"][0]["game_name"],
                         )
