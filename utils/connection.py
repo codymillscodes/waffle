@@ -1,4 +1,5 @@
 import aiohttp
+from loguru import logger
 
 
 class Connection:
@@ -7,14 +8,18 @@ class Connection:
         self.timeout = aiohttp.ClientTimeout(total=30)
 
     async def get_json(self, url, headers=None, data=None):
-        if headers is None:
-            headers = {}
-        if data is None:
-            data = {}
-        async with self.session.get(
-            url, headers=headers, data=data, timeout=self.timeout
-        ) as resp:
-            return await resp.json()
+        try:
+            if headers is None:
+                headers = {}
+            if data is None:
+                data = {}
+            async with self.session.get(
+                url, headers=headers, data=data, timeout=self.timeout
+            ) as resp:
+                return await resp.json()
+        except TimeoutError:
+            logger.info("Timeout error")
+            return None
 
     async def get_text(self, url):
         async with self.session.get(url, timeout=self.timeout) as resp:

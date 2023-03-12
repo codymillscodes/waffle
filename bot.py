@@ -58,37 +58,36 @@ class Waffle(commands.Bot):
 
     @tasks.loop(seconds=15)
     async def twitch_check(self):
-        try:
-            twitch_channel = await self.fetch_channel(TWITCH_CHANNEL)
-            # logger.debug("Checking twitchers...")
-            for t in self.twitchers:
-                async with Conn() as resp:
-                    stream_data = await resp.get_json(
-                        Urls.TWITCH_URL + t["user"], headers=self.twitch_headers
+        twitch_channel = await self.fetch_channel(TWITCH_CHANNEL)
+        # logger.debug("Checking twitchers...")
+        for t in self.twitchers:
+            async with Conn() as resp:
+                stream_data = await resp.get_json(
+                    Urls.TWITCH_URL + t["user"], headers=self.twitch_headers
+                )
+            if stream_data["data"] is None:
+                break
+            elif len(stream_data["data"]) == 1:
+                if t["user"] not in self.online:
+                    self.online.append(t["user"])
+                    embed = stream_embed(
+                        t["user"],
+                        stream_data["data"][0]["title"],
+                        stream_data["data"][0]["game_name"],
                     )
-                if len(stream_data["data"]) == 1:
-                    if t["user"] not in self.online:
-                        self.online.append(t["user"])
-                        embed = stream_embed(
-                            t["user"],
-                            stream_data["data"][0]["title"],
-                            stream_data["data"][0]["game_name"],
-                        )
-                        # em_twitch = discord.Embed(
-                        #     description=f"<@&{TWITCH_NOTIFY_ROLE}>"
-                        # )
-                        # em_twitch.add_field(
-                        #     name=f"""{t} is live: {stream_data["data"][0]["title"]} playing {stream_data["data"][0]["game_name"]}""",
-                        #     value=f"{Urls.TWITCH_CHANNEL}{t}",
-                        # )
-                        logger.info(f"{self.online} is online.")
-                        await twitch_channel.send(embed=embed)
-                else:
-                    if t["user"] in self.online:
-                        self.online.remove(t["user"])
-                        logger.info(f"{t['user']} is offline.")
-        except Exception as e:
-            logger.exception(e)
+                    # em_twitch = discord.Embed(
+                    #     description=f"<@&{TWITCH_NOTIFY_ROLE}>"
+                    # )
+                    # em_twitch.add_field(
+                    #     name=f"""{t} is live: {stream_data["data"][0]["title"]} playing {stream_data["data"][0]["game_name"]}""",
+                    #     value=f"{Urls.TWITCH_CHANNEL}{t}",
+                    # )
+                    logger.info(f"{self.online} is online.")
+                    await twitch_channel.send(embed=embed)
+            else:
+                if t["user"] in self.online:
+                    self.online.remove(t["user"])
+                    logger.info(f"{t['user']} is offline.")
 
     @twitch_check.before_loop
     async def before_twitch_check(self):
@@ -118,53 +117,57 @@ class Waffle(commands.Bot):
         queue = await DB().get_active_queue()
         queue = list(queue)
         if len(queue) > 0:
-            logger.info(f"{queue}")
-        for id in queue:
-            if "active" in id["status"]:
-                logger.info(f"Checking: {id['task_id']}")
-                if "link" in id["type"]:
-                    async with Conn() as resp:
-                        r = await resp.get_json(
-                            Urls.DEBRID_DELAYED + str(id["task_id"])
-                        )
-                        logger.info(Urls.DEBRID_DELAYED + str(id["task_id"]))
-                        logger.debug(r)
+            # logger.info(f"{queue}")
+            for id in queue:
+                if "active" in id["status"]:
+                    logger.info(f"Checking: {id['task_id']}")
+                    if "link" in id["type"]:
+                        async with Conn() as resp:
+                            r = await resp.get_json(
+                                Urls.DEBRID_DELAYED + str(id["task_id"])
+                            )
+                            logger.info(Urls.DEBRID_DELAYED + str(id["task_id"]))
+                            logger.debug(r)
 
-                    if r["data"]["status"] == 2:
-                        link = r["data"]["link"]
-                        link_split = link.split("/")[-2:]
-                        filename = urllib.parse.unquote(link_split[1])
-                        logger.info(f"removing {id['task_id']}")
-                        await DB().set_status(id["task_id"], "complete")
-                        embed = download_ready(id["user_id"], filename, link)
-                        dl_channel = await self.fetch_channel(DL_CHANNEL)
-                        await dl_channel.send(embed=embed)
-            else:
-                try:
-                    async with Conn() as resp:
-                        status_json = await resp.get_json(
-                            Urls.DEBRID_STATUS_ONE + str(id["task_id"])
-                        )
-                except:
-                    pass
-                logger.info(f"Checking: {id['task_id']}")
-                try:
-                    if (
-                        status_json["status"] == "error"
-                        or status_json["data"]["magnets"]["statusCode"] > 4
-                    ):
-                        await DB.set_status(task_id=id["task_id"], status="failed")
-                        logger.info(f"removing {id['task_id']}")
+                        if r["data"]["status"] == 2:
+                            link = r["data"]["link"]
+                            link_split = link.split("/")[-2:]
+                            filename = urllib.parse.unquote(link_split[1])
+                            logger.info(f"removing {id['task_id']}")
+                            await DB().set_status(id["task_id"], "complete")
+                            embed = download_ready(id["user_id"], filename, link)
+                            dl_channel = await self.fetch_channel(DL_CHANNEL)
+                            await dl_channel.send(embed=embed)
+                else:
+                    try:
+                        async with Conn() as resp:
+                            status_json = await resp.get_json(
+                                Urls.DEBRID_STATUS_ONE + str(id["task_id"])
+                            )
+                    except:
+                        pass
+                    logger.info(f"Checking: {id['task_id']}")
+                    try:
+                        if (
+                            status_json["status"] == "error"
+                            or status_json["data"]["magnets"]["statusCode"] > 4
+                        ):
+                            await DB.set_status(
+                                self, task_id=id["task_id"], status="failed"
+                            )
+                            logger.info(f"removing {id['task_id']}")
 
-                    if "Ready" in status_json["data"]["magnets"]["status"]:
-                        await DB.set_status(task_id=id["task_id"], status="complete")
-                        filename = status_json["data"]["magnets"]["filename"]
-                        embed = download_ready(id["user_id"], filename)
-                        logger.info(f"Removed: {id['task_id']}")
-                        dl_channel = await self.fetch_channel(DL_CHANNEL)
-                        await dl_channel.send(embed=embed)
-                except:
-                    pass
+                        if "Ready" in status_json["data"]["magnets"]["status"]:
+                            await DB.set_status(
+                                self, task_id=id["task_id"], status="complete"
+                            )
+                            filename = status_json["data"]["magnets"]["filename"]
+                            embed = download_ready(id["user_id"], filename)
+                            logger.info(f"Removed: {id['task_id']}")
+                            dl_channel = await self.fetch_channel(DL_CHANNEL)
+                            await dl_channel.send(embed=embed)
+                    except:
+                        pass
 
     @debrid_check.before_loop
     async def before_task(self):
