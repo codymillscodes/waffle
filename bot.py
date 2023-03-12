@@ -35,6 +35,7 @@ class Waffle(commands.Bot):
         self.twitch_headers = ""
         self.twitchers = []
         self.online = []
+        self.db = DB()
 
     async def setup_hook(self):
         self.debrid_check.start()
@@ -92,7 +93,7 @@ class Waffle(commands.Bot):
     @twitch_check.before_loop
     async def before_twitch_check(self):
         await self.wait_until_ready()
-        self.twitchers = await DB().get_twitchers()
+        self.twitchers = await self.db.get_twitchers()
         self.twitchers = list(self.twitchers)
         try:
             body = {
@@ -114,7 +115,7 @@ class Waffle(commands.Bot):
     async def debrid_check(self):
         # await self.twitch_check()
 
-        queue = await DB().get_active_queue()
+        queue = await self.db.get_active_queue()
         queue = list(queue)
         if len(queue) > 0:
             # logger.info(f"{queue}")
@@ -134,7 +135,7 @@ class Waffle(commands.Bot):
                             link_split = link.split("/")[-2:]
                             filename = urllib.parse.unquote(link_split[1])
                             logger.info(f"removing {id['task_id']}")
-                            await DB().set_status(id["task_id"], "complete")
+                            await self.db.set_status(id["task_id"], "complete")
                             embed = download_ready(id["user_id"], filename, link)
                             dl_channel = await self.fetch_channel(DL_CHANNEL)
                             await dl_channel.send(embed=embed)
@@ -160,7 +161,7 @@ class Waffle(commands.Bot):
 
                             if "Ready" in status_json["data"]["magnets"]["status"]:
                                 await DB.set_status(
-                                    task_id=id["task_id"], status="complete"
+                                    self, task_id=id["task_id"], status="complete"
                                 )
                                 filename = status_json["data"]["magnets"]["filename"]
                                 embed = download_ready(id["user_id"], filename)
