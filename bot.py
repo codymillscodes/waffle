@@ -84,7 +84,7 @@ class Waffle(commands.Bot):
                         logger.info(f"{self.online} is online.")
                         await twitch_channel.send(embed=embed)
                 else:
-                    if t in self.online:
+                    if t["user"] in self.online:
                         self.online.remove(t["user"])
                         logger.info(f"{t['user']} is offline.")
         except Exception as e:
