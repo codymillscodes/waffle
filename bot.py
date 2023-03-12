@@ -144,7 +144,8 @@ class Waffle(commands.Bot):
                             status_json = await resp.get_json(
                                 Urls.DEBRID_STATUS_ONE + str(id["task_id"])
                             )
-                    except:
+                    except Exception as e:
+                        logger.exception(e)
                         pass
                     logger.info(f"Checking: {id['task_id']}")
                     try:
@@ -166,7 +167,8 @@ class Waffle(commands.Bot):
                             logger.info(f"Removed: {id['task_id']}")
                             dl_channel = await self.fetch_channel(DL_CHANNEL)
                             await dl_channel.send(embed=embed)
-                    except:
+                    except Exception as e:
+                        logger.exception(e)
                         pass
 
     @debrid_check.before_loop
