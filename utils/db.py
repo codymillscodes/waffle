@@ -31,7 +31,7 @@ class DB:
         self.queue.insert_one(data)
 
     async def set_status(self, task_id, status):
-        self.queue.update_one(
+        self.db.queue.update_one(
             {"task_id": task_id},
             {
                 "$set": {"status": status, "updated_at": await self.get_time()},
