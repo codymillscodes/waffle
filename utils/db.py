@@ -1,6 +1,7 @@
 import pymongo
 from config import MONGO_USER, MONGO_PASS
 from datetime import datetime
+from loguru import logger
 
 client = pymongo.MongoClient(
     f"mongodb+srv://{MONGO_USER}:{MONGO_PASS}@waffle.i2tnxdm.mongodb.net/?retryWrites=true&w=majority"
@@ -37,6 +38,7 @@ class DB:
                 "$set": {"status": status, "updated_at": await self.get_time()},
             },
         )
+        logger.info(f"Set status of {task_id} to {status}")
 
     async def get_time(self):
         now = datetime.now()
