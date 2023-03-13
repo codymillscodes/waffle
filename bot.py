@@ -153,12 +153,10 @@ class Waffle(commands.Bot):
                                 status_json["status"] == "error"
                                 or status_json["data"]["magnets"]["statusCode"] > 4
                             ):
-                                await DB.set_status(
-                                    self, task_id=id["task_id"], status="failed"
-                                )
+                                await self.db.set_status(id["task_id"], "failed")
                                 logger.info(f"removing {id['task_id']}")
 
-                            elif "Ready" in status_json["data"]["magnets"]["status"]:
+                            if "Ready" in status_json["data"]["magnets"]["status"]:
                                 await DB.set_status(
                                     self, task_id=id["task_id"], status="complete"
                                 )
