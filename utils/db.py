@@ -41,7 +41,9 @@ class DB:
                 "$set": {"status": status, "updated_at": self.get_time()},
             },
         )
-        logger.info(r)
+        logger.info(
+            f"Matched: {r.matched_count}, Modified: {r.modified_count}, acknowledged: {r.acknowledged}"
+        )
         logger.info(f"Set status of {task_id} to {status}")
 
     async def get_twitchers(self):
