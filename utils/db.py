@@ -35,12 +35,13 @@ class DB:
         self.queue.insert_one(data)
 
     async def set_status(self, task_id, status):
-        self.queue.update_one(
+        r = self.queue.update_one(
             {"task_id": task_id},
             {
                 "$set": {"status": status, "updated_at": self.get_time()},
             },
         )
+        logger.info(r)
         logger.info(f"Set status of {task_id} to {status}")
 
     async def get_twitchers(self):
