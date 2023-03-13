@@ -158,7 +158,7 @@ class Waffle(commands.Bot):
 
                             elif "Ready" in status_json["data"]["magnets"]["status"]:
                                 await DB.set_status(
-                                    self, task_id=id["task_id"], status="complete"
+                                    DB, task_id=id["task_id"], status="complete"
                                 )
                                 filename = status_json["data"]["magnets"]["filename"]
                                 embed = download_ready(id["user_id"], filename)
