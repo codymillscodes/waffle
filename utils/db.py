@@ -9,9 +9,9 @@ client = pymongo.MongoClient(
 
 class DB:
     def __init__(self):
-        self.db = client["waffle"]
-        self.queue = self.db["queue"]
-        self.users = self.db["users"]
+        self.client = client["waffle"]
+        self.queue = self.client["queue"]
+        self.users = self.client["users"]
 
     # async def get_queue(self):
     #    return self.queue.find({})
