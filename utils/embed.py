@@ -160,7 +160,7 @@ def hltb(name, results):
 
 # debrid embeds
 def debrid_status(all_status):
-    embed = Embed(title="Download Status", color=0x00FF00)
+    embed = Embed(title="__Download Status__", color=0x00FF00)
     for m in all_status:
         try:
             name = all_status[m].get("filename", "")

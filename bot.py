@@ -158,7 +158,7 @@ class Waffle(commands.Bot):
                                 )
                                 logger.info(f"removing {id['task_id']}")
 
-                            if "Ready" in status_json["data"]["magnets"]["status"]:
+                            elif "Ready" in status_json["data"]["magnets"]["status"]:
                                 await DB.set_status(
                                     self, task_id=id["task_id"], status="complete"
                                 )
