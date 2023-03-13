@@ -34,7 +34,7 @@ class DB:
         self.client.queue.update_one(
             {"task_id": task_id},
             {
-                "$set": {"status": status, "updated_at": await self.client.get_time()},
+                "$set": {"status": status, "updated_at": await self.get_time()},
             },
         )
 
