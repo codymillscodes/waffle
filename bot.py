@@ -148,7 +148,6 @@ class Waffle(commands.Bot):
                         except Exception as e:
                             logger.exception(e)
                             pass
-                        logger.info(f"Checking: {id['task_id']}")
                         try:
                             if (
                                 status_json["status"] == "error"
