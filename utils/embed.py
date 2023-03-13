@@ -181,8 +181,26 @@ def debrid_status(all_status):
                 value=f"{percentage_complete} of {sized_size} | Seeders: {seeders} | Speed: {speed}",
                 inline=False,
             )
-    except Exception as e:
-        logger.exception(f"Error building debrid status embed: {e}")
+    except TypeError:
+        for m in all_status:
+            name = m.get("filename", "")
+            dlsize = float(m.get("size", 0))
+            seeders = m.get("seeders", 0)
+            speed = m.get("downloadSpeed", 0)
+            complete = float(m.get("downloaded", 0))
+            sized_size = 0
+            percentage_complete = "0%"
+            if dlsize > 0:
+                sized_size = size(int(dlsize))
+            if speed > 0:
+                speed = size(int(speed))
+            if complete > 0:
+                percentage_complete = percentage(complete, dlsize)
+            embed.add_field(
+                name=name,
+                value=f"{percentage_complete} of {sized_size} | Seeders: {seeders} | Speed: {speed}",
+                inline=False,
+            )
     return embed
 
 
