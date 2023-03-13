@@ -182,7 +182,7 @@ def debrid_status(all_status):
                 inline=False,
             )
     except Exception as e:
-        logger.error(f"Error building debrid status embed: {e}")
+        logger.exception(f"Error building debrid status embed: {e}")
     return embed
 
 
