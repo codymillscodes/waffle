@@ -108,7 +108,7 @@ class ChatbotCog(commands.Cog):
                         messages=messages,
                     )
                 )
-                response = response.choices[0].message.content
+                response = f"Tokens: {response['usage']['total_tokens']} | {response.choices[0].message.content}"
                 logger.info(f"Response recvd: {response}")
                 # self.previous_messages.append("Waffle: " + response + " ")
                 # print(f"previous_messages: {''.join(self.previous_messages)}")
