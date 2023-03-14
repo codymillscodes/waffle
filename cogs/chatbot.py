@@ -79,7 +79,7 @@ class ChatbotCog(commands.Cog):
                 message.reference.message_id
             )
             if replied_message.author.id == 968919979577704529:
-                messages.append(
+                messages.extend(
                     {"role": "assistant", "content": replied_message.content},
                     {"role": "user", "content": message.content},
                 )
