@@ -79,10 +79,10 @@ class ChatbotCog(commands.Cog):
                 message.reference.message_id
             )
             if replied_message.author.id == 968919979577704529:
-                messages.append(
-                    {"role": "assistant", "content": replied_message.content}
+                messages = messages + (
+                    {"role": "assistant", "content": replied_message.content},
+                    {"role": "user", "content": message.content},
                 )
-                messages.append({"role": "user", "content": message.content})
                 send = 1
         elif message.content.startswith("@waffle") or (
             len(message.mentions) > 0 and "waffle" in message.mentions[0].name
