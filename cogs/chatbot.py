@@ -79,11 +79,23 @@ class ChatbotCog(commands.Cog):
                 message.reference.message_id
             )
             if replied_message.author.id == 968919979577704529:
-                messages = messages + [
+                m = [
                     {"role": "assistant", "content": replied_message.content},
                     {"role": "user", "content": message.content},
                 ]
+            if replied_message.reference:
+                second_reply = await message.channel.fetch_message(
+                    replied_message.reference.message_id
+                )
+                m = [{"role": "user", "content": second_reply.content}] + m
+                if second_reply.reference:
+                    third_reply = await message.channel.fetch_message(
+                        second_reply.reference.message_id
+                    )
+                    m = [{"role": "assistant", "content": third_reply.content}] + m
 
+                messages = messages + m
+                logger.info(f"Input sent: {m}")
                 send = 1
         elif message.content.startswith("@waffle") or (
             len(message.mentions) > 0 and "waffle" in message.mentions[0].name
@@ -109,7 +121,7 @@ class ChatbotCog(commands.Cog):
                         messages=messages,
                     )
                 )
-                response = f"Tokens: {response['usage']['total_tokens']} | {response.choices[0].message.content}"
+                response = {response.choices[0].message.content}
                 logger.info(f"Response recvd: {response}")
                 # self.previous_messages.append("Waffle: " + response + " ")
                 # print(f"previous_messages: {''.join(self.previous_messages)}")
