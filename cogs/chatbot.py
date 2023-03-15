@@ -121,14 +121,16 @@ class ChatbotCog(commands.Cog):
                         messages=messages,
                     )
                 )
-                response = {response.choices[0].message.content}
-                logger.info(f"Response recvd: {response}")
+                r = {response.choices[0].message.content}
+                logger.info(
+                    f"Response recvd. Tokens used: {response['usage']['total_tokens']}"
+                )
                 # self.previous_messages.append("Waffle: " + response + " ")
                 # print(f"previous_messages: {''.join(self.previous_messages)}")
                 # chat limit is 2000 chars
-                if len(response) > 2000:
-                    response = response[:2000]
-                await message.reply(response, mention_author=False)
+                if len(r) > 2000:
+                    r = r[:2000]
+                await message.reply(r, mention_author=False)
             except Exception as e:
                 logger.exception(e)
                 await message.channel.send("The server is overloaded or not ready yet.")
