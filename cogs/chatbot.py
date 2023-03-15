@@ -121,7 +121,7 @@ class ChatbotCog(commands.Cog):
                         messages=messages,
                     )
                 )
-                r = {response.choices[0].message.content}
+                r = response.choices[0].message.content
                 logger.info(
                     f"Response recvd. Tokens used: {response['usage']['total_tokens']}"
                 )
