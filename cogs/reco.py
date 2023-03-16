@@ -1,7 +1,10 @@
 from discord.ext import commands
 from loguru import logger
+import discord
 
 # from utils import DB, embed
+
+tree = discord.app_commands.CommandTree()
 
 
 class RecoCog(commands.Cog):
