@@ -13,6 +13,7 @@ class DB:
         self.client = client["waffle"]
         self.queue = self.client["queue"]
         self.users = self.client["users"]
+        self.reco = self.client["reco"]
 
     # async def get_queue(self):
     #    return self.queue.find({})
@@ -48,3 +49,18 @@ class DB:
 
     async def get_twitchers(self):
         return self.users.find({"twitcher": {"$eq": True}})
+
+    async def add_reco(self, reco):
+        data = {
+            "user_id": reco[0],
+            "recommender": reco[1],
+            "receiver": reco[2],
+            "media type": reco[3],
+            "media title": reco[4],
+            "rating": reco[5],
+            "timestamp": self.get_time(),
+        }
+        self.reco.insert_one(data)
+
+    async def update_count(self):
+        self.reco.update_one({"name": "count"}, {"$inc": {"count": 1}})
