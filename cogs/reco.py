@@ -10,6 +10,6 @@ class RecoCog(commands.Cog):
 
     # self.db = DB()
 
-    @commands.slash_command(name="reco", description="Get a recommendation")
+    @bot.tree.command(name="reco")
     async def add_reco(self, interaction: commands.Interaction, one: str):
         await interaction.response.send_message("one is " + one)
