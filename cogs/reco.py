@@ -18,4 +18,4 @@ class RecoCog(commands.Cog):
 
 
 async def setup(bot):
-    bot.add_cog(RecoCog(bot))
+    await bot.add_cog(RecoCog(bot))
