@@ -40,12 +40,14 @@ class Waffle(commands.Bot):
     async def setup_hook(self):
         self.debrid_check.start()
         self.twitch_check.start()
+        self.tree.copy_global_to(guild=771867774087725146)
+        await self.tree.sync(guild=discord.Object(id=771867774087725146))
         logger.info("Background tasks started.")
 
     @watch(path="cogs", preload=True)
     async def on_ready(self):
         await self.change_presence(activity=discord.Game(name="8=====D~~"))
-        await self.tree.sync(guild=discord.Object(id=771867774087725146))
+
         logger.info(
             f"\n\nLogged in as: {self.user.name} - {self.user.id}\nVersion: {discord.__version__}\n"
         )
