@@ -18,6 +18,8 @@ from utils.random import get_link_msg
 from utils.embed import download_ready, stream_embed
 from utils.db import DB
 
+MY_GUILD = discord.Object(id=771867774087725146)
+
 
 class Waffle(commands.Bot):
     def __init__(self):
@@ -40,8 +42,8 @@ class Waffle(commands.Bot):
     async def setup_hook(self):
         self.debrid_check.start()
         self.twitch_check.start()
-        self.tree.copy_global_to(guild=771867774087725146)
-        await self.tree.sync(guild=discord.Object(id=771867774087725146))
+        self.tree.copy_global_to(guild=MY_GUILD)
+        await self.tree.sync(guild=MY_GUILD)
         logger.info("Background tasks started.")
 
     @watch(path="cogs", preload=True)
