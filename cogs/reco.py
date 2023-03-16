@@ -11,6 +11,6 @@ class RecoCog(commands.Cog):
 
     # self.db = DB()
 
-    @discord.tree.command(name="reco")
+    @bot.hybrid_command(name="reco")
     async def add_reco(self, interaction: commands.Interaction, one: str):
         await interaction.response.send_message("one is " + one)
