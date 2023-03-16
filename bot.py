@@ -24,7 +24,7 @@ class Waffle(commands.Bot):
         super().__init__(
             command_prefix="!", description="waffle", intents=discord.Intents.all()
         )
-        tree = discord.app_commands.CommandTree(self)
+        # tree = discord.app_commands.CommandTree(self)
         logger.add(
             "logs/{time}_waffle.log",
             rotation="7 MB",
