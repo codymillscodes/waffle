@@ -24,7 +24,7 @@ class Waffle(commands.Bot):
         super().__init__(
             command_prefix="!", description="waffle", intents=discord.Intents.all()
         )
-
+        tree = discord.app_commands.CommandTree(self)
         logger.add(
             "logs/{time}_waffle.log",
             rotation="7 MB",
@@ -45,6 +45,7 @@ class Waffle(commands.Bot):
     @watch(path="cogs", preload=True)
     async def on_ready(self):
         await self.change_presence(activity=discord.Game(name="8=====D~~"))
+        await self.tree.sync(guild=discord.Object(id=771867774087725146))
         logger.info(
             f"\n\nLogged in as: {self.user.name} - {self.user.id}\nVersion: {discord.__version__}\n"
         )
