@@ -1,6 +1,7 @@
 from discord.ext import commands
 from loguru import logger
-from utils import DB, embed
+
+# from utils import DB, embed
 
 
 class RecoCog(commands.Cog):
