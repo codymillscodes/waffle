@@ -116,7 +116,7 @@ class ChatbotCog(commands.Cog):
                 response = await (
                     openai.ChatCompletion.acreate(
                         temperature=0.7,
-                        max_tokens=1024,
+                        max_tokens=4000,
                         model=CHAT_ENGINE,
                         messages=messages,
                     )

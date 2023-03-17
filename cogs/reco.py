@@ -14,7 +14,7 @@ class RecoCog(commands.Cog):
 
     @commands.hybrid_command(name="add_reco", description="Add a recommendation")
     async def add_reco(self, interaction: discord.Interaction, one: str):
-        await interaction.response.send_message("one is " + one)
+        await interaction.("one is " + one)
 
 
 async def setup(bot):

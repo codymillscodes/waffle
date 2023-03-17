@@ -1,6 +1,7 @@
 twitchers.txt
 debrid.txt
 dreams/
+cogs/reco.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
