@@ -83,7 +83,7 @@ class DirectDLCog(commands.Cog):
                 logger.debug(stream["id"])
                 stream = urllib.parse.quote(stream["id"]).replace("-", "%2D")
                 break
-            elif stream["quality"] in resolutions and stream is not "":
+            elif stream["quality"] in resolutions and stream != "":
                 logger.debug(stream["id"])
                 stream = urllib.parse.quote(stream["id"]).replace("-", "%2D")
                 break
