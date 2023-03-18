@@ -78,10 +78,10 @@ class DirectDLCog(commands.Cog):
             logger.info(f"Unlocking ({id}) : {filename}")
             for stream in result["data"]["streams"]:
                 if stream["quality"] == "1080":
-                    stream = urllib.parse.quote(stream["id"])
+                    stream = urllib.parse.quote(stream["id"]).replace("-", "%2D")
                     break
                 elif stream["quality"] in resolutions:
-                    stream = urllib.parse.quote(stream["id"])
+                    stream = urllib.parse.quote(stream["id"]).replace("-", "%2D")
                     break
             if stream == "":
                 await ctx.send("No 1080p, 720p, 480p, 360p or 240p found.")
