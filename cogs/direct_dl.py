@@ -90,6 +90,7 @@ class DirectDLCog(commands.Cog):
                 result = await resp.get_json(
                     f"{Urls.DEBRID_STREAMING}{id}&stream={stream}"
                 )
+            logger.info(f"url: {Urls.DEBRID_STREAMING}{id}&stream={stream}")
             id = result["data"]["delayed"]
             logger.info(f"Got delayed ID: {id}")
             async with Conn() as resp:
