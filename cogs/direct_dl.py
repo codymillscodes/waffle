@@ -77,10 +77,13 @@ class DirectDLCog(commands.Cog):
             filename = result["data"]["filename"]
             logger.info(f"Unlocking ({id}) : {filename}")
             for stream in result["data"]["streams"]:
+                logger.debug(f"Stream: {stream}")
                 if stream["quality"] == "1080":
+                    logger.debug(stream["id"])
                     stream = urllib.parse.quote(stream["id"]).replace("-", "%2D")
                     break
-                elif stream["quality"] in resolutions:
+                elif stream["quality"] in resolutions and stream is not "":
+                    logger.debug(stream["id"])
                     stream = urllib.parse.quote(stream["id"]).replace("-", "%2D")
                     break
             if stream == "":
