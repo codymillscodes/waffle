@@ -70,47 +70,45 @@ class DirectDLCog(commands.Cog):
     async def video(self, ctx, *, input: str):
         resolutions = [720, 480, 360, 240]
         allowed = ["youtube", "youtu.be", "ok.ru", "vimeo", "dailymotion"]
-        if input in allowed:
-            link = input
-            async with Conn() as resp:
-                result = await resp.get_json(Urls.DEBRID_UNLOCK + link)
-            id = result["data"]["id"]
-            filename = result["data"]["filename"]
-            logger.info(f"Unlocking ({id}) : {filename}")
-            for stream in result["data"]["streams"]:
-                logger.debug(f"Stream: {stream}")
-                if stream["quality"] == 1080:
-                    logger.debug(stream["id"])
-                    stream = urllib.parse.quote(stream["id"]).replace("-", "%2D")
-                    break
-                elif stream["quality"] in resolutions and stream is not "":
-                    logger.debug(stream["id"])
-                    stream = urllib.parse.quote(stream["id"]).replace("-", "%2D")
-                    break
-            if stream == "":
-                await ctx.send("No 1080p, 720p, 480p, 360p or 240p found.")
-                return
-            async with Conn() as resp:
-                result = await resp.get_json(
-                    f"{Urls.DEBRID_STREAMING}{id}&stream={stream}"
-                )
-            logger.info(f"url: {Urls.DEBRID_STREAMING}{id}&stream={stream}")
-            id = result["data"]["delayed"]
-            logger.info(f"Got delayed ID: {id}")
-            async with Conn() as resp:
-                re = await resp.get_json(Urls.DEBRID_DELAYED + str(id))
-            if re["data"]["status"] != 2:
-                await DB().add_to_queue([id, filename, ctx.author.id, "link"])
-                logger.info(f"{id} not ready, added to queue.")
-                await ctx.send("It's not ready and there's no !stat for this.")
-            elif re["data"]["status"] == 2:
-                link = re["data"]["link"]
-                dlchannel = await self.bot.fetch_channel(DL_CHANNEL)
-                embed = download_ready(ctx.author, filename, link)
-                logger.info(f"{id} ready.")
-                await dlchannel.send(embed=embed)
-        else:
-            await ctx.reply("Only supports youtube for now.", mention_author=False)
+        # if input in allowed:
+        link = input
+        async with Conn() as resp:
+            result = await resp.get_json(Urls.DEBRID_UNLOCK + link)
+        id = result["data"]["id"]
+        filename = result["data"]["filename"]
+        logger.info(f"Unlocking ({id}) : {filename}")
+        for stream in result["data"]["streams"]:
+            logger.debug(f"Stream: {stream}")
+            if stream["quality"] == 1080:
+                logger.debug(stream["id"])
+                stream = urllib.parse.quote(stream["id"]).replace("-", "%2D")
+                break
+            elif stream["quality"] in resolutions and stream is not "":
+                logger.debug(stream["id"])
+                stream = urllib.parse.quote(stream["id"]).replace("-", "%2D")
+                break
+        if stream == "":
+            await ctx.send("No 1080p, 720p, 480p, 360p or 240p found.")
+            return
+        async with Conn() as resp:
+            result = await resp.get_json(f"{Urls.DEBRID_STREAMING}{id}&stream={stream}")
+        logger.info(f"url: {Urls.DEBRID_STREAMING}{id}&stream={stream}")
+        id = result["data"]["delayed"]
+        logger.info(f"Got delayed ID: {id}")
+        async with Conn() as resp:
+            re = await resp.get_json(Urls.DEBRID_DELAYED + str(id))
+        if re["data"]["status"] != 2:
+            await DB().add_to_queue([id, filename, ctx.author.id, "link"])
+            logger.info(f"{id} not ready, added to queue.")
+            await ctx.send("It's not ready and there's no !stat for this.")
+        elif re["data"]["status"] == 2:
+            link = re["data"]["link"]
+            dlchannel = await self.bot.fetch_channel(DL_CHANNEL)
+            embed = download_ready(ctx.author, filename, link)
+            logger.info(f"{id} ready.")
+            await dlchannel.send(embed=embed)
+        # else:
+        #    await ctx.reply("Only supports youtube for now.", mention_author=False)
 
     async def get_title(self, url):
         async with Conn() as resp:
