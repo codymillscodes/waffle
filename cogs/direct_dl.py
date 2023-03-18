@@ -93,20 +93,24 @@ class DirectDLCog(commands.Cog):
         async with Conn() as resp:
             result = await resp.get_json(f"{Urls.DEBRID_STREAMING}{id}&stream={stream}")
         logger.info(f"url: {Urls.DEBRID_STREAMING}{id}&stream={stream}")
-        id = result["data"]["delayed"]
-        logger.info(f"Got delayed ID: {id}")
-        async with Conn() as resp:
-            re = await resp.get_json(Urls.DEBRID_DELAYED + str(id))
-        if re["data"]["status"] != 2:
-            await DB().add_to_queue([id, filename, ctx.author.id, "link"])
-            logger.info(f"{id} not ready, added to queue.")
-            await ctx.send("It's not ready and there's no !stat for this.")
-        elif re["data"]["status"] == 2:
-            link = re["data"]["link"]
-            dlchannel = await self.bot.fetch_channel(DL_CHANNEL)
-            embed = download_ready(ctx.author, filename, link)
-            logger.info(f"{id} ready.")
-            await dlchannel.send(embed=embed)
+        try:
+            id = result["data"]["delayed"]
+            logger.info(f"Got delayed ID: {id}")
+            async with Conn() as resp:
+                re = await resp.get_json(Urls.DEBRID_DELAYED + str(id))
+            if re["data"]["status"] != 2:
+                await DB().add_to_queue([id, filename, ctx.author.id, "link"])
+                logger.info(f"{id} not ready, added to queue.")
+                await ctx.send("It's not ready and there's no !stat for this.")
+            elif re["data"]["status"] == 2:
+                link = re["data"]["link"]
+        except KeyError:
+            link = result["data"]["link"]
+
+        dlchannel = await self.bot.fetch_channel(DL_CHANNEL)
+        embed = download_ready(ctx.author, filename, link)
+        logger.info(f"{id} ready.")
+        await dlchannel.send(embed=embed)
         # else:
         #    await ctx.reply("Only supports youtube for now.", mention_author=False)
 
