@@ -3,6 +3,7 @@ import discord
 import openai
 import re
 from loguru import logger
+import tiktoken
 import config
 from utils.connection import Connection as Conn
 
@@ -24,7 +25,7 @@ class ChatbotCog(commands.Cog):
     )
     async def gpt(self, ctx, *, input: str):
         response = await openai.Completion.acreate(
-            temperature=0.9, max_tokens=512, engine=ENGINE, prompt=input
+            temperature=0.9, max_tokens=1024, engine=ENGINE, prompt=input
         )
         logger.info(f"GPT recvd: {response}")
         await ctx.reply(
@@ -112,11 +113,12 @@ class ChatbotCog(commands.Cog):
                     logger.info(f"Input sent: {i}")
                     send = 1
         if send == 1:
+            tokens = await self.count_tokens_in_messages(messages)
             try:
                 response = await (
                     openai.ChatCompletion.acreate(
                         temperature=0.7,
-                        max_tokens=3000,
+                        max_tokens=4000 - tokens,
                         model=CHAT_ENGINE,
                         messages=messages,
                     )
@@ -134,6 +136,19 @@ class ChatbotCog(commands.Cog):
             except Exception as e:
                 logger.exception(e)
                 await message.channel.send("The server is overloaded or not ready yet.")
+
+    async def count_tokens_in_messages(self, messages):
+        num_tokens = 0
+        for message in messages:
+            num_tokens += (
+                4  # every message follows <im_start>{role/name}\n{content}<im_end>\n
+            )
+            for key, value in message.items():
+                num_tokens += len(encoding.encode(value))
+                if key == "name":  # if there's a name, the role is omitted
+                    num_tokens += -1  # role is always required and always 1 token
+        num_tokens += 2  # every reply is primed with <im_start>assistant
+        return num_tokens
 
 
 async def setup(bot):
