@@ -139,6 +139,7 @@ class ChatbotCog(commands.Cog):
 
     async def count_tokens_in_messages(self, messages):
         num_tokens = 0
+        encoding = tiktoken.get_encoding(ENGINE)
         for message in messages:
             num_tokens += (
                 4  # every message follows <im_start>{role/name}\n{content}<im_end>\n
