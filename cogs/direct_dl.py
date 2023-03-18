@@ -66,10 +66,11 @@ class DirectDLCog(commands.Cog):
         else:
             await ctx.reply("Only supports youtube for now.", mention_author=False)
 
-    @commands.command(name="ytvid")
-    async def ytvid(self, ctx, *, input: str):
+    @commands.command(name="video")
+    async def video(self, ctx, *, input: str):
         resolutions = [720, 480, 360, 240]
-        if "youtube" in input or "youtu.be" in input:
+        allowed = ["youtube", "youtu.be", "ok.ru", "vimeo", "dailymotion"]
+        if input in allowed:
             link = input
             async with Conn() as resp:
                 result = await resp.get_json(Urls.DEBRID_UNLOCK + link)
