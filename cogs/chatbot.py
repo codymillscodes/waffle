@@ -148,6 +148,7 @@ class ChatbotCog(commands.Cog):
                 if key == "name":  # if there's a name, the role is omitted
                     num_tokens += -1  # role is always required and always 1 token
         num_tokens += 2  # every reply is primed with <im_start>assistant
+        logger.info(f"Tokens used: {num_tokens}")
         return num_tokens
 
 
