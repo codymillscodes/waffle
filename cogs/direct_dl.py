@@ -68,7 +68,7 @@ class DirectDLCog(commands.Cog):
 
     @commands.command(name="ytvid")
     async def ytvid(self, ctx, *, input: str):
-        resolutions = ["720", "480", "360", "240"]
+        resolutions = [720, 480, 360, 240]
         if "youtube" in input or "youtu.be" in input:
             link = input
             async with Conn() as resp:
@@ -78,7 +78,7 @@ class DirectDLCog(commands.Cog):
             logger.info(f"Unlocking ({id}) : {filename}")
             for stream in result["data"]["streams"]:
                 logger.debug(f"Stream: {stream}")
-                if stream["quality"] == "1080":
+                if stream["quality"] == 1080:
                     logger.debug(stream["id"])
                     stream = urllib.parse.quote(stream["id"]).replace("-", "%2D")
                     break
