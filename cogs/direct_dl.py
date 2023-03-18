@@ -32,12 +32,12 @@ class DirectDLCog(commands.Cog):
         await ctx.message.add_reaction(WAFFLE_EMOJI)
 
     @commands.command(
-        name="unlock",
+        name="ytmp3",
         description="At the moment, it only returns the mp3 of a youtube video.",
         brief="Get mp3 of YT video.",
     )
-    async def unlock(self, ctx, *, input: str):
-        if "youtube" in input:
+    async def ytmp3(self, ctx, *, input: str):
+        if "youtube" in input or "youtu.be" in input:
             link = input
             async with Conn() as resp:
                 result = await resp.get_json(Urls.DEBRID_UNLOCK + link)
@@ -45,6 +45,47 @@ class DirectDLCog(commands.Cog):
             filename = result["data"]["filename"]
             logger.info(f"Unlocking ({id}) : {filename}")
             stream = urllib.parse.quote(result["data"]["streams"][0]["id"])
+            async with Conn() as resp:
+                result = await resp.get_json(
+                    f"{Urls.DEBRID_STREAMING}{id}&stream={stream}"
+                )
+            id = result["data"]["delayed"]
+            logger.info(f"Got delayed ID: {id}")
+            async with Conn() as resp:
+                re = await resp.get_json(Urls.DEBRID_DELAYED + str(id))
+            if re["data"]["status"] != 2:
+                await DB().add_to_queue([id, filename, ctx.author.id, "link"])
+                logger.info(f"{id} not ready, added to queue.")
+                await ctx.send("It's not ready and there's no !stat for this.")
+            elif re["data"]["status"] == 2:
+                link = re["data"]["link"]
+                dlchannel = await self.bot.fetch_channel(DL_CHANNEL)
+                embed = download_ready(ctx.author, filename, link)
+                logger.info(f"{id} ready.")
+                await dlchannel.send(embed=embed)
+        else:
+            await ctx.reply("Only supports youtube for now.", mention_author=False)
+
+    @commands.command(name="ytvid")
+    async def ytvid(self, ctx, *, input: str):
+        resolutions = ["720", "480", "360", "240"]
+        if "youtube" in input or "youtu.be" in input:
+            link = input
+            async with Conn() as resp:
+                result = await resp.get_json(Urls.DEBRID_UNLOCK + link)
+            id = result["data"]["id"]
+            filename = result["data"]["filename"]
+            logger.info(f"Unlocking ({id}) : {filename}")
+            for stream in result["data"]["streams"]:
+                if stream["quality"] == "1080":
+                    stream = urllib.parse.quote(stream["id"])
+                    break
+                elif stream["quality"] in resolutions:
+                    stream = urllib.parse.quote(stream["id"])
+                    break
+            if stream == "":
+                await ctx.send("No 1080p, 720p, 480p, 360p or 240p found.")
+                return
             async with Conn() as resp:
                 result = await resp.get_json(
                     f"{Urls.DEBRID_STREAMING}{id}&stream={stream}"
