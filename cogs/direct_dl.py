@@ -20,7 +20,6 @@ class DirectDLCog(commands.Cog):
     @app_commands.command(
         name="bandcamp",
         description="Download an album from Bandcamp. Gets uploaded to my server for downloading.",
-        brief="Download ANY album from bandcamp.",
     )
     async def bandcamp(self, interaction: discord.Interaction, url: str):
         title = await self.get_title(url)
@@ -36,7 +35,6 @@ class DirectDLCog(commands.Cog):
     @app_commands.command(
         name="ytmp3",
         description="At the moment, it only returns the mp3 of a youtube video.",
-        brief="Get mp3 of YT video.",
     )
     async def ytmp3(self, interaction: discord.Interaction, input: str):
         if "youtube" in input or "youtu.be" in input:
