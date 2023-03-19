@@ -66,34 +66,37 @@ class Waffle(commands.Bot):
     async def twitch_check(self):
         twitch_channel = await self.fetch_channel(TWITCH_CHANNEL)
         # logger.debug("Checking twitchers...")
-        for t in self.twitchers:
-            async with Conn() as resp:
-                stream_data = await resp.get_json(
-                    Urls.TWITCH_URL + t["user"], headers=self.twitch_headers
-                )
-            if stream_data["data"] is None:
-                break
-            elif len(stream_data["data"]) == 1:
-                if t["user"] not in self.online:
-                    self.online.append(t["user"])
-                    embed = stream_embed(
-                        t["user"],
-                        stream_data["data"][0]["title"],
-                        stream_data["data"][0]["game_name"],
+        try:
+            for t in self.twitchers:
+                async with Conn() as resp:
+                    stream_data = await resp.get_json(
+                        Urls.TWITCH_URL + t["user"], headers=self.twitch_headers
                     )
-                    # em_twitch = discord.Embed(
-                    #     description=f"<@&{TWITCH_NOTIFY_ROLE}>"
-                    # )
-                    # em_twitch.add_field(
-                    #     name=f"""{t} is live: {stream_data["data"][0]["title"]} playing {stream_data["data"][0]["game_name"]}""",
-                    #     value=f"{Urls.TWITCH_CHANNEL}{t}",
-                    # )
-                    logger.info(f"{self.online} is online.")
-                    await twitch_channel.send(embed=embed)
-            else:
-                if t["user"] in self.online:
-                    self.online.remove(t["user"])
-                    logger.info(f"{t['user']} is offline.")
+                if stream_data["data"] is None:
+                    break
+                elif len(stream_data["data"]) == 1:
+                    if t["user"] not in self.online:
+                        self.online.append(t["user"])
+                        embed = stream_embed(
+                            t["user"],
+                            stream_data["data"][0]["title"],
+                            stream_data["data"][0]["game_name"],
+                        )
+                        # em_twitch = discord.Embed(
+                        #     description=f"<@&{TWITCH_NOTIFY_ROLE}>"
+                        # )
+                        # em_twitch.add_field(
+                        #     name=f"""{t} is live: {stream_data["data"][0]["title"]} playing {stream_data["data"][0]["game_name"]}""",
+                        #     value=f"{Urls.TWITCH_CHANNEL}{t}",
+                        # )
+                        logger.info(f"{self.online} is online.")
+                        await twitch_channel.send(embed=embed)
+                else:
+                    if t["user"] in self.online:
+                        self.online.remove(t["user"])
+                        logger.info(f"{t['user']} is offline.")
+        except KeyError:
+            await self.before_twitch_check()
 
     @twitch_check.before_loop
     async def before_twitch_check(self):
