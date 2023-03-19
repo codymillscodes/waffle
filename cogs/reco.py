@@ -21,7 +21,7 @@ class RecoCog(commands.Cog):
         rating: int,
         receiver: discord.Member,
     ):
-        self.db.add_reco([interaction.user.id, receiver.id, type, title, rating])
+        await self.db.add_reco([interaction.user.id, receiver.id, type, title, rating])
         await interaction.response.send_message(
             f"Added {title} to {receiver}'s recommendations!"
         )
