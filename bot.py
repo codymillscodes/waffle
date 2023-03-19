@@ -70,9 +70,9 @@ class Waffle(commands.Bot):
                     stream_data = await resp.get_json(
                         Urls.TWITCH_URL + t["user"], headers=self.twitch_headers
                     )
-                if stream_data["data"] is None:
+                if None in stream_data["data"]:
                     break
-                elif len(stream_data["data"]) == 1:
+                if len(stream_data["data"]) == 1:
                     if t["user"] not in self.online:
                         self.online.append(t["user"])
                         embed = stream_embed(
