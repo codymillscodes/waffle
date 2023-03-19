@@ -65,22 +65,18 @@ class DebridCog(commands.Cog):
             mag = await deb.upload_magnet(magnet)
             logger.info(f"Adding magnet for {mag[1]}")
             if mag[2]:
-                embed = utils.embed.download_ready(interaction.author, mag)
+                embed = utils.embed.download_ready(interaction.user, mag)
                 logger.info(f"{mag[1]} is ready.")
                 dl_channel = await self.bot.fetch_channel(config.DL_CHANNEL)
                 await dl_channel.send(embed=embed)
             else:
-                data = [mag[0], "magnet", interaction.author.id, "magnet"]
+                data = [mag[0], "magnet", interaction.user.id, "magnet"]
                 await DB().add_to_queue(data)
                 logger.info(f"{mag[1]} is not ready. Adding to queue.")
-                await interaction.response.send_message(
-                    "It aint ready. Try !stat.", mention_author=False
-                )
+                await interaction.response.send_message("It aint ready. Try !stat.")
         else:
             logger.info(f"Invalid link recv'd: {input}")
-            await interaction.response.send_message(
-                "Not a valid magnet link.", mention_author=False
-            )
+            await interaction.response.send_message("Not a valid magnet link.")
 
     @commands.command(
         name="stat",

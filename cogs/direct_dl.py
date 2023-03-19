@@ -36,9 +36,8 @@ class DirectDLCog(commands.Cog):
         name="ytmp3",
         description="At the moment, it only returns the mp3 of a youtube video.",
     )
-    async def ytmp3(self, interaction: discord.Interaction, input: str):
-        if "youtube" in input or "youtu.be" in input:
-            link = input
+    async def ytmp3(self, interaction: discord.Interaction, link: str):
+        if "youtube" in link or "youtu.be" in link:
             async with Conn() as resp:
                 result = await resp.get_json(Urls.DEBRID_UNLOCK + link)
             id = result["data"]["id"]
@@ -54,7 +53,7 @@ class DirectDLCog(commands.Cog):
             async with Conn() as resp:
                 re = await resp.get_json(Urls.DEBRID_DELAYED + str(id))
             if re["data"]["status"] != 2:
-                await DB().add_to_queue([id, filename, interaction.author.id, "link"])
+                await DB().add_to_queue([id, filename, interaction.user.id, "link"])
                 logger.info(f"{id} not ready, added to queue.")
                 await interaction.response.send_message(
                     "It's not ready and there's no !stat for this."
@@ -62,20 +61,17 @@ class DirectDLCog(commands.Cog):
             elif re["data"]["status"] == 2:
                 link = re["data"]["link"]
                 dlchannel = await self.bot.fetch_channel(DL_CHANNEL)
-                embed = download_ready(interaction.author, filename, link)
+                embed = download_ready(interaction.user, filename, link)
                 logger.info(f"{id} ready.")
                 await dlchannel.send(embed=embed)
         else:
-            await interaction.response.send_message(
-                "Only supports youtube for now.", mention_author=False
-            )
+            await interaction.response.send_message("Only supports youtube for now.")
 
     @app_commands.command(name="video")
-    async def video(self, interaction: discord.Interaction, input: str):
+    async def video(self, interaction: discord.Interaction, link: str):
         resolutions = [720, 480, 360, 240]
-        allowed = ["youtube", "youtu.be", "ok.ru", "vimeo", "dailymotion"]
+        # allowed = ["youtube", "youtu.be", "ok.ru", "vimeo", "dailymotion"]
         # if input in allowed:
-        link = input
         async with Conn() as resp:
             result = await resp.get_json(Urls.DEBRID_UNLOCK + link)
         id = result["data"]["id"]
@@ -105,7 +101,7 @@ class DirectDLCog(commands.Cog):
             async with Conn() as resp:
                 re = await resp.get_json(Urls.DEBRID_DELAYED + str(id))
             if re["data"]["status"] != 2:
-                await DB().add_to_queue([id, filename, interaction.author.id, "link"])
+                await DB().add_to_queue([id, filename, interaction.user.id, "link"])
                 logger.info(f"{id} not ready, added to queue.")
                 await interaction.response.send_message(
                     "It's not ready and there's no !stat for this."
@@ -116,7 +112,7 @@ class DirectDLCog(commands.Cog):
             link = result["data"]["link"]
 
         dlchannel = await self.bot.fetch_channel(DL_CHANNEL)
-        embed = download_ready(interaction.author, filename, link)
+        embed = download_ready(interaction.user, filename, link)
         logger.info(f"{id} ready.")
         await dlchannel.send(embed=embed)
         # else:
