@@ -30,7 +30,10 @@ class RecoCog(commands.Cog):
     async def get_reco(
         self, interaction: discord.Interaction, receiver: discord.Member
     ):
+        reco_array = []
         reco = await self.db.get_reco(receiver.id)
+        for r in reco:
+            reco_array.append(f"{r['media title']}: {r['media type']} ({r['rating']})")
         if reco is None:
             await interaction.response.send_message("No recommendations found.")
         else:
