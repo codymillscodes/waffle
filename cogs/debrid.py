@@ -138,12 +138,15 @@ class DebridCog(commands.Cog):
             url = f"{Urls.RARBG_API}{self.token}&search_string={input}"
             counter = 0
             while counter < max_requests:
-                async with Conn() as resp:
-                    r = await resp.get_json(url)
-                    if "torrent_results" in r:
-                        break
-                    time.sleep(0.1)
-                    counter = counter + 1
+                try:
+                    async with Conn() as resp:
+                        r = await resp.get_json(url)
+                        if "torrent_results" in r:
+                            break
+                        time.sleep(0.1)
+                        counter = counter + 1
+                except:
+                    logger.info(r)
 
             if "error_code" in r:
                 if r["error_code"] == 5:
