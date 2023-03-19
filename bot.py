@@ -42,8 +42,6 @@ class Waffle(commands.Bot):
     async def setup_hook(self):
         self.debrid_check.start()
         self.twitch_check.start()
-        self.tree.copy_global_to(guild=MY_GUILD)
-        await self.tree.sync(guild=MY_GUILD)
         logger.info("Background tasks started.")
 
     @watch(path="cogs", preload=True)

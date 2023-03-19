@@ -29,6 +29,13 @@ class SystemCog(commands.Cog):
         else:
             await ctx.reply("lol youre not allowed to do this", mention_author=False)
 
+    @commands.command(name="sync")
+    async def sync(self, ctx):
+        guild = ctx.guild
+        ctx.bot.tree.copy_global_to(guild=guild)
+        synced = await ctx.bot.tree.sync(guild=guild)
+        await ctx.reply(f"Synced {len(synced)} commands.", mention_author=False)
+
 
 async def setup(bot):
     await bot.add_cog(SystemCog(bot))
