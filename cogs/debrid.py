@@ -1,6 +1,8 @@
 import time
 import asyncio
 from discord.ext import commands
+from discord import app_commands
+import discord
 from py1337x import py1337x
 from loguru import logger
 import utils.debrid as deb
@@ -54,28 +56,31 @@ class DebridCog(commands.Cog):
         logger.info(f"{len(r)} cached torrents.")
         await ctx.send(f"{len(r)} torrents.\nThe limit is 1000.")
 
-    @commands.command(
+    @app_commands.command(
         name="magnet",
         description="Upload a magnet directly.",
-        brief="Upload a magnet directly.",
     )
-    async def mag(self, ctx, *, input: str):
-        if input.startswith("magnet"):
-            mag = await deb.upload_magnet(input)
+    async def mag(self, interaction: discord.Interaction, magnet: str):
+        if magnet.startswith("magnet"):
+            mag = await deb.upload_magnet(magnet)
             logger.info(f"Adding magnet for {mag[1]}")
             if mag[2]:
-                embed = utils.embed.download_ready(ctx.author, mag)
+                embed = utils.embed.download_ready(interaction.author, mag)
                 logger.info(f"{mag[1]} is ready.")
                 dl_channel = await self.bot.fetch_channel(config.DL_CHANNEL)
                 await dl_channel.send(embed=embed)
             else:
-                data = [mag[0], "magnet", ctx.author.id, "magnet"]
+                data = [mag[0], "magnet", interaction.author.id, "magnet"]
                 await DB().add_to_queue(data)
                 logger.info(f"{mag[1]} is not ready. Adding to queue.")
-                await ctx.reply("It aint ready. Try !stat.", mention_author=False)
+                await interaction.response.send_message(
+                    "It aint ready. Try !stat.", mention_author=False
+                )
         else:
             logger.info(f"Invalid link recv'd: {input}")
-            await ctx.reply("Not a valid magnet link.", mention_author=False)
+            await interaction.response.send_message(
+                "Not a valid magnet link.", mention_author=False
+            )
 
     @commands.command(
         name="stat",
@@ -138,15 +143,12 @@ class DebridCog(commands.Cog):
             url = f"{Urls.RARBG_API}{self.token}&search_string={input}"
             counter = 0
             while counter < max_requests:
-                try:
-                    async with Conn() as resp:
-                        r = await resp.get_json(url)
-                        if "torrent_results" in r:
-                            break
-                        time.sleep(0.1)
-                        counter = counter + 1
-                except:
-                    logger.info(r)
+                async with Conn() as resp:
+                    r = await resp.get_json(url)
+                    if "torrent_results" in r:
+                        break
+                    time.sleep(0.1)
+                    counter = counter + 1
 
             if "error_code" in r:
                 if r["error_code"] == 5:
