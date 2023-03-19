@@ -52,12 +52,11 @@ class DB:
 
     async def add_reco(self, reco):
         data = {
-            "user_id": reco[0],
-            "recommender": reco[1],
-            "receiver": reco[2],
-            "media type": reco[3],
-            "media title": reco[4],
-            "rating": reco[5],
+            "recommender": reco[0],
+            "receiver": reco[1],
+            "media type": reco[2],
+            "media title": reco[3],
+            "rating": reco[4],
             "timestamp": self.get_time(),
         }
         self.reco.insert_one(data)
