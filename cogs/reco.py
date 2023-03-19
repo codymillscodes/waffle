@@ -13,8 +13,18 @@ class RecoCog(commands.Cog):
     # self.db = DB()
 
     @app_commands.command(name="add_reco", description="Add a recommendation")
-    async def add_reco(self, interaction: discord.Interaction, one: str):
-        await interaction.response.send_message("one is " + one)
+    async def add_reco(
+        self,
+        interaction: discord.Interaction,
+        title: str,
+        type: str,
+        rating: int,
+        receiver: discord.Member,
+    ):
+        self.db.add_reco([interaction.user.id, receiver.id, type, title, rating])
+        await interaction.response.send_message(
+            f"Added {title} to {receiver}'s recommendations!"
+        )
 
 
 async def setup(bot):
