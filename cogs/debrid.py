@@ -132,7 +132,7 @@ class DebridCog(commands.Cog):
         logger.info(f"{ctx.invoked_with} {input}")
 
         if ctx.invoked_with == "rarbg":
-            self.token = self.get_token()
+            self.token = await self.get_token()
             max_requests = 10
             input = input.replace(" ", "%20")
             url = f"{Urls.RARBG_API}{self.token}&search_string={input}"
@@ -218,7 +218,8 @@ class DebridCog(commands.Cog):
                 r = await resp.get_json(Urls.TOKEN_URL)
             logger.info("Got token.")
             logger.debug(f"Token: {r.json()['token']}")
-            return r.json()["token"]
+            token = r.json()["token"]
+            return token
         except IndexError:
             logger.error(f"Failed to get torrent api token.\n{r.json()}")
 

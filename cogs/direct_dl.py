@@ -2,6 +2,8 @@ import os
 import re
 import urllib.parse
 from discord.ext import commands
+from discord import app_commands
+import discord
 from bs4 import BeautifulSoup
 from loguru import logger
 from config import DL_CHANNEL, WAFFLE_EMOJI
@@ -15,12 +17,12 @@ class DirectDLCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(
+    @app_commands.command(
         name="bandcamp",
         description="Download an album from Bandcamp. Gets uploaded to my server for downloading.",
         brief="Download ANY album from bandcamp.",
     )
-    async def bandcamp(self, ctx, *, url: str):
+    async def bandcamp(self, interaction: discord.Interaction, url: str):
         title = await self.get_title(url)
         for t in range(len(title)):
             title[t] = re.sub(r"[^\w\s]", "", title[t].lower())
@@ -29,14 +31,14 @@ class DirectDLCog(commands.Cog):
             f"sh /mnt/thumb/waffle/scripts/bandcamp.sh {url} {title[1]} {title[0]} &"
         )
         logger.info(f"Downloading {title[0]} by {title[1]}")
-        await ctx.message.add_reaction(WAFFLE_EMOJI)
+        await interaction.response.send_message("Downloading...")
 
-    @commands.command(
+    @app_commands.command(
         name="ytmp3",
         description="At the moment, it only returns the mp3 of a youtube video.",
         brief="Get mp3 of YT video.",
     )
-    async def ytmp3(self, ctx, *, input: str):
+    async def ytmp3(self, interaction: discord.Interaction, input: str):
         if "youtube" in input or "youtu.be" in input:
             link = input
             async with Conn() as resp:
@@ -54,20 +56,24 @@ class DirectDLCog(commands.Cog):
             async with Conn() as resp:
                 re = await resp.get_json(Urls.DEBRID_DELAYED + str(id))
             if re["data"]["status"] != 2:
-                await DB().add_to_queue([id, filename, ctx.author.id, "link"])
+                await DB().add_to_queue([id, filename, interaction.author.id, "link"])
                 logger.info(f"{id} not ready, added to queue.")
-                await ctx.send("It's not ready and there's no !stat for this.")
+                await interaction.response.send_message(
+                    "It's not ready and there's no !stat for this."
+                )
             elif re["data"]["status"] == 2:
                 link = re["data"]["link"]
                 dlchannel = await self.bot.fetch_channel(DL_CHANNEL)
-                embed = download_ready(ctx.author, filename, link)
+                embed = download_ready(interaction.author, filename, link)
                 logger.info(f"{id} ready.")
                 await dlchannel.send(embed=embed)
         else:
-            await ctx.reply("Only supports youtube for now.", mention_author=False)
+            await interaction.response.send_message(
+                "Only supports youtube for now.", mention_author=False
+            )
 
-    @commands.command(name="video")
-    async def video(self, ctx, *, input: str):
+    @app_commands.command(name="video")
+    async def video(self, interaction: discord.Interaction, input: str):
         resolutions = [720, 480, 360, 240]
         allowed = ["youtube", "youtu.be", "ok.ru", "vimeo", "dailymotion"]
         # if input in allowed:
@@ -88,7 +94,9 @@ class DirectDLCog(commands.Cog):
                 stream = urllib.parse.quote(stream["id"]).replace("-", "%2D")
                 break
         if stream == "":
-            await ctx.send("No 1080p, 720p, 480p, 360p or 240p found.")
+            await interaction.response.send_message(
+                "No 1080p, 720p, 480p, 360p or 240p found."
+            )
             return
         async with Conn() as resp:
             result = await resp.get_json(f"{Urls.DEBRID_STREAMING}{id}&stream={stream}")
@@ -99,16 +107,18 @@ class DirectDLCog(commands.Cog):
             async with Conn() as resp:
                 re = await resp.get_json(Urls.DEBRID_DELAYED + str(id))
             if re["data"]["status"] != 2:
-                await DB().add_to_queue([id, filename, ctx.author.id, "link"])
+                await DB().add_to_queue([id, filename, interaction.author.id, "link"])
                 logger.info(f"{id} not ready, added to queue.")
-                await ctx.send("It's not ready and there's no !stat for this.")
+                await interaction.response.send_message(
+                    "It's not ready and there's no !stat for this."
+                )
             elif re["data"]["status"] == 2:
                 link = re["data"]["link"]
         except KeyError:
             link = result["data"]["link"]
 
         dlchannel = await self.bot.fetch_channel(DL_CHANNEL)
-        embed = download_ready(ctx.author, filename, link)
+        embed = download_ready(interaction.author, filename, link)
         logger.info(f"{id} ready.")
         await dlchannel.send(embed=embed)
         # else:
