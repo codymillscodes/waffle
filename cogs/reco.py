@@ -38,7 +38,7 @@ class RecoCog(commands.Cog):
             await interaction.response.send_message("No recommendations found.")
         else:
             await interaction.response.send_message(
-                f"{receiver}'s recommendations: {reco}"
+                f"{receiver}'s recommendations: {reco_array}"
             )
 
 
