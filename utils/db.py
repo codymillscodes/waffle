@@ -52,6 +52,7 @@ class DB:
 
     async def add_reco(self, reco):
         data = {
+            "number": self.reco.count_documents({}) + 1,
             "recommender": reco[0],
             "receiver": reco[1],
             "media type": reco[2],
@@ -65,5 +66,5 @@ class DB:
     async def get_reco(self, user_id):
         return self.reco.find({"receiver": user_id})
 
-    async def update_count(self):
-        self.reco.update_one({"name": "count"}, {"$inc": {"count": 1}})
+    # async def update_count(self):
+    #    self.reco.update_one({"name": "count"}, {"$inc": {"count": 1}})
