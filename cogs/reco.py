@@ -26,6 +26,18 @@ class RecoCog(commands.Cog):
             f"Added {title} to {receiver}'s recommendations!"
         )
 
+    @app_commands.command(name="get_reco", description="Get recommendations")
+    async def get_reco(
+        self, interaction: discord.Interaction, receiver: discord.Member
+    ):
+        reco = await self.db.get_reco(receiver.id)
+        if reco is None:
+            await interaction.response.send_message("No recommendations found.")
+        else:
+            await interaction.response.send_message(
+                f"{receiver}'s recommendations: {reco}"
+            )
+
 
 async def setup(bot):
     await bot.add_cog(RecoCog(bot))

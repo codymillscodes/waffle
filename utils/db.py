@@ -62,5 +62,8 @@ class DB:
         r = self.reco.insert_one(data)
         logger.info(f"Added reco: {r.inserted_id}")
 
+    async def get_reco(self, user_id):
+        return self.reco.find({"receiver": user_id})
+
     async def update_count(self):
         self.reco.update_one({"name": "count"}, {"$inc": {"count": 1}})
