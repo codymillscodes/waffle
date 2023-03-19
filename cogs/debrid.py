@@ -180,8 +180,10 @@ class DebridCog(commands.Cog):
                 msg = await self.bot.wait_for("message", check=check, timeout=60)
 
                 pick = int(msg.content[6:]) - 1
-                if int(msg.content[6:]) > 5 or pick < 0:
+                if int(msg.content[6:]) > 5:
                     await ctx.send("WRONG")
+                if pick < 0:
+                    await ctx.send("Godspeed.")
                 else:
                     if ctx.invoked_with == "rarbg":
                         magnet_link = results[pick]["download"]
