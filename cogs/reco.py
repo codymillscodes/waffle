@@ -1,6 +1,7 @@
 from discord.ext import commands
 from discord import app_commands
 from loguru import logger
+from utils.db import DB
 import discord
 
 # from utils import DB, embed
@@ -9,8 +10,7 @@ import discord
 class RecoCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
-    # self.db = DB()
+        self.db = DB()
 
     @app_commands.command(name="add_reco", description="Add a recommendation")
     async def add_reco(
