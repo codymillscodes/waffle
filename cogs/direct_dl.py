@@ -38,6 +38,7 @@ class DirectDLCog(commands.Cog):
     )
     async def ytmp3(self, interaction: discord.Interaction, link: str):
         if "youtube" in link or "youtu.be" in link:
+            await interaction.response.defer(thinking=True)
             async with Conn() as resp:
                 result = await resp.get_json(Urls.DEBRID_UNLOCK + link)
             id = result["data"]["id"]
@@ -55,7 +56,7 @@ class DirectDLCog(commands.Cog):
             if re["data"]["status"] != 2:
                 await DB().add_to_queue([id, filename, interaction.user.id, "link"])
                 logger.info(f"{id} not ready, added to queue.")
-                await interaction.response.send_message(
+                await interaction.followup.send(
                     "It's not ready and there's no !stat for this."
                 )
             elif re["data"]["status"] == 2:
@@ -68,13 +69,13 @@ class DirectDLCog(commands.Cog):
             await interaction.response.send_message("Only supports youtube for now.")
 
     @app_commands.command(name="video")
-    async def video(self, interaction: discord.Interaction, link: str):
+    async def video(self, interaction: discord.Interaction, url: str):
         resolutions = [720, 480, 360, 240]
         # allowed = ["youtube", "youtu.be", "ok.ru", "vimeo", "dailymotion"]
         # if input in allowed:
         await interaction.response.defer(thinking=True)
         async with Conn() as resp:
-            result = await resp.get_json(Urls.DEBRID_UNLOCK + link)
+            result = await resp.get_json(Urls.DEBRID_UNLOCK + url)
         id = result["data"]["id"]
         filename = result["data"]["filename"]
         logger.info(f"Unlocking ({id}) : {filename}")
@@ -108,13 +109,13 @@ class DirectDLCog(commands.Cog):
                 )
             elif re["data"]["status"] == 2:
                 link = re["data"]["link"]
+                dlchannel = await self.bot.fetch_channel(DL_CHANNEL)
+                embed = download_ready(interaction.user, filename, link)
+                logger.info(f"{id} ready.")
+                await dlchannel.send(embed=embed)
         except KeyError:
             link = result["data"]["link"]
 
-        dlchannel = await self.bot.fetch_channel(DL_CHANNEL)
-        embed = download_ready(interaction.user, filename, link)
-        logger.info(f"{id} ready.")
-        await dlchannel.send(embed=embed)
         # else:
         #    await ctx.reply("Only supports youtube for now.", mention_author=False)
 
