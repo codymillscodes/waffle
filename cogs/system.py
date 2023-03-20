@@ -32,8 +32,11 @@ class SystemCog(commands.Cog):
     @commands.command(name="clear")
     async def clear(self, ctx):
         guild = ctx.guild
-        commands = await ctx.bot.tree.fetch_commands(guild=guild)
-        ctx.bot.tree.clear_commands(guild=guild)
+        synced = await ctx.bot.tree.sync(guild=guild)
+        c = await ctx.bot.tree.fetch_commands(guild=guild)
+        for i in c:
+            ctx.bot.tree.remove_command(i.name, guild=guild)
+        logger.info(f"Clearing {len(c)} commands.")
         synced = await ctx.bot.tree.sync(guild=guild)
         await ctx.reply(f"Synced {len(synced)} commands.", mention_author=False)
 
