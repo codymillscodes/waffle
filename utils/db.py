@@ -50,6 +50,11 @@ class DB:
     async def get_twitchers(self):
         return self.users.find({"twitcher": {"$eq": True}})
 
+    async def set_twitcher_status(self, user_id, online: bool):
+        r = self.users.update_one({"user_id": user_id}, {"$set": {"online": online}})
+        logger.info(f"Set twitcher status of {user_id} to {online}")
+        logger.info(f"Matched: {r.matched_count}, Modified: {r.modified_count}")
+
     async def add_reco(self, reco):
         data = {
             "number": self.reco.count_documents({}) + 1,
