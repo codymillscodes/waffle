@@ -103,7 +103,8 @@ class Waffle(commands.Bot):
                     if t["online"]:
                         await self.db.set_twitcher_status(t["user"], False)
                         logger.info(f"{t['user']} is offline.")
-        except KeyError:
+        except KeyError as e:
+            logger.exception(e)
             await self.get_twitch_headers()
 
     @twitch_check.before_loop
