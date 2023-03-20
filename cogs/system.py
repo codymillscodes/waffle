@@ -43,7 +43,7 @@ class SystemCog(commands.Cog):
     @commands.command(name="sync")
     async def sync(self, ctx):
         guild = ctx.guild
-        # ctx.bot.tree.copy_global_to(guild=guild)
+        ctx.bot.tree.copy_global_to(guild=guild)
         synced = await ctx.bot.tree.sync()
         await ctx.reply(f"Synced {len(synced)} commands.", mention_author=False)
 
