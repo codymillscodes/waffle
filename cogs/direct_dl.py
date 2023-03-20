@@ -72,6 +72,7 @@ class DirectDLCog(commands.Cog):
         resolutions = [720, 480, 360, 240]
         # allowed = ["youtube", "youtu.be", "ok.ru", "vimeo", "dailymotion"]
         # if input in allowed:
+        await interaction.response.defer(thinking=True)
         async with Conn() as resp:
             result = await resp.get_json(Urls.DEBRID_UNLOCK + link)
         id = result["data"]["id"]
@@ -88,9 +89,7 @@ class DirectDLCog(commands.Cog):
                 stream = urllib.parse.quote(stream["id"]).replace("-", "%2D")
                 break
         if stream == "":
-            await interaction.response.send_message(
-                "No 1080p, 720p, 480p, 360p or 240p found."
-            )
+            await interaction.followup.send("No 1080p, 720p, 480p, 360p or 240p found.")
             return
         async with Conn() as resp:
             result = await resp.get_json(f"{Urls.DEBRID_STREAMING}{id}&stream={stream}")
@@ -103,7 +102,8 @@ class DirectDLCog(commands.Cog):
             if re["data"]["status"] != 2:
                 await DB().add_to_queue([id, filename, interaction.user.id, "link"])
                 logger.info(f"{id} not ready, added to queue.")
-                await interaction.response.send_message(
+                # discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+                await interaction.followup.send(
                     "It's not ready and there's no !stat for this."
                 )
             elif re["data"]["status"] == 2:

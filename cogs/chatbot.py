@@ -29,14 +29,14 @@ class ChatbotCog(commands.Cog):
         )
         logger.info(f"GPT recvd: {response}")
         await interaction.response.send_message(
-            f">>> {input}\n```\n{response.choices[0].text[-4500:]}\n```"
+            f">>> {prompt}\n```\n{response.choices[0].text[-4500:]}\n```"
         )
 
     @app_commands.command(
         name="dream",
         description="Generate an image based on a prompt.",
     )
-    async def dream(self, ctx, *, prompt: str):
+    async def dream(self, interaction: discord.Interaction, prompt: str):
         try:
             response = await openai.Image.acreate(prompt=prompt, n=1, size="512x512")
             image_url = response["data"][0]["url"]
@@ -51,12 +51,14 @@ class ChatbotCog(commands.Cog):
                 # add if file exists check
                 with open(f"dreams/{filename}.png", "wb") as f:
                     f.write(image)
-            await ctx.reply(file=discord.File(f"dreams/{filename}.png"))
+            await interaction.response.send_message(
+                file=discord.File(f"dreams/{filename}.png")
+            )
         except openai.InvalidRequestError:
-            await ctx.send("Too offensive. :(")
+            await interaction.response.send_message("Too offensive. :(")
         except Exception as e:
             logger.exception(e)
-            await ctx.send("Something went wrong. :(")
+            await interaction.response.send_message("Something went wrong. :(")
 
     @commands.Cog.listener()
     async def on_message(self, message):
