@@ -1,4 +1,5 @@
 from discord.ext import commands
+from discord import app_commands
 import discord
 import openai
 import re
@@ -18,31 +19,28 @@ class ChatbotCog(commands.Cog):
         # self.previous_messages = []
         openai.aiosession.set(Conn())
 
-    @commands.command(
+    @app_commands.command(
         name="gpt",
         description="Send a raw prompt to GPT.",
-        brief="Send a raw prompt to GPT.",
     )
-    async def gpt(self, ctx, *, input: str):
+    async def gpt(self, interaction: discord.Interaction, prompt: str):
         response = await openai.Completion.acreate(
-            temperature=0.9, max_tokens=1024, engine=ENGINE, prompt=input
+            temperature=0.7, max_tokens=2048, engine=ENGINE, prompt=prompt
         )
         logger.info(f"GPT recvd: {response}")
-        await ctx.reply(
-            f">>> {input}\n```\n{response.choices[0].text[-4500:]}\n```",
-            mention_author=False,
+        await interaction.response.send_message(
+            f">>> {input}\n```\n{response.choices[0].text[-4500:]}\n```"
         )
 
-    @commands.command(
+    @app_commands.command(
         name="dream",
-        brief="Generate an image based on a prompt.",
         description="Generate an image based on a prompt.",
     )
-    async def dream(self, ctx, *, input: str):
+    async def dream(self, ctx, *, prompt: str):
         try:
-            response = await openai.Image.acreate(prompt=input, n=1, size="512x512")
+            response = await openai.Image.acreate(prompt=prompt, n=1, size="512x512")
             image_url = response["data"][0]["url"]
-            filename = input
+            filename = prompt
             if len(filename) > 100:
                 filename = filename[:100]
             filename = re.sub(r"[^\w\s]", "", filename.lower())
@@ -53,9 +51,7 @@ class ChatbotCog(commands.Cog):
                 # add if file exists check
                 with open(f"dreams/{filename}.png", "wb") as f:
                     f.write(image)
-            await ctx.reply(
-                file=discord.File(f"dreams/{filename}.png"), mention_author=False
-            )
+            await ctx.reply(file=discord.File(f"dreams/{filename}.png"))
         except openai.InvalidRequestError:
             await ctx.send("Too offensive. :(")
         except Exception as e:
