@@ -24,11 +24,12 @@ class ChatbotCog(commands.Cog):
         description="Send a raw prompt to GPT.",
     )
     async def gpt(self, interaction: discord.Interaction, prompt: str):
+        await interaction.response.defer(thinking=True)
         response = await openai.Completion.acreate(
             temperature=0.7, max_tokens=2048, engine=ENGINE, prompt=prompt
         )
         logger.info(f"GPT recvd: {response}")
-        await interaction.response.send_message(
+        await interaction.followup.send(
             f">>> {prompt}\n```\n{response.choices[0].text[-4500:]}\n```"
         )
 

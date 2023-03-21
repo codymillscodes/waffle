@@ -3,8 +3,9 @@ import glob
 from discord import File
 from discord.ext import commands
 from loguru import logger
-from config import ADMIN_ROLE
+from config import ADMIN_ROLE, GITHUB_TOKEN
 from utils.helpers import get_folder_time
+from github import Github
 
 
 class SystemCog(commands.Cog):
@@ -32,29 +33,28 @@ class SystemCog(commands.Cog):
         )
         return log_file
 
+    async def create_issue(self, title, body):
+        g = Github(os.environ["GITHUB_TOKEN"])
+        repo = g.get_repo("idiotdoomspiral/waffle")
+        issue = repo.create_issue(title=title, body=body)
+        return issue
+
     @commands.command(name="bug", description="Report a bug.", brief="Report a bug.")
     async def bug(self, ctx, *, bug: str):
         logger.info(f"{ctx.author.name} reported a bug: {bug}")
-        bug_folder = "/mnt/thumb/waffle/bugs"
         messages = [message async for message in ctx.channel.history(limit=20)]
         messages.reverse()
-        filename = f"{bug_folder}/{get_folder_time()} - {ctx.author.name}.txt"
-        admin = await self.bot.fetch_user(ADMIN_ROLE)
-        with open(filename, "w", encoding="utf-8") as f:
-            f.write(
-                f"Bug: {bug}\n----------------\nChannel: {ctx.channel.name}\n----------------\n"
-            )
-            for message in messages:
-                f.write(
-                    f"{message.created_at}|{message.author.name}: {message.content}\n"
-                )
+        messages.join("\n")
         log_file = await self.get_log()
-        log_files = [File(filename), File(log_file)]
+        with open(log_file, "r") as f:
+            log = f.read()
+        issue = await self.create_issue(title=bug, body=messages + "\nLOG:\n" + log)
+        admin = await self.bot.fetch_user(ADMIN_ROLE)
+        await admin.send(f"New bug reported: {issue.title}\n{issue.html_url}")
         await ctx.reply(
             f"Thanks for reporting a bug! I'll look into it as soon as possible.",
             mention_author=False,
         )
-        await admin.send(files=log_files)
 
     # @commands.command(name="clear")
     # async def clear(self, ctx):
