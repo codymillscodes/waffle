@@ -289,7 +289,7 @@ def reco_embed(user, reco_list, consumed=False, random=False, amount=0):
         embed = Embed(title=f"__Recommendations for {user}:__", color=0x00FF00)
         for r in reco_list:
             embed.add_field(
-                name=f"({reco_list['number']}) {r['media title']}",
+                name=f"({r['number']}) {r['media title']}",
                 value=f"Type: {r['media type']} | Recommended by: {r['recommender']}",
                 inline=False,
             )
