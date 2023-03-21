@@ -39,7 +39,7 @@ class SystemCog(commands.Cog):
             async for message in ctx.channel.history(limit=10, oldest_first=True)
         ]
         with open(
-            f"{bug_folder}/{get_folder_time()} - {ctx.author.name}.txt", "w"
+            f"{bug_folder}/{get_folder_time()} - {ctx.author.name}.txt", "wx"
         ) as f:
             for message in messages:
                 f.write(f"{message.author.name}: {message.content}\n")
