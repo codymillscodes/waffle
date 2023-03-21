@@ -87,6 +87,7 @@ class Waffle(commands.Bot):
                     stream_data = await resp.get_json(
                         Urls.TWITCH_URL + t["user"], headers=self.twitch_headers
                     )
+                    logger.info(stream_data)
                 if None in stream_data["data"]:
                     break
                 if len(stream_data["data"]) == 1:
