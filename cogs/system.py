@@ -3,6 +3,7 @@ import glob
 from discord import File
 from discord.ext import commands
 from loguru import logger
+from utils.helpers import get_folder_time
 
 
 class SystemCog(commands.Cog):
@@ -28,6 +29,24 @@ class SystemCog(commands.Cog):
             await ctx.reply(file=File(log_file), mention_author=False)
         else:
             await ctx.reply("lol youre not allowed to do this", mention_author=False)
+
+    @commands.command(name="bug", description="Report a bug.", brief="Report a bug.")
+    async def bug(self, ctx, *, bug: str):
+        logger.info(f"{ctx.author.name} reported a bug: {bug}")
+        bug_folder = "/mnt/thumb/waffle/bugs"
+        messages = [
+            message
+            async for message in ctx.channel.history(limit=10, oldest_first=True)
+        ]
+        with open(
+            f"{bug_folder}/{get_folder_time()} - {ctx.author.name}.txt", "w"
+        ) as f:
+            for message in messages:
+                f.write(f"{message.author.name}: {message.content}\n")
+        await ctx.reply(
+            "Thanks for reporting a bug! I'll look into it as soon as possible.",
+            mention_author=False,
+        )
 
     # @commands.command(name="clear")
     # async def clear(self, ctx):

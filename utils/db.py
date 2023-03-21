@@ -1,7 +1,7 @@
 import pymongo
 from config import MONGO_USER, MONGO_PASS
-from datetime import datetime
 from loguru import logger
+from utils.helpers import get_time
 
 client = pymongo.MongoClient(
     f"mongodb+srv://{MONGO_USER}:{MONGO_PASS}@waffle.i2tnxdm.mongodb.net/?retryWrites=true&w=majority"
@@ -17,9 +17,6 @@ class DB:
 
     # async def get_queue(self):
     #    return self.queue.find({})
-    def get_time(self):
-        now = datetime.now()
-        return now.strftime("%d/%m/%Y %H:%M:%S")
 
     async def get_active_queue(self):
         return self.queue.find({"status": "active"})
@@ -29,7 +26,7 @@ class DB:
             "task_id": d[0],
             "task_name": d[1],
             "user_id": d[2],
-            "updated_at": self.get_time(),
+            "updated_at": get_time(),
             "status": "active",
             "type": d[3],
         }
@@ -39,7 +36,7 @@ class DB:
         r = self.queue.update_many(
             {"task_id": task_id},
             {
-                "$set": {"status": status, "updated_at": self.get_time()},
+                "$set": {"status": status, "updated_at": get_time()},
             },
         )
         logger.info(
@@ -63,7 +60,7 @@ class DB:
             "media type": reco[2],
             "media title": reco[3],
             "rating": reco[4],
-            "timestamp": self.get_time(),
+            "timestamp": get_time(),
         }
         r = self.reco.insert_one(data)
         logger.info(f"Added reco: {r.inserted_id}")
