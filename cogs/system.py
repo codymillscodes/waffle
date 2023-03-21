@@ -35,7 +35,7 @@ class SystemCog(commands.Cog):
         messages = [message async for message in ctx.channel.history(limit=20)]
         messages.reverse()
         filename = f"{bug_folder}/{get_folder_time()} - {ctx.author.name}.txt"
-        admin = self.bot.fetch_user(ADMIN_ROLE)
+        admin = await self.bot.fetch_user(ADMIN_ROLE)
         with open(filename, "w", encoding="utf-8") as f:
             f.write(
                 f"Bug: {bug}\n----------------\nChannel: {ctx.channel.name}\n----------------\n"
