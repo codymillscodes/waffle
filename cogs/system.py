@@ -49,7 +49,7 @@ class SystemCog(commands.Cog):
                     f"{message.created_at}|{message.author.name}: {message.content}\n"
                 )
         log_file = await self.get_log()
-        log_files = [File(log_file), File(filename)]
+        log_files = [File(filename), File(log_file)]
         await ctx.reply(
             f"Thanks for reporting a bug! I'll look into it as soon as possible.",
             mention_author=False,
