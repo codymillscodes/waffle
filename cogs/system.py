@@ -39,11 +39,15 @@ class SystemCog(commands.Cog):
         messages.reverse()
         filename = f"{bug_folder}/{get_folder_time()} - {ctx.author.name}.txt"
         with open(filename, "w", encoding="utf-8") as f:
-            f.write(f"Bug: {bug}\n----------------\n")
+            f.write(
+                f"Bug: {bug}\n----------------\nChannel: {ctx.channel.name}\n----------------\n"
+            )
             for message in messages:
-                f.write(f"{message.author.name}: {message.content}\n")
+                f.write(
+                    f"{message.created_at}|{message.author.name}: {message.content}\n"
+                )
         await ctx.reply(
-            "Thanks for reporting a bug! I'll look into it as soon as possible.\n<@{ADMIN_ROLE}>",
+            f"Thanks for reporting a bug! I'll look into it as soon as possible.\n<@{ADMIN_ROLE}>",
             mention_author=False,
             file=File(filename),
         )
