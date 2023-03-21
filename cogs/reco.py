@@ -42,7 +42,8 @@ class RecoCog(commands.Cog):
             await interaction.response.send_message(embed=embed)
 
     @app_commands.command(name="random_reco", description="Get random recommendations")
-    async def random_reco(self, interaction: discord.Interaction, amount: int + 1):
+    async def random_reco(self, interaction: discord.Interaction, amount: int):
+        amount = amount + 1
         reco = await self.db.get_reco(interaction.user.id)
         if reco is None:
             await interaction.response.send_message("No recommendations found.")
