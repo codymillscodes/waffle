@@ -262,6 +262,8 @@ def stream_embed(name, title=None, game=None):
 
 
 def reco_embed(user, reco_list, consumed=False, random=False, amount=0):
+    if len(reco_list) > 10:
+        reco_list = reco_list[:10]
     if random:
         embed = Embed(title=f"__Random Recommendation for {user}:__", color=0x00FF00)
         for i in range(amount):

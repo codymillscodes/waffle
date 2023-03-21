@@ -31,7 +31,6 @@ class RecoCog(commands.Cog):
     async def get_reco(
         self, interaction: discord.Interaction, receiver: discord.Member = None
     ):
-        reco_array = []
         if receiver is None:
             receiver = interaction.user
         reco = await self.db.get_reco(receiver.id)
@@ -73,7 +72,6 @@ class RecoCog(commands.Cog):
     async def get_consumed(
         self, interaction: discord.Interaction, receiver: discord.Member
     ):
-        reco_array = []
         reco = await self.db.get_consumed_reco(receiver.id)
         embed = reco_embed(receiver.name, reco, consumed=True)
         await interaction.response.send_message(embed=embed)
