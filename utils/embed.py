@@ -271,17 +271,19 @@ def reco_embed(user, reco_list, consumed=False, random=False, amount=0):
                 while chosen in chosen_ints:
                     chosen = randint(0, len(reco_list) - 1)
             chosen_ints.append(chosen)
+            r = reco_list[chosen]
             embed.add_field(
-                name=f"({reco_list['number']}) {reco_list['media title']}",
-                value=f"Type: {reco_list['media type']} | Recommended by: {reco_list['recommender']}",
+                name=f"({r['number']}) {r['media title']}",
+                value=f"Type: {r['media type']} | Recommended by: <@{r['recommender']}>",
                 inline=False,
             )
+
     elif consumed:
         embed = Embed(title=f"__{user} has consumed:__", color=0x00FF00)
         for r in reco_list:
             embed.add_field(
                 name=f"{r['media title']} | Rating: {r['rating']}:star:",
-                value=f"Type: {r['media type']} | Recommended by: {r['recommender']}",
+                value=f"Type: {r['media type']} | Recommended by: <@{r['recommender']}>",
                 inline=False,
             )
 
@@ -290,7 +292,7 @@ def reco_embed(user, reco_list, consumed=False, random=False, amount=0):
         for r in reco_list:
             embed.add_field(
                 name=f"({r['number']}) {r['media title']}",
-                value=f"Type: {r['media type']} | Recommended by: {r['recommender']}",
+                value=f"Type: {r['media type']} | Recommended by: <@{r['recommender']}>",
                 inline=False,
             )
 
