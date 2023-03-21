@@ -34,10 +34,12 @@ class SystemCog(commands.Cog):
     async def bug(self, ctx, *, bug: str):
         logger.info(f"{ctx.author.name} reported a bug: {bug}")
         bug_folder = "/mnt/thumb/waffle/bugs"
-        messages = [message async for message in ctx.channel.history(limit=10)]
+        messages = [message async for message in ctx.channel.history(limit=20)]
+        messages.reverse()
         with open(
             f"{bug_folder}/{get_folder_time()} - {ctx.author.name}.txt", "w"
         ) as f:
+            f.write(f"Bug: {bug}\n")
             for message in messages:
                 f.write(f"{message.author.name}: {message.content}\n")
         await ctx.reply(
