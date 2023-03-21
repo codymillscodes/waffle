@@ -191,7 +191,7 @@ class DebridCog(commands.Cog):
                     else:
                         # logger.info(f"results: {results}")
                         magnet_link = torrents.info(
-                            torrentId=results["items"][pick]["torrentId"]
+                            torrentId=sanitized_results[pick]["torrentId"]
                         )["magnetLink"]
                     # add magnet, get ready, name, id
                     mag = await deb.upload_magnet(magnet_link)
