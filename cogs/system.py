@@ -43,7 +43,7 @@ class SystemCog(commands.Cog):
             for message in messages:
                 f.write(f"{message.author.name}: {message.content}\n")
         await ctx.reply(
-            "Thanks for reporting a bug! I'll look into it as soon as possible.\n<@&{ADMIN_ROLE}>",
+            "Thanks for reporting a bug! I'll look into it as soon as possible.\n<@{ADMIN_ROLE}>",
             mention_author=False,
             file=File(filename),
         )
