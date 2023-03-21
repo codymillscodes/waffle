@@ -22,14 +22,11 @@ class SystemCog(commands.Cog):
     )
     async def log(self, ctx):
         logger.info(f"{ctx.author.name} called log command.")
-        if ctx.author.guild_permissions.administrator:
-            logs_folder = "/mnt/thumb/waffle/logs"
-            log_file = max(
-                glob.glob(os.path.join(logs_folder, "*.log")), key=os.path.getctime
-            )
-            await ctx.reply(file=File(log_file), mention_author=False)
-        else:
-            await ctx.reply("lol youre not allowed to do this", mention_author=False)
+        logs_folder = "/mnt/thumb/waffle/logs"
+        log_file = max(
+            glob.glob(os.path.join(logs_folder, "*.log")), key=os.path.getctime
+        )
+        await ctx.reply(file=File(log_file), mention_author=False)
 
     @commands.command(name="bug", description="Report a bug.", brief="Report a bug.")
     async def bug(self, ctx, *, bug: str):
@@ -51,6 +48,7 @@ class SystemCog(commands.Cog):
             mention_author=False,
             file=File(filename),
         )
+        await self.log(ctx)
 
     # @commands.command(name="clear")
     # async def clear(self, ctx):
