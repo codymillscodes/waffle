@@ -6,6 +6,7 @@ from utils.random import get_link_msg
 from config import DEBRID_WEBDAV, TWITCH_NOTIFY_ROLE
 from urllib.parse import quote
 from utils.urls import Urls
+from random import randint
 
 
 def runescape(name, char_stats):
@@ -257,4 +258,40 @@ def stream_embed(name, title=None, game=None):
             name=f"----------------",
             value=f"<@{name}> is live in the voice channel!",
         )
+    return embed
+
+
+def reco_embed(user, reco_list, consumed=False, random=False, amount=0):
+    if random:
+        embed = Embed(title=f"__Random Recommendation for {user}:__", color=0x00FF00)
+        for i in range(amount):
+            chosen_ints = []
+            chosen = randint(0, len(reco_list) - 1)
+            if chosen in chosen_ints:
+                while chosen in chosen_ints:
+                    chosen = randint(0, len(reco_list) - 1)
+            chosen_ints.append(chosen)
+            embed.add_field(
+                name=f"({reco_list['number']}) {reco_list['media title']}",
+                value=f"Type: {reco_list['media type']} | Recommended by: {reco_list['recommender']}",
+                inline=False,
+            )
+    elif consumed:
+        embed = Embed(title=f"__{user} has consumed:__", color=0x00FF00)
+        for r in reco_list:
+            embed.add_field(
+                name=f"{r['media title']} | Rating: {r['rating']}:star:",
+                value=f"Type: {r['media type']} | Recommended by: {r['recommender']}",
+                inline=False,
+            )
+
+    else:
+        embed = Embed(title=f"__Recommendations for {user}:__", color=0x00FF00)
+        for r in reco_list:
+            embed.add_field(
+                name=f"({reco_list['number']}) {r['media title']}",
+                value=f"Type: {r['media type']} | Recommended by: {r['recommender']}",
+                inline=False,
+            )
+
     return embed

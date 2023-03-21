@@ -59,14 +59,26 @@ class DB:
             "receiver": reco[1],
             "media type": reco[2],
             "media title": reco[3],
-            "rating": reco[4],
+            "rating": 0,
+            "consumed": False,
             "timestamp": get_time(),
         }
         r = self.reco.insert_one(data)
         logger.info(f"Added reco: {r.inserted_id}")
 
     async def get_reco(self, user_id):
-        return self.reco.find({"receiver": user_id})
+        return self.reco.find({"receiver": user_id, "consumed": False})
+
+    async def set_reco_consumed(self, reco_id, rating):
+        r = self.reco.update_one(
+            {"number": reco_id}, {"$set": {"consumed": True, "rating": rating}}
+        )
+        logger.info(f"Matched: {r.matched_count}, Modified: {r.modified_count}")
+        logger.info(f"Set reco {reco_id} to watched")
+        return r.modified_count
+
+    async def get_consumed_reco(self, user_id):
+        return self.reco.find({"receiver": user_id, "consumed": True})
 
     # async def update_count(self):
     #    self.reco.update_one({"name": "count"}, {"$inc": {"count": 1}})
