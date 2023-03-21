@@ -22,11 +22,15 @@ class SystemCog(commands.Cog):
     )
     async def log(self, ctx):
         logger.info(f"{ctx.author.name} called log command.")
+        log_file = await self.get_log()
+        await ctx.reply(file=File(log_file), mention_author=False)
+
+    async def get_log(self):
         logs_folder = "/mnt/thumb/waffle/logs"
         log_file = max(
             glob.glob(os.path.join(logs_folder, "*.log")), key=os.path.getctime
         )
-        await ctx.reply(file=File(log_file), mention_author=False)
+        return log_file
 
     @commands.command(name="bug", description="Report a bug.", brief="Report a bug.")
     async def bug(self, ctx, *, bug: str):
@@ -44,13 +48,13 @@ class SystemCog(commands.Cog):
                 f.write(
                     f"{message.created_at}|{message.author.name}: {message.content}\n"
                 )
+        log_file = await self.get_log()
+        log_files = [File(log_file), File(filename)]
         await ctx.reply(
-            f"Thanks for reporting a bug! I'll look into it as soon as possible.\n<@{ADMIN_ROLE}>",
+            f"Thanks for reporting a bug! I'll look into it as soon as possible.",
             mention_author=False,
-            file=File(filename),
         )
-        await admin.send(file=File(filename))
-        await self.log(ctx)
+        await admin.send(files=log_files)
 
     # @commands.command(name="clear")
     # async def clear(self, ctx):
