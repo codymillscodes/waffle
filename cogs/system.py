@@ -3,6 +3,7 @@ import glob
 from discord import File
 from discord.ext import commands
 from loguru import logger
+from config import ADMIN_ROLE
 from utils.helpers import get_folder_time
 
 
@@ -36,15 +37,15 @@ class SystemCog(commands.Cog):
         bug_folder = "/mnt/thumb/waffle/bugs"
         messages = [message async for message in ctx.channel.history(limit=20)]
         messages.reverse()
-        with open(
-            f"{bug_folder}/{get_folder_time()} - {ctx.author.name}.txt", "w"
-        ) as f:
-            f.write(f"Bug: {bug}\n")
+        filename = f"{bug_folder}/{get_folder_time()} - {ctx.author.name}.txt"
+        with open(filename, "w", encoding="utf-8") as f:
+            f.write(f"Bug: {bug}\n----------------\n")
             for message in messages:
                 f.write(f"{message.author.name}: {message.content}\n")
         await ctx.reply(
-            "Thanks for reporting a bug! I'll look into it as soon as possible.",
+            "Thanks for reporting a bug! I'll look into it as soon as possible.\n<@&{ADMIN_ROLE}>",
             mention_author=False,
+            file=File(filename),
         )
 
     # @commands.command(name="clear")

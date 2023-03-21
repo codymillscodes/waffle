@@ -35,3 +35,5 @@ WAFFLE_EMOJI = "\N{WAFFLE}"
 # mongo settings
 MONGO_USER = os.environ["MONGO_USER"]
 MONGO_PASS = os.environ["MONGO_PASS"]
+
+ADMIN_ROLE = os.environ["ADMIN_ROLE"]
