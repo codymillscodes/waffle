@@ -241,6 +241,7 @@ def torrent_results(results, emergency: bool = False):
             value="You should pick the one with the most seeders and a reasonable filesize. Pay attention to the quality. You dont want a cam or TS.\n*!pick 1-5*",
             inline=False,
         )
+        logger.info("Built embed for torrent results")
         return embed
 
 

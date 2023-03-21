@@ -219,7 +219,7 @@ class DebridCog(commands.Cog):
                 r = await resp.get_json(Urls.TOKEN_URL)
             token = r["token"]
             logger.info("Got token.")
-            logger.debug(f"Token: {token}")
+            # logger.debug(f"Token: {token}")
             return token
         except IndexError:
             logger.error(f"Failed to get torrent api token.\n{r.json()}")

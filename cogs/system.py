@@ -75,6 +75,7 @@ class SystemCog(commands.Cog):
         guild = ctx.guild
         ctx.bot.tree.copy_global_to(guild=guild)
         synced = await ctx.bot.tree.sync()
+        logger.info(f"Syncing {len(synced)} commands.")
         await ctx.reply(f"Synced {len(synced)} commands.", mention_author=False)
 
 
