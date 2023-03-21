@@ -44,7 +44,9 @@ class SystemCog(commands.Cog):
         logger.info(f"{ctx.author.name} reported a bug: {bug}")
         messages = [message async for message in ctx.channel.history(limit=20)]
         messages.reverse()
-        messages.join("\n")
+        messages = "\n".join(
+            [f"{m.created_at}|{m.author.name}: {m.content}" for m in messages]
+        )
         log_file = await self.get_log()
         with open(log_file, "r") as f:
             log = f.read()
