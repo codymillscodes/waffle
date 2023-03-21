@@ -22,6 +22,7 @@ class DirectDLCog(commands.Cog):
         description="Download an album from Bandcamp. Gets uploaded to my server for downloading.",
     )
     async def bandcamp(self, interaction: discord.Interaction, url: str):
+        await interaction.response.defer(thinking=True)
         title = await self.get_title(url)
         for t in range(len(title)):
             title[t] = re.sub(r"[^\w\s]", "", title[t].lower())
@@ -30,7 +31,7 @@ class DirectDLCog(commands.Cog):
             f"sh /mnt/thumb/waffle/scripts/bandcamp.sh {url} {title[1]} {title[0]} &"
         )
         logger.info(f"Downloading {title[0]} by {title[1]}")
-        await interaction.response.send_message("Downloading...")
+        await interaction.followup.send("Downloading...")
 
     @app_commands.command(
         name="ytmp3",
