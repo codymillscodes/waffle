@@ -49,7 +49,8 @@ class SystemCog(commands.Cog):
         with open(log_file, "r") as f:
             log = f.read()
         issue = await self.create_issue(
-            title=bug, body=messages + "\n\n------\n\nLOG:\n\n------\n\n" + log
+            title=bug,
+            body=f"Last 20 messages:\n\n{messages}\n\n------\n\nLOG:\n\n{log}",
         )
         admin = await self.bot.fetch_user(ADMIN_ROLE)
         await admin.send(f"New bug reported: {issue.title}\n{issue.html_url}")
