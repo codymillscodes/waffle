@@ -14,6 +14,7 @@ class DB:
         self.queue = self.client["queue"]
         self.users = self.client["users"]
         self.reco = self.client["reco"]
+        self.remind = self.client["reminders"]
 
     # async def get_queue(self):
     #    return self.queue.find({})
@@ -79,6 +80,17 @@ class DB:
 
     async def get_consumed_reco(self, user_id):
         return self.reco.find({"receiver": user_id, "consumed": True})
+
+    async def add_reminder(self, user_id, time, reminder):
+        data = {
+            "user_id": user_id,
+            "reminder": reminder,
+            "reminded": False,
+            "time_to_remind": time,
+            "timestamp": get_time(),
+        }
+        r = self.remind.insert_one(data)
+        logger.info(f"Added reminder: {r.inserted_id}")
 
     # async def update_count(self):
     #    self.reco.update_one({"name": "count"}, {"$inc": {"count": 1}})
