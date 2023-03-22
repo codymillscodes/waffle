@@ -88,19 +88,21 @@ class Waffle(commands.Bot):
                         Urls.TWITCH_URL + t["user"], headers=self.twitch_headers
                     )
                 try:
-                    if not t["online"]:
-                        embed = stream_embed(
-                            t["user"],
-                            stream_data["data"][0]["title"],
-                            stream_data["data"][0]["game_name"],
-                        )
-                        await self.db.set_twitcher_status(t["user"], True)
-                        logger.info(f"{t['user']} is online.")
-                        await twitch_channel.send(embed=embed)
-                    else:
-                        if t["online"]:
-                            await self.db.set_twitcher_status(t["user"], False)
-                            logger.info(f"{t['user']} is offline.")
+                    logger.debug(stream_data)
+                    if stream_data["data"][0]["type"] == "live":
+                        if not t["online"]:
+                            embed = stream_embed(
+                                t["user"],
+                                stream_data["data"][0]["title"],
+                                stream_data["data"][0]["game_name"],
+                            )
+                            await self.db.set_twitcher_status(t["user"], True)
+                            logger.info(f"{t['user']} is online.")
+                            await twitch_channel.send(embed=embed)
+                        else:
+                            if t["online"]:
+                                await self.db.set_twitcher_status(t["user"], False)
+                                logger.info(f"{t['user']} is offline.")
                 except TypeError:
                     pass
                 except KeyError:
