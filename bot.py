@@ -103,6 +103,8 @@ class Waffle(commands.Bot):
                             logger.info(f"{t['user']} is offline.")
                 except TypeError:
                     pass
+                except KeyError:
+                    pass
         except KeyError as e:
             logger.exception(e)
             await self.get_twitch_headers()
