@@ -105,6 +105,8 @@ class Waffle(commands.Bot):
                     pass
                 except KeyError:
                     pass
+                except IndexError:
+                    pass
         except KeyError as e:
             logger.exception(e)
             await self.get_twitch_headers()

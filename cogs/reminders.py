@@ -1,4 +1,5 @@
 from discord import app_commands
+from discord.ext import commands
 import discord
 from loguru import logger
 import parsedatetime as pdt
@@ -7,7 +8,7 @@ from pytz import timezone
 from utils.db import DB
 
 
-class Reminders(app_commands.Cog):
+class Reminders(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.db = DB()
@@ -19,3 +20,6 @@ class Reminders(app_commands.Cog):
         new_time = datetime(*r_time[0][:6], tzinfo=timezone("UTC"))
         logger.info(r_time)
         await self.db.add_reminder(interaction.user.id, new_time, message)
+
+    async def setup(bot):
+        bot.add_cog(Reminders(bot))
