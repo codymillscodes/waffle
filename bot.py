@@ -89,7 +89,8 @@ class Waffle(commands.Bot):
                     )
                 try:
                     logger.debug(stream_data)
-                    if stream_data["data"][0]["type"] == "live":
+                    logger.debug(t)
+                    if stream_data != [] and stream_data["data"][0]["type"] == "live":
                         if not t["online"]:
                             embed = stream_embed(
                                 t["user"],
@@ -99,7 +100,7 @@ class Waffle(commands.Bot):
                             await self.db.set_twitcher_status(t["user"], True)
                             logger.info(f"{t['user']} is online.")
                             await twitch_channel.send(embed=embed)
-                        else:
+                        elif stream_data == []:
                             if t["online"]:
                                 await self.db.set_twitcher_status(t["user"], False)
                                 logger.info(f"{t['user']} is offline.")
