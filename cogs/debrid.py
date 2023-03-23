@@ -175,37 +175,44 @@ class DebridCog(commands.Cog):
                 await ctx.reply("Zero results.", mention_author=False)
 
             def check(m):
-                return m.author == ctx.author and m.content.startswith("!pick")
+                return (
+                    m.author == ctx.author
+                    and m.content.startswith("!pick")
+                    or m.content.startswith("!search")
+                )
 
             try:
                 msg = await self.bot.wait_for("message", check=check, timeout=60)
-
-                pick = int(msg.content[6:]) - 1
-                if int(msg.content[6:]) > 5:
-                    await ctx.send("WRONG")
-                if pick < 0:
-                    await ctx.send("Godspeed.")
-                else:
-                    if ctx.invoked_with == "rarbg":
-                        magnet_link = results[pick]["download"]
+                if msg.content.startswith("!search"):
+                    # await ctx.invoke(self.search, input=msg.content[8:])
+                    await e.add_reaction("❌")
+                elif msg.content.startswith("!pick"):
+                    pick = int(msg.content[6:]) - 1
+                    if int(msg.content[6:]) > 5:
+                        await ctx.send("WRONG")
+                    if pick < 0:
+                        await ctx.send("Godspeed.")
                     else:
-                        # logger.info(f"results: {results}")
-                        magnet_link = torrents.info(
-                            torrentId=sanitized_results[pick]["torrentId"]
-                        )["magnetLink"]
-                    # add magnet, get ready, name, id
-                    mag = await deb.upload_magnet(magnet_link)
-                    if mag[2]:
-                        embed = utils.embed.download_ready(ctx.author, mag[1])
-                        dl_channel = await self.bot.fetch_channel(config.DL_CHANNEL)
-                        await dl_channel.send(embed=embed)
-                    else:
-                        await DB().add_to_queue(
-                            [mag[0], input, ctx.author.id, "magnet"]
-                        )
-                        await ctx.reply(
-                            "It aint ready. Try !stat.", mention_author=False
-                        )
+                        if ctx.invoked_with == "rarbg":
+                            magnet_link = results[pick]["download"]
+                        else:
+                            # logger.info(f"results: {results}")
+                            magnet_link = torrents.info(
+                                torrentId=sanitized_results[pick]["torrentId"]
+                            )["magnetLink"]
+                        # add magnet, get ready, name, id
+                        mag = await deb.upload_magnet(magnet_link)
+                        if mag[2]:
+                            embed = utils.embed.download_ready(ctx.author, mag[1])
+                            dl_channel = await self.bot.fetch_channel(config.DL_CHANNEL)
+                            await dl_channel.send(embed=embed)
+                        else:
+                            await DB().add_to_queue(
+                                [mag[0], input, ctx.author.id, "magnet"]
+                            )
+                            await ctx.reply(
+                                "It aint ready. Try !stat.", mention_author=False
+                            )
 
             except asyncio.TimeoutError:
                 # await ctx.send("TOO SLOW", mention_author=False)
