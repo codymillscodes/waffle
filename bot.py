@@ -27,10 +27,7 @@ class Waffle(commands.Bot):
             command_prefix="!", description="waffle", intents=discord.Intents.all()
         )
         # self.tree = discord.app_commands.CommandTree(self)
-        logger.add(
-            "logs/{time}_waffle.log",
-            rotation="7 MB",
-        )
+        logger.add("logs/waffle.log", rotation="7 MB", retention="10 days")
         logger.level("DEBUG")
         logger.info("Logging is set up!")
 
@@ -104,12 +101,8 @@ class Waffle(commands.Bot):
                         if t["online"]:
                             await self.db.set_twitcher_status(t["user"], False)
                             logger.info(f"{t['user']} is offline.")
-                except TypeError:
-                    pass
-                except KeyError:
-                    pass
-                except IndexError:
-                    pass
+                except (TypeError, KeyError, IndexError) as e:
+                    logger.exception(e)
         except KeyError as e:
             logger.exception(e)
             await self.get_twitch_headers()
