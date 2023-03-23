@@ -78,34 +78,36 @@ class Waffle(commands.Bot):
         twitchers = await self.db.get_twitchers()
         twitchers = list(twitchers)
         # logger.debug("Checking twitchers...")
-        try:
-            for t in twitchers:
-                async with Conn() as resp:
-                    stream_data = await resp.get_json(
-                        Urls.TWITCH_URL + t["user"], headers=self.twitch_headers
-                    )
-                try:
-                    logger.debug(stream_data)
-                    logger.debug(t)
-                    if stream_data != [] and stream_data["data"][0]["type"] == "live":
-                        if not t["online"]:
-                            embed = stream_embed(
-                                t["user"],
-                                stream_data["data"][0]["title"],
-                                stream_data["data"][0]["game_name"],
-                            )
-                            await self.db.set_twitcher_status(t["user"], True)
-                            logger.info(f"{t['user']} is online.")
-                            await twitch_channel.send(embed=embed)
-                    elif stream_data == []:
-                        if t["online"]:
-                            await self.db.set_twitcher_status(t["user"], False)
-                            logger.info(f"{t['user']} is offline.")
-                except (TypeError, KeyError, IndexError) as e:
-                    logger.exception(e)
-        except KeyError as e:
-            logger.exception(e)
-            await self.get_twitch_headers()
+        for t in twitchers:
+            async with Conn() as resp:
+                stream_data = await resp.get_json(
+                    Urls.TWITCH_URL + t["user"], headers=self.twitch_headers
+                )
+            try:
+                logger.debug(stream_data)
+                logger.debug(t)
+                if (
+                    stream_data["data"] != []
+                    and stream_data["data"][0]["type"] == "live"
+                ):
+                    if not t["online"]:
+                        embed = stream_embed(
+                            t["user"],
+                            stream_data["data"][0]["title"],
+                            stream_data["data"][0]["game_name"],
+                        )
+                        await self.db.set_twitcher_status(t["user"], True)
+                        logger.info(f"{t['user']} is online.")
+                        await twitch_channel.send(embed=embed)
+                elif stream_data["data"] == []:
+                    if t["online"]:
+                        await self.db.set_twitcher_status(t["user"], False)
+                        logger.info(f"{t['user']} is offline.")
+            except (TypeError, KeyError, IndexError) as e:
+                logger.exception(e)
+        # except KeyError as e:
+        #    logger.exception(e)
+        #    await self.get_twitch_headers()
 
     @twitch_check.before_loop
     async def before_twitch_check(self):
