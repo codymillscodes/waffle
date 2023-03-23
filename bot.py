@@ -100,10 +100,10 @@ class Waffle(commands.Bot):
                             await self.db.set_twitcher_status(t["user"], True)
                             logger.info(f"{t['user']} is online.")
                             await twitch_channel.send(embed=embed)
-                        elif stream_data == []:
-                            if t["online"]:
-                                await self.db.set_twitcher_status(t["user"], False)
-                                logger.info(f"{t['user']} is offline.")
+                    elif stream_data == []:
+                        if t["online"]:
+                            await self.db.set_twitcher_status(t["user"], False)
+                            logger.info(f"{t['user']} is offline.")
                 except TypeError:
                     pass
                 except KeyError:
