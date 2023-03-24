@@ -45,12 +45,12 @@ class SystemCog(commands.Cog):
         messages = [message async for message in ctx.channel.history(limit=5)]
         messages.reverse()
         messages = "\n".join([f"{m.author.name}: {m.content}" for m in messages])
-        log_file = await self.get_log()
-        with open(log_file, "r") as f:
-            log = f.read()
+        # log_file = await self.get_log()
+        # with open(log_file, "r") as f:
+        #    log = f.read()
         issue = await self.create_issue(
             title=bug,
-            body=f"Last 20 messages:\n\n{messages}\n\n------\n\nLOG:\n\n{log}",
+            body=f"Last 20 messages:\n\n{messages}",
         )
         admin = await self.bot.fetch_user(ADMIN_ROLE)
         await admin.send(f"New bug reported: {issue.title}\n{issue.html_url}")
