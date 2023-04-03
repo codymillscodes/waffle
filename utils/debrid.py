@@ -60,3 +60,18 @@ async def instant_magnet(magnet):
     async with Conn() as resp:
         r = await resp.get_json(Urls.DEBRID_DELETE + magnet)
     return r["data"]["magnets"][0]["instant"]
+
+
+def eval_pick(pick):
+    # pick will be one number, a range of numbers('1-5'), or a list of numbers('1,2,3,4,5')
+    # need to return a list of numbers
+    pick_list = []
+    if pick.isdigit():
+        pick_list.append(int(pick) - 1)
+    elif "-" in pick:
+        start, end = pick.split("-")
+        pick_list.extend(range(int(start), int(end) - 1))
+    elif "," in pick:
+        pick_list.extend([int(x) - 1 for x in pick.split(",")])
+
+    return pick_list

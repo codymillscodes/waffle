@@ -186,20 +186,17 @@ class DebridCog(commands.Cog):
                     # await ctx.invoke(self.search, input=msg.content[8:])
                     await e.add_reaction("❌")
                 elif msg.content.startswith("!pick"):
-                    pick = []
+                    pick = deb.eval_pick(msg.content.replace("!pick", "").strip())
                     # pick = int(msg.content[6:]) - 1
-                    if "-" in msg.content:
-                        for i in msg.content.split("!pick")[1].strip().split("-"):
-                            pick.append(int(i) - 1)
-                    else:
-                        pick.append(int(msg.content.split("!pick")[1].strip()) - 1)
-                    if int(msg.content[6:]) > 5:
+                    if len(pick) > 0 and pick[0] > 0:
                         await ctx.send("WRONG")
-                    if len(pick) < 0:
-                        await ctx.send("Godspeed.")
+                    elif len(pick) == 0:
+                        await e.add_reaction("❌")
                     else:
                         if ctx.invoked_with == "rarbg":
-                            magnet_link = results[pick]["download"]
+                            magnet_link = []
+                            for p in pick:
+                                magnet_link.append(results[pick]["download"])
                         else:
                             dl_channel = await self.bot.fetch_channel(config.DL_CHANNEL)
                             not_ready = 0
