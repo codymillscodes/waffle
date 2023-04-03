@@ -177,7 +177,7 @@ class DebridCog(commands.Cog):
 
             def check(m):
                 return m.author == ctx.author and m.content.startswith(
-                    ["!pick", "!Pick", "!search"]
+                    ("!pick", "!Pick", "!search")
                 )
 
             try:
