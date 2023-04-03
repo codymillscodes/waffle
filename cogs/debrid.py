@@ -195,7 +195,7 @@ class DebridCog(commands.Cog):
                         pick.append(int(msg.content.split("!pick")[1].strip()) - 1)
                     if int(msg.content[6:]) > 5:
                         await ctx.send("WRONG")
-                    if pick < 0:
+                    if len(pick) < 0:
                         await ctx.send("Godspeed.")
                     else:
                         if ctx.invoked_with == "rarbg":
