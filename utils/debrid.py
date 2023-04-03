@@ -2,6 +2,7 @@
 from bot import Waffle
 from utils.connection import Connection as Conn
 from utils.urls import Urls
+from loguru import logger
 
 
 async def upload_magnet(magnet):
@@ -73,5 +74,5 @@ def eval_pick(pick):
         pick_list.extend(range(int(start), int(end) - 1))
     elif "," in pick:
         pick_list.extend([int(x) - 1 for x in pick.split(",")])
-
+    logger.info(pick_list)
     return pick_list
