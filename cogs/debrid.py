@@ -186,8 +186,13 @@ class DebridCog(commands.Cog):
                     # await ctx.invoke(self.search, input=msg.content[8:])
                     await e.add_reaction("❌")
                 elif msg.content.startswith("!pick"):
+                    pick = []
                     # pick = int(msg.content[6:]) - 1
-                    pick = (msg.content.split("!pick")[1].strip()) - 1
+                    if "-" in msg.content:
+                        for i in msg.content.split("!pick")[1].strip().split("-"):
+                            pick.append(int(i) - 1)
+                    else:
+                        pick.append((msg.content.split("!pick")[1].strip()) - 1)
                     if int(msg.content[6:]) > 5:
                         await ctx.send("WRONG")
                     if pick < 0:
@@ -196,24 +201,35 @@ class DebridCog(commands.Cog):
                         if ctx.invoked_with == "rarbg":
                             magnet_link = results[pick]["download"]
                         else:
-                            # logger.info(f"results: {results}")
-                            magnet_link = torrents.info(
-                                torrentId=sanitized_results[pick]["torrentId"]
-                            )["magnetLink"]
-                        # add magnet, get ready, name, id
-                        mag = await deb.upload_magnet(magnet_link)
-                        if mag[2]:
-                            embed = utils.embed.download_ready(ctx.author, mag[1])
                             dl_channel = await self.bot.fetch_channel(config.DL_CHANNEL)
-                            await dl_channel.send(embed=embed)
-                        else:
-                            await DB().add_to_queue(
-                                [mag[0], input, ctx.author.id, "magnet"]
-                            )
-                            await ctx.reply(
-                                "It aint ready. Try !stat.", mention_author=False
-                            )
-
+                            not_ready = 0
+                            for p in pick:
+                                # logger.info(f"results: {results}")
+                                magnet_link = torrents.info(
+                                    torrentId=sanitized_results[p]["torrentId"]
+                                )["magnetLink"]
+                                # add magnet, get ready, name, id
+                                mag = await deb.upload_magnet(magnet_link)
+                                if mag[2]:
+                                    embed = utils.embed.download_ready(
+                                        ctx.author, mag[1]
+                                    )
+                                    await dl_channel.send(embed=embed)
+                                else:
+                                    await DB().add_to_queue(
+                                        [mag[0], input, ctx.author.id, "magnet"]
+                                    )
+                                    not_ready += 1
+                            if not_ready == 0:
+                                await ctx.reply(
+                                    f"Sent {len(pick)} downloads to #downloads",
+                                    mention_author=False,
+                                )
+                            else:
+                                await ctx.reply(
+                                    f"Sent {len(pick) - not_ready} downloads to #downloads. {not_ready} not ready.",
+                                    mention_author=False,
+                                )
             except asyncio.TimeoutError:
                 # await ctx.send("TOO SLOW", mention_author=False)
                 # add reaction to previously sent em_result embed
