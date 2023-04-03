@@ -162,12 +162,16 @@ class DebridCog(commands.Cog):
                 e = await ctx.reply(embed=embed, mention_author=False)
         else:
             results = torrents.search(input, sortBy="seeders", order="desc")
+            logger.info(f"{len(results['items'])} torrent results.")
             sanitized_results = []
             for torrent in results["items"]:
                 info = torrents.info(torrentId=torrent["torrentId"])
+                logger.info(f"{info['category']} {info['title']}")
                 if "xxx".upper() not in info["category"]:
+                    logger.info(f"Added {info['title']} to results.")
                     sanitized_results.append(torrent)
                 if len(sanitized_results) > 5:
+                    logger.info("Max results reached.")
                     break
             if len(sanitized_results) > 0:
                 embed = utils.embed.torrent_results(sanitized_results)
