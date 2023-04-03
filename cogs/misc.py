@@ -27,5 +27,6 @@ class MiscCog(commands.Cog):
 
         await ctx.send(f"You rolled a {randint(min, max)}")
 
-    def setup(bot):
-        bot.add_cog(MiscCog(bot))
+
+async def setup(bot):
+    bot.add_cog(MiscCog(bot))
