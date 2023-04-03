@@ -29,4 +29,4 @@ class MiscCog(commands.Cog):
 
 
 async def setup(bot):
-    bot.add_cog(MiscCog(bot))
+    await bot.add_cog(MiscCog(bot))
