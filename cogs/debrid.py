@@ -222,8 +222,11 @@ class DebridCog(commands.Cog):
                                     )
                                     not_ready += 1
                             if not_ready == 0:
+                                download_word = (
+                                    "download" if len(pick) == 1 else "downloads"
+                                )
                                 await ctx.reply(
-                                    f"Sent {len(pick)} downloads to #downloads",
+                                    f"Sent {len(pick)} {download_word} to #downloads",
                                     mention_author=False,
                                 )
                             else:
