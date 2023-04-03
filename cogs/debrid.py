@@ -192,7 +192,7 @@ class DebridCog(commands.Cog):
                         for i in msg.content.split("!pick")[1].strip().split("-"):
                             pick.append(int(i) - 1)
                     else:
-                        pick.append((msg.content.split("!pick")[1].strip()) - 1)
+                        pick.append(int(msg.content.split("!pick")[1].strip()) - 1)
                     if int(msg.content[6:]) > 5:
                         await ctx.send("WRONG")
                     if pick < 0:
