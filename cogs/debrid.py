@@ -166,7 +166,7 @@ class DebridCog(commands.Cog):
             sanitized_results = []
             for torrent in results["items"]:
                 info = torrents.info(torrentId=torrent["torrentId"])
-                logger.info(f"{info['category']} {torrent["torrentId"]}")
+                logger.info(f"{info['category']} {torrent['torrentId']}")
                 if "xxx".upper() not in info["category"]:
                     logger.info(f"Added {info['title']} to results.")
                     sanitized_results.append(torrent)
