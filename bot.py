@@ -78,14 +78,13 @@ class Waffle(commands.Bot):
         twitchers = await self.db.get_twitchers()
         twitchers = list(twitchers)
         # logger.debug("Checking twitchers...")
+        logger.info(f"Checking {len(twitchers)} twitchers...")
         for t in twitchers:
             async with Conn() as resp:
                 stream_data = await resp.get_json(
                     Urls.TWITCH_URL + t["user"], headers=self.twitch_headers
                 )
             try:
-                logger.debug(stream_data)
-                logger.debug(t)
                 if (
                     stream_data["data"] != []
                     and stream_data["data"][0]["type"] == "live"
