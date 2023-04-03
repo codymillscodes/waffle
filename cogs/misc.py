@@ -16,7 +16,7 @@ class MiscCog(commands.Cog):
             max = int(dice)
         elif "d" in dice:
             min = int(dice.split("d")[0])
-            max = int(dice.split("d")[1])
+            max = min * int(dice.split("d")[1])
         else:
             await ctx.send("Invalid input")
             return
