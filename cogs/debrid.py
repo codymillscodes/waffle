@@ -188,7 +188,7 @@ class DebridCog(commands.Cog):
                 elif msg.content.startswith("!pick"):
                     pick = deb.eval_pick(msg.content.replace("!pick", "").strip())
                     # pick = int(msg.content[6:]) - 1
-                    if len(pick) > 0 and pick[0] > 0:
+                    if pick[0] > 5:
                         await ctx.send("WRONG")
                     elif len(pick) == 0:
                         await e.add_reaction("❌")
