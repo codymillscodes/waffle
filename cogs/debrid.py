@@ -62,6 +62,7 @@ class DebridCog(commands.Cog):
     )
     async def mag(self, interaction: discord.Interaction, magnet: str):
         if magnet.startswith("magnet"):
+            await interaction.response.defer(thinking=True)
             mag = await deb.upload_magnet(magnet)
             logger.info(f"Adding magnet for {mag[1]}")
             if mag[2]:
@@ -73,7 +74,7 @@ class DebridCog(commands.Cog):
                 data = [mag[0], "magnet", interaction.user.id, "magnet"]
                 await DB().add_to_queue(data)
                 logger.info(f"{mag[1]} is not ready. Adding to queue.")
-                await interaction.response.send_message("It aint ready. Try !stat.")
+                await interaction.followup.send("It aint ready. Try !stat.")
         else:
             logger.info(f"Invalid link recv'd: {magnet}")
             await interaction.response.send_message("Not a valid magnet link.")

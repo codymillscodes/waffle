@@ -42,15 +42,15 @@ class SystemCog(commands.Cog):
     @commands.command(name="bug", description="Report a bug.", brief="Report a bug.")
     async def bug(self, ctx, *, bug: str):
         logger.info(f"{ctx.author.name} reported a bug: {bug}")
-        messages = [message async for message in ctx.channel.history(limit=5)]
-        messages.reverse()
-        messages = "\n".join([f"{m.author.name}: {m.content}" for m in messages])
+        # messages = [message async for message in ctx.channel.history(limit=5)]
+        # messages.reverse()
+        # messages = "\n".join([f"{m.author.name}: {m.content}" for m in messages])
         # log_file = await self.get_log()
         # with open(log_file, "r") as f:
         #    log = f.read()
         issue = await self.create_issue(
             title=bug,
-            body=f"Last 20 messages:\n\n{messages}",
+            body=f"Bug reported by {ctx.author.name}",
         )
         admin = await self.bot.fetch_user(ADMIN_ROLE)
         await admin.send(f"New bug reported: {issue.title}\n{issue.html_url}")
