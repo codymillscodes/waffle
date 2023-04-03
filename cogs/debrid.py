@@ -176,10 +176,8 @@ class DebridCog(commands.Cog):
                 await ctx.reply("Zero results.", mention_author=False)
 
             def check(m):
-                return (
-                    m.author == ctx.author
-                    and m.content.startswith("!pick")
-                    or m.content.startswith("!search")
+                return m.author == ctx.author and m.content.startswith(
+                    ["!pick", "!Pick", "!search"]
                 )
 
             try:
@@ -188,7 +186,8 @@ class DebridCog(commands.Cog):
                     # await ctx.invoke(self.search, input=msg.content[8:])
                     await e.add_reaction("❌")
                 elif msg.content.startswith("!pick"):
-                    pick = int(msg.content[6:]) - 1
+                    # pick = int(msg.content[6:]) - 1
+                    pick = msg.content.split("!pick")[1].strip()
                     if int(msg.content[6:]) > 5:
                         await ctx.send("WRONG")
                     if pick < 0:
