@@ -170,7 +170,7 @@ class DebridCog(commands.Cog):
                 if "xxx".upper() not in info["category"]:
                     logger.info(f"Added {torrent['torrentId']} to results.")
                     sanitized_results.append(torrent)
-                if len(sanitized_results) > 5:
+                if len(sanitized_results) >= 5:
                     logger.info("Max results reached.")
                     break
             if len(sanitized_results) > 0:
