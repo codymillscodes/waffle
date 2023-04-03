@@ -71,7 +71,7 @@ def eval_pick(pick):
         pick_list.append(int(pick) - 1)
     elif "-" in pick:
         start, end = pick.split("-")
-        pick_list.extend(range(int(start - 1), int(end - 1)))
+        pick_list.extend(range(int(start) - 1, int(end) + 1))
     elif "," in pick:
         pick_list.extend([int(x) - 1 for x in pick.split(",")])
     logger.info(pick_list)
