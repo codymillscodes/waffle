@@ -138,7 +138,7 @@ class Waffle(commands.Bot):
                             filename = urllib.parse.unquote(link_split[1])
                             logger.info(f"removing {id['task_id']}")
                             await self.db.set_status(id["task_id"], "complete")
-                            embed = download_ready(id["user_id"], filename, link)
+                            embed = download_ready(int(id["user_id"]), filename, link)
                             dl_channel = await self.fetch_channel(DL_CHANNEL)
                             await dl_channel.send(embed=embed)
                     else:

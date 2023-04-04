@@ -213,7 +213,7 @@ class DebridCog(commands.Cog):
                                 mag = await deb.upload_magnet(magnet_link)
                                 if mag[2]:
                                     embed = utils.embed.download_ready(
-                                        ctx.author, mag[1]
+                                        ctx.author.id, mag[1]
                                     )
                                     await dl_channel.send(embed=embed)
                                 else:
