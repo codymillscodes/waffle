@@ -231,7 +231,7 @@ class DebridCog(commands.Cog):
                                 )
                             else:
                                 await ctx.reply(
-                                    f"Sent {len(pick) - not_ready} downloads to #downloads. {not_ready} not ready.",
+                                    f"Sent {len(pick) - not_ready} downloads to <#downloads>. {not_ready} not ready.",
                                     mention_author=False,
                                 )
             except asyncio.TimeoutError:
