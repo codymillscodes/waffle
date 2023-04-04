@@ -226,12 +226,12 @@ class DebridCog(commands.Cog):
                                     "download" if len(pick) == 1 else "downloads"
                                 )
                                 await ctx.reply(
-                                    f"Sent {len(pick)} {download_word} to #downloads",
+                                    f"Sent {len(pick)} {download_word} to <#{config.DL_CHANNEL}>",
                                     mention_author=False,
                                 )
                             else:
                                 await ctx.reply(
-                                    f"Sent {len(pick) - not_ready} downloads to <#downloads>. {not_ready} not ready.",
+                                    f"Sent {len(pick) - not_ready} downloads to <#{config.DL_CHANNEL}>. {not_ready} not ready.",
                                     mention_author=False,
                                 )
             except asyncio.TimeoutError:
