@@ -28,10 +28,6 @@ class MiscCog(commands.Cog):
             await ctx.send("Invalid input")
             return
 
-        if min > max:
-            await ctx.send("Invalid input")
-            return
-
         await ctx.send(f"You rolled a {randint(min, max)}")
 
 
