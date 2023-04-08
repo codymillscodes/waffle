@@ -141,4 +141,6 @@ filter = [
     "you're",
     "youre",
     "your",
+    "handle",
+    "just",
 ]

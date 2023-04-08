@@ -15,8 +15,15 @@ class MiscCog(commands.Cog):
         if "d" not in dice and dice.isdigit():
             max = int(dice)
         elif "d" in dice:
-            min = int(dice.split("d")[0])
-            max = min * int(dice.split("d")[1])
+            rolls = []
+            num_to_roll = int(dice.split("d")[0])
+            for i in range(num_to_roll):
+                rolls.append(randint(1, int(dice.split("d")[1])))
+            if len(rolls) == 1:
+                await ctx.send(f"You rolled {rolls[0]}")
+            # send rolls '1 + 1 + 1 = 3' instead of [1, 1, 1], send the rseult of each roll and the total
+            elif len(rolls) > 1:
+                await ctx.send(f"You rolled {rolls} = {sum(rolls)}")
         else:
             await ctx.send("Invalid input")
             return
