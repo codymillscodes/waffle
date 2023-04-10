@@ -36,6 +36,7 @@ class MiscCog(commands.Cog):
 
     @commands.command(name="test2", description="Test command")
     async def test2(self, ctx):
+        embed = discord.Embed(url="test", title="Test", description="Test")
         file = discord.File("test.mp4", filename="test.mp4")
         await ctx.send(file=file)
 
