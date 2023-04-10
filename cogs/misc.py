@@ -31,14 +31,10 @@ class MiscCog(commands.Cog):
 
     @commands.command(name="test", description="Test command")
     async def test(self, ctx):
-        embed = discord.Embed(url="https://7aseln.debrid.it//dl//2q83blj2c48//Every%20day%20is%20a%20step%20closer%21%20Its%20so%20great%20to%20spend%20life%20in%20school%20then%20at%20work%21%20%23work%20%23relatable%20%23corporate%20%23millennial%20%23millennialsoftiktok%20%23corporatehumor%20%23corporatemillennial%20%23workjokes%20%23corporatejokes%20%23workhumor%20%23officehumor%20.144.mp4, "title="Test", description="Test")
-        await ctx.send(embed=embed)
-
-    @commands.command(name="test2", description="Test command")
-    async def test2(self, ctx):
         embed = discord.Embed(url="test", title="Test", description="Test")
         file = discord.File("test.mp4", filename="test.mp4")
         await ctx.send(embed=embed, file=file)
+
 
 async def setup(bot):
     await bot.add_cog(MiscCog(bot))
