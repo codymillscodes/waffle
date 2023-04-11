@@ -3,6 +3,7 @@ from bot import Waffle
 from utils.connection import Connection as Conn
 from utils.urls import Urls
 from loguru import logger
+import os
 
 
 async def upload_magnet(magnet):
@@ -76,3 +77,40 @@ def eval_pick(pick):
         pick_list.extend([int(x) - 1 for x in pick.replace(" ", "").split(",")])
     logger.info(pick_list)
     return pick_list
+
+
+async def get_tiktok_link(url):
+    try:
+        async with Conn() as resp:
+            r = await resp.get_json(Urls.DEBRID_UNLOCK + url)
+        file_id = r["data"]["id"]
+        streams = r["data"]["streams"]
+        for s in streams:
+            if "h264" in s["format"]:
+                stream_id = s["id"]
+                stream_fs = s["filesize"]
+                break
+
+        async with Conn() as resp:
+            r = await resp.get_json(
+                f"{Urls.DEBRID_STREAMING}{file_id}&stream={stream_id}"
+            )
+
+        if stream_fs >= 8388000:
+            logger.info("File too large")
+            return "File too large"
+        return r["data"]["link"]
+        # download_tiktok_video(r["data"]["link"])
+
+    except Exception as e:
+        logger.exception(e)
+
+
+async def download_tiktok_video(url):
+    async with Conn() as resp:
+        r = await resp.get(url)
+        if r.status == 200:
+            with open("tiktok.mp4", "wb") as f:
+                async for data in r.content.iter_chunked(1024):
+                    f.write(data)
+    return "Downloaded"

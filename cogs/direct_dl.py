@@ -11,6 +11,7 @@ from utils.embed import download_ready
 from utils.urls import Urls
 from utils.connection import Connection as Conn
 from utils.db import DB
+from utils.debrid import get_tiktok_link, download_tiktok_video
 
 
 class DirectDLCog(commands.Cog):
@@ -128,6 +129,14 @@ class DirectDLCog(commands.Cog):
         title = s["content"].split(", by ")
         logger.info(f"Got title: {title}")
         return title
+
+    @commands.commands(name="tiktest")
+    async def tiktest(self, url):
+        link = await get_tiktok_link(url)
+        tt_file = await download_tiktok_video(link)
+        if tt_file == "Downloaded":
+            file = discord.File("tiktok.mp4", filename="tiktok.mp4")
+            await ctx.reply(file=file, mention_author=False)
 
 
 async def setup(bot):
