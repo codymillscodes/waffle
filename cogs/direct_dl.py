@@ -11,7 +11,7 @@ from utils.embed import download_ready
 from utils.urls import Urls
 from utils.connection import Connection as Conn
 from utils.db import DB
-from utils.debrid import get_tiktok_link, download_tiktok_video
+from utils.debrid import get_tiktok_link, download_tiktok_video, delete_file
 
 
 class DirectDLCog(commands.Cog):
@@ -145,12 +145,18 @@ class DirectDLCog(commands.Cog):
             link = await get_tiktok_link(message.content)
             tt_file = await download_tiktok_video(link)
             logger.info(f"tt_file: {tt_file}")
-            if tt_file == "Downloaded":
-                file = discord.File("tiktok.mp4", filename="tiktok.mp4")
-                await message.delete()
-                await message.channel.send(
-                    f"{message.author}: {message.content}", file=file
+            if tt_file["status"] == 1:
+                file = discord.File(
+                    f"{tt_file['fn']}.mp4", filename=f"{tt_file['fn']}.mp4"
                 )
+                await message.delete()
+                await message.channel.send(f"<@{message.author.id}>", file=file)
+
+                delete = await delete_file(tt_file["fn"])
+                if delete:
+                    logger.info(f"Deleted {tt_file['fn']}")
+                else:
+                    logger.error(f"Failed to delete {tt_file['fn']}")
 
 
 async def setup(bot):

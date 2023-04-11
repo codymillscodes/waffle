@@ -94,6 +94,7 @@ async def get_tiktok_link(url):
                 logger.info("Found h264")
                 stream_id = s["id"]
                 stream_fs = s["filesize"]
+                stream_fn = s["filename"]
                 break
 
         async with Conn() as resp:
@@ -106,7 +107,7 @@ async def get_tiktok_link(url):
             logger.info("File too large")
             return "File too large"
         logger.info(r["data"]["link"])
-        return r["data"]["link"]
+        return {"url": r["data"]["link"], "fn": stream_fn, "status": 0}
         # download_tiktok_video(r["data"]["link"])
 
     except Exception as e:
@@ -116,11 +117,21 @@ async def get_tiktok_link(url):
 async def download_tiktok_video(url):
     logger.info("Downloading TikTok video")
     async with aiohttp.ClientSession() as session:
-        async with session.get(url) as resp:
+        async with session.get(url["url"]) as resp:
             logger.info(resp.status)
             if resp.status == 200:
                 logger.info("Writing to file")
-                with open("tiktok.mp4", "wb") as f:
+                with open(f"{url['fn']}.mp4", "wb") as f:
                     async for data in resp.content.iter_chunked(1024):
                         f.write(data)
-    return "Downloaded"
+                        url["status"] = 1
+    return url
+
+
+async def delete_file(file):
+    try:
+        os.remove(file)
+        return True
+    except Exception as e:
+        logger.exception(e)
+        return False
