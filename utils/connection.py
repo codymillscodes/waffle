@@ -34,7 +34,7 @@ class Connection:
 
     async def get(self, url):
         async with self.session.get(url, timeout=self.timeout) as resp:
-            return await resp
+            return resp
 
     async def post_json(self, url, headers=None, data=None):
         if headers is None:
