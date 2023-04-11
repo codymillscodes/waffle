@@ -141,13 +141,14 @@ class DirectDLCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if "tiktok" in message:
+        if "tiktok" in message.content:
             link = await get_tiktok_link(message.content)
             tt_file = await download_tiktok_video(link)
             logger.info(f"tt_file: {tt_file}")
             if tt_file == "Downloaded":
                 file = discord.File("tiktok.mp4", filename="tiktok.mp4")
-                await message.channel.reply(file=file)
+                await message.delete()
+                await message.channel.send(file=file)
 
 
 async def setup(bot):
