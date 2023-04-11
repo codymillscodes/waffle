@@ -115,7 +115,7 @@ async def get_tiktok_link(url):
 async def download_tiktok_video(url):
     logger.info("Downloading TikTok video")
     async with Conn() as resp:
-        r = await resp.get(url)
+        r = await resp.get_json(url)
         if r.status == 200:
             logger.info("Writing to file")
             with open("tiktok.mp4", "wb") as f:
