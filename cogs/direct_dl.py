@@ -130,7 +130,7 @@ class DirectDLCog(commands.Cog):
         logger.info(f"Got title: {title}")
         return title
 
-    @commands.commands(name="tiktest")
+    @commands.command(name="tiktest")
     async def tiktest(self, ctx, url):
         link = await get_tiktok_link(url)
         tt_file = await download_tiktok_video(link)
