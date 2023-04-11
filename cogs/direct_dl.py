@@ -131,9 +131,10 @@ class DirectDLCog(commands.Cog):
         return title
 
     @commands.commands(name="tiktest")
-    async def tiktest(self, url):
+    async def tiktest(self, ctx, url):
         link = await get_tiktok_link(url)
         tt_file = await download_tiktok_video(link)
+        logger.info(f"tt_file: {tt_file}")
         if tt_file == "Downloaded":
             file = discord.File("tiktok.mp4", filename="tiktok.mp4")
             await ctx.reply(file=file, mention_author=False)

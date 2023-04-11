@@ -80,13 +80,17 @@ def eval_pick(pick):
 
 
 async def get_tiktok_link(url):
+    logger.info("Getting TikTok link")
     try:
         async with Conn() as resp:
             r = await resp.get_json(Urls.DEBRID_UNLOCK + url)
         file_id = r["data"]["id"]
         streams = r["data"]["streams"]
+        logger.info(file_id, streams)
         for s in streams:
+            logger.info(s)
             if "h264" in s["format"]:
+                logger.info("Found h264")
                 stream_id = s["id"]
                 stream_fs = s["filesize"]
                 break
@@ -95,10 +99,12 @@ async def get_tiktok_link(url):
             r = await resp.get_json(
                 f"{Urls.DEBRID_STREAMING}{file_id}&stream={stream_id}"
             )
+            logger.info(r)
 
         if stream_fs >= 8388000:
             logger.info("File too large")
             return "File too large"
+        logger.info(r["data"]["link"])
         return r["data"]["link"]
         # download_tiktok_video(r["data"]["link"])
 
@@ -107,9 +113,11 @@ async def get_tiktok_link(url):
 
 
 async def download_tiktok_video(url):
+    logger.info("Downloading TikTok video")
     async with Conn() as resp:
         r = await resp.get(url)
         if r.status == 200:
+            logger.info("Writing to file")
             with open("tiktok.mp4", "wb") as f:
                 async for data in r.content.iter_chunked(1024):
                     f.write(data)
