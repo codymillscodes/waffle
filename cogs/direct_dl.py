@@ -147,12 +147,12 @@ class DirectDLCog(commands.Cog):
             logger.info(f"tt_file: {tt_file}")
             if tt_file["status"] == 1:
                 file = discord.File(
-                    f"{tt_file['fn']}.mp4", filename=f"{tt_file['fn']}.mp4"
+                    f"tiktok/{tt_file['fn']}.mp4", filename=f"{tt_file['fn']}.mp4"
                 )
                 await message.delete()
                 await message.channel.send(f"<@{message.author.id}>", file=file)
 
-                delete = await delete_file(tt_file["fn"])
+                delete = await delete_file(f"tiktok/{tt_file['fn']}")
                 if delete:
                     logger.info(f"Deleted {tt_file['fn']}")
                 else:

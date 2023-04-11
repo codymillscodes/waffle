@@ -121,7 +121,7 @@ async def download_tiktok_video(url):
             logger.info(resp.status)
             if resp.status == 200:
                 logger.info("Writing to file")
-                with open(f"{url['fn']}.mp4", "wb") as f:
+                with open(f"tiktok/{url['fn']}.mp4", "wb") as f:
                     async for data in resp.content.iter_chunked(1024):
                         f.write(data)
                         url["status"] = 1
