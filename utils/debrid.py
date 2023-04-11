@@ -5,6 +5,7 @@ from utils.urls import Urls
 from loguru import logger
 import aiohttp
 import os
+from datetime import datetime
 
 
 async def upload_magnet(magnet):
@@ -87,7 +88,7 @@ async def get_tiktok_link(url):
             r = await resp.get_json(Urls.DEBRID_UNLOCK + url)
         file_id = r["data"]["id"]
         streams = r["data"]["streams"]
-        stream_fn = r["data"]["filename"]
+        stream_fn = datetime.strftime(datetime.now(), "%m%d%y%H%M%S")
         logger.info(file_id, streams)
         for s in streams:
             logger.info(s)
