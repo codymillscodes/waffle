@@ -87,6 +87,7 @@ async def get_tiktok_link(url):
             r = await resp.get_json(Urls.DEBRID_UNLOCK + url)
         file_id = r["data"]["id"]
         streams = r["data"]["streams"]
+        stream_fn = r["data"]["filename"]
         logger.info(file_id, streams)
         for s in streams:
             logger.info(s)
@@ -94,7 +95,6 @@ async def get_tiktok_link(url):
                 logger.info("Found h264")
                 stream_id = s["id"]
                 stream_fs = s["filesize"]
-                stream_fn = s["filename"]
                 break
 
         async with Conn() as resp:
