@@ -148,7 +148,9 @@ class DirectDLCog(commands.Cog):
             if tt_file == "Downloaded":
                 file = discord.File("tiktok.mp4", filename="tiktok.mp4")
                 await message.delete()
-                await message.channel.send(file=file)
+                await message.channel.send(
+                    f"{message.author}: {message.content}", file=file
+                )
 
 
 async def setup(bot):
