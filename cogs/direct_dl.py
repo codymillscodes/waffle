@@ -139,6 +139,16 @@ class DirectDLCog(commands.Cog):
             file = discord.File("tiktok.mp4", filename="tiktok.mp4")
             await ctx.reply(file=file, mention_author=False)
 
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        if "tiktok" in message:
+            link = await get_tiktok_link(message.content)
+            tt_file = await download_tiktok_video(link)
+            logger.info(f"tt_file: {tt_file}")
+            if tt_file == "Downloaded":
+                file = discord.File("tiktok.mp4", filename="tiktok.mp4")
+                await message.channel.reply(file=file)
+
 
 async def setup(bot):
     await bot.add_cog(DirectDLCog(bot))
