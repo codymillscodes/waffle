@@ -88,6 +88,7 @@ async def get_tiktok_link(url):
             r = await resp.get_json(Urls.DEBRID_UNLOCK + url)
         file_id = r["data"]["id"]
         if r["data"]["link"] == "":
+            logger.info("No link found, getting streaming link")
             streams = r["data"]["streams"]
 
             logger.info(file_id, streams)
@@ -105,11 +106,12 @@ async def get_tiktok_link(url):
                 )
                 logger.info(r)
 
+            if stream_fs >= 8388000:
+                logger.info("File too large")
+                return "File too large"
+
         stream_fn = datetime.strftime(datetime.now(), "%m%d%y%H%M%S")
 
-        if stream_fs >= 8388000:
-            logger.info("File too large")
-            return "File too large"
         logger.info(r["data"]["link"])
         return {"url": r["data"]["link"], "fn": stream_fn, "status": 0}
         # download_tiktok_video(r["data"]["link"])
