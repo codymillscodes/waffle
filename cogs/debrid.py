@@ -13,6 +13,8 @@ from utils.connection import Connection as Conn
 from utils.db import DB
 
 torrents = py1337x(proxy="1337x.to")
+
+
 # torrents.search('harry potter', category='movies', sortBy='seeders', order='desc')
 class DebridCog(commands.Cog):
     def __init__(self, bot):
@@ -194,7 +196,7 @@ class DebridCog(commands.Cog):
                     # pick = int(msg.content[6:]) - 1
                     if pick[0] > 5:
                         await ctx.send("WRONG")
-                    elif len(pick) == 0 or pick[0] <= 0:
+                    elif len(pick) == 0 or pick[0] < 0:
                         await e.add_reaction("❌")
                     else:
                         if ctx.invoked_with == "rarbg":
