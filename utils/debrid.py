@@ -87,7 +87,7 @@ async def get_tiktok_link(url):
         async with Conn() as resp:
             r = await resp.get_json(Urls.DEBRID_UNLOCK + url)
         file_id = r["data"]["id"]
-        if r["data"]["link"] is "":
+        if r["data"]["link"] == "":
             streams = r["data"]["streams"]
 
             logger.info(file_id, streams)

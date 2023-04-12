@@ -141,7 +141,7 @@ class DirectDLCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if "tiktok" in message.content:
+        if "tiktok.com" in message.content:
             link = await get_tiktok_link(message.content)
             tt_file = await download_tiktok_video(link)
             logger.info(f"tt_file: {tt_file}")
