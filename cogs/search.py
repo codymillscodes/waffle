@@ -70,7 +70,7 @@ class SearchCog(commands.Cog):
     async def fn(self, interaction: discord.Interaction, user: str):
         logger.info(f"{interaction.user} wants {user}'s fortnite stats.")
         try:
-            stats = self.fnapi.stats.fetch_by_name(user)
+            stats = self.fnapi.stats.fetch_by_name(user, time_window="season")
             embed = utils.embed.fortnite(stats)
             await interaction.response.send_message(embed=embed)
         except fortnite_api.errors.NotFound:
