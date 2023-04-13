@@ -108,7 +108,7 @@ async def get_tiktok_link(url):
 
             if stream_fs >= 8388000:
                 logger.info("File too large")
-                return "File too large"
+                return 0
 
         stream_fn = datetime.strftime(datetime.now(), "%m%d%y%H%M%S")
 
