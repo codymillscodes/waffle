@@ -55,7 +55,7 @@ class SystemCog(commands.Cog):
         admin = await self.bot.fetch_user(ADMIN_ROLE)
         await admin.send(f"New bug reported: {issue.title}\n{issue.html_url}")
         await ctx.reply(
-            f"Thanks for reporting a bug! I'll look into it as soon as possible.",
+            f"Thanks for reporting a bug!",
             mention_author=False,
         )
 
