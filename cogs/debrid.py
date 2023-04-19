@@ -72,6 +72,7 @@ class DebridCog(commands.Cog):
                 logger.info(f"{mag[1]} is ready.")
                 dl_channel = await self.bot.fetch_channel(config.DL_CHANNEL)
                 await dl_channel.send(embed=embed)
+                await interaction.followup.send("Download ready and waiting!")
             else:
                 data = [mag[0], "magnet", interaction.user.id, "magnet"]
                 await DB().add_to_queue(data)
