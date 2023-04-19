@@ -38,3 +38,5 @@ MONGO_PASS = os.environ["MONGO_PASS"]
 
 ADMIN_ROLE = os.environ["ADMIN_ROLE"]
 GITHUB_TOKEN = os.environ["GITHUB_TOKEN"]
+
+IGNORE_CHANNELS = os.environ["IGNORE_CHANNELS"].split(",")

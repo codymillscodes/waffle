@@ -99,7 +99,9 @@ class ChatbotCog(commands.Cog):
                 logger.info(f"Input sent: {m}")
                 send = 1
         elif message.content.startswith("@waffle") or (
-            len(message.mentions) > 0 and "waffle" in message.mentions[0].name
+            len(message.mentions) > 0
+            and "waffle" in message.mentions[0].name
+            and message.channel not in config.IGNORE_CHANNELS
         ):
             logger.info(message.type)
             logger.info(message.content)
