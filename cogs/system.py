@@ -42,10 +42,7 @@ class SystemCog(commands.Cog):
         # log_file = await self.get_log()
         # with open(log_file, "r") as f:
         #    log = f.read()
-        gitea_headers = {
-            "accept": "application/json",
-            "Content-Type": "application/json",
-        }
+        gitea_headers = {"Content-Type": "application/json"}
         gitea_data = {
             "assignee": "idiotdoomspiral",
             "body": f"Bug reported by {ctx.author.name}.",
