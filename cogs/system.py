@@ -56,7 +56,7 @@ class SystemCog(commands.Cog):
             "title": f"{bug}",
         }
         async with Conn() as resp:
-            resp.post_json(
+            await resp.post_json(
                 f"{GITEA_ISSUE_URL}?access_token={GITEA_TOKEN}",
                 headers=gitea_headers,
                 data=gitea_data,
