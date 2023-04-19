@@ -61,7 +61,7 @@ class SystemCog(commands.Cog):
                 headers=gitea_headers,
                 data=gitea_data,
             )
-            logger.info(resp)
+        logger.info(resp)
         admin = await self.bot.fetch_user(ADMIN_ROLE)
         await admin.send(f"New bug reported.\n{bug}")
         await ctx.reply(
