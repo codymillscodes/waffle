@@ -239,7 +239,7 @@ def torrent_results(results, emergency: bool = False):
             x = x + 1
         embed.add_field(
             name="----------------",
-            value="You should pick the one with the most seeders and a reasonable filesize. Pay attention to the quality. You dont want a cam or TS.\n*!pick 1-5*",
+            value="You should pick the one with the most seeders and a reasonable filesize. Pay attention to the quality. You dont want a cam or TS.\n*!pick 1-10, !pick 1,3,5, !pick 1.\nSupports range or comma-separated picks.*",
             inline=False,
         )
         logger.info("Built embed for torrent results")
