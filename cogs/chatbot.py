@@ -75,47 +75,48 @@ class ChatbotCog(commands.Cog):
             # {"role": "user", "content": i},
         ]
         send = 0
-        if message.reference:
-            replied_message = await message.channel.fetch_message(
-                message.reference.message_id
-            )
-            if replied_message.author.id == 968919979577704529:
-                m = [
-                    {"role": "assistant", "content": replied_message.content},
-                    {"role": "user", "content": message.content},
-                ]
-                if replied_message.reference:
-                    second_reply = await message.channel.fetch_message(
-                        replied_message.reference.message_id
-                    )
-                    m = [{"role": "user", "content": second_reply.content}] + m
-                    if second_reply.reference:
-                        third_reply = await message.channel.fetch_message(
-                            second_reply.reference.message_id
+        if message.channel.id not in config.IGNORE_CHANNELS:
+            if message.reference:
+                replied_message = await message.channel.fetch_message(
+                    message.reference.message_id
+                )
+                if replied_message.author.id == 968919979577704529:
+                    m = [
+                        {"role": "assistant", "content": replied_message.content},
+                        {"role": "user", "content": message.content},
+                    ]
+                    if replied_message.reference:
+                        second_reply = await message.channel.fetch_message(
+                            replied_message.reference.message_id
                         )
-                        m = [{"role": "assistant", "content": third_reply.content}] + m
+                        m = [{"role": "user", "content": second_reply.content}] + m
+                        if second_reply.reference:
+                            third_reply = await message.channel.fetch_message(
+                                second_reply.reference.message_id
+                            )
+                            m = [
+                                {"role": "assistant", "content": third_reply.content}
+                            ] + m
 
-                messages = messages + m
-                logger.info(f"Input sent: {m}")
-                send = 1
-        elif message.content.startswith("@waffle") or (
-            len(message.mentions) > 0
-            and "waffle" in message.mentions[0].name
-            and message.channel.id not in config.IGNORE_CHANNELS
-        ):
-            # logger.info(f"{message.channel.id} | {config.IGNORE_CHANNELS}")
-            logger.info(message.type)
-            logger.info(message.content)
-            ctx = await self.bot.get_context(message)
-            i = message.content
-            async with ctx.typing():
-                if message.content.startswith(
-                    "<@968919979577704529>"
-                ) or message.content.startswith("@waffle"):
-                    i = i.replace("<@968919979577704529>", "")
-                    messages.append({"role": "user", "content": i})
-                    logger.info(f"Input sent: {i}")
+                    messages = messages + m
+                    logger.info(f"Input sent: {m}")
                     send = 1
+            elif message.content.startswith("@waffle") or (
+                len(message.mentions) > 0 and "waffle" in message.mentions[0].name
+            ):
+                # logger.info(f"{message.channel.id} | {config.IGNORE_CHANNELS}")
+                logger.info(message.type)
+                logger.info(message.content)
+                ctx = await self.bot.get_context(message)
+                i = message.content
+                async with ctx.typing():
+                    if message.content.startswith(
+                        "<@968919979577704529>"
+                    ) or message.content.startswith("@waffle"):
+                        i = i.replace("<@968919979577704529>", "")
+                        messages.append({"role": "user", "content": i})
+                        logger.info(f"Input sent: {i}")
+                        send = 1
         if send == 1:
             tokens = await self.count_tokens_in_messages(messages)
             try:
