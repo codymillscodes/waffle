@@ -36,9 +36,9 @@ class SystemCog(commands.Cog):
     @commands.command(name="bug", description="Report a bug.", brief="Report a bug.")
     async def bug(self, ctx, *, bug: str):
         logger.info(f"{ctx.author.name} reported a bug: {bug}")
-        messages = [message async for message in ctx.channel.history(limit=5)]
-        messages.reverse()
-        messages = "\n".join([f"{m.author.name}: {m.content}" for m in messages])
+        # messages = [message async for message in ctx.channel.history(limit=5)]
+        # messages.reverse()
+        # messages = "\n".join([f"{m.author.name}: {m.content}" for m in messages])
         # log_file = await self.get_log()
         # with open(log_file, "r") as f:
         #    log = f.read()
@@ -48,7 +48,7 @@ class SystemCog(commands.Cog):
         }
         gitea_data = {
             "assignee": "idiotdoomspiral",
-            "body": "```" + messages + "```",
+            "body": f"Bug reported by {ctx.author.name}.",
             "closed": False,
             "labels": [0],
             "milestone": 0,
