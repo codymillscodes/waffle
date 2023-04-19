@@ -44,7 +44,7 @@ class Connection:
         async with self.session.post(
             url, headers=headers, data=data, timeout=self.timeout
         ) as resp:
-            logger.info(f"URL: {url}\nHeaders: {headers}\nData: {data}")
+            # logger.info(f"URL: {url}\nHeaders: {headers}\nData: {data}")
             return await resp.json()
 
     async def close(self):

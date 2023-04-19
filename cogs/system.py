@@ -47,7 +47,6 @@ class SystemCog(commands.Cog):
             "assignee": "idiotdoomspiral",
             "body": f"Bug reported by {ctx.author.name}.",
             "closed": False,
-            "labels": [0],
             "milestone": 0,
             "ref": "",
             "title": f"{bug}",
