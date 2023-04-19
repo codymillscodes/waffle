@@ -103,7 +103,7 @@ class ChatbotCog(commands.Cog):
             and "waffle" in message.mentions[0].name
             and message.channel.id not in config.IGNORE_CHANNELS
         ):
-            logger.info(f"{message.channel.id} | {config.IGNORE_CHANNELS}")
+            # logger.info(f"{message.channel.id} | {config.IGNORE_CHANNELS}")
             logger.info(message.type)
             logger.info(message.content)
             ctx = await self.bot.get_context(message)

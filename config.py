@@ -40,3 +40,5 @@ ADMIN_ROLE = os.environ["ADMIN_ROLE"]
 GITHUB_TOKEN = os.environ["GITHUB_TOKEN"]
 
 IGNORE_CHANNELS = os.environ["IGNORE_CHANNELS"].split(",")
+for i in range(len(IGNORE_CHANNELS)):
+    IGNORE_CHANNELS[i] = int(IGNORE_CHANNELS[i])
