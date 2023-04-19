@@ -3,9 +3,9 @@ import glob
 from discord import File
 from discord.ext import commands
 from loguru import logger
-from config import ADMIN_ROLE, GITHUB_TOKEN
+from config import ADMIN_ROLE, GITEA_TOKEN, GITEA_ISSUE_URL
 from utils.helpers import get_folder_time
-from github import Github
+from utils.connection import Connection as Conn
 
 
 class SystemCog(commands.Cog):
@@ -33,27 +33,36 @@ class SystemCog(commands.Cog):
         )
         return log_file
 
-    async def create_issue(self, title, body):
-        g = Github(os.environ["GITHUB_TOKEN"])
-        repo = g.get_repo("idiotdoomspiral/waffle")
-        issue = repo.create_issue(title=title, body=body)
-        return issue
-
     @commands.command(name="bug", description="Report a bug.", brief="Report a bug.")
     async def bug(self, ctx, *, bug: str):
         logger.info(f"{ctx.author.name} reported a bug: {bug}")
-        # messages = [message async for message in ctx.channel.history(limit=5)]
-        # messages.reverse()
-        # messages = "\n".join([f"{m.author.name}: {m.content}" for m in messages])
+        messages = [message async for message in ctx.channel.history(limit=5)]
+        messages.reverse()
+        messages = "\n".join([f"{m.author.name}: {m.content}" for m in messages])
         # log_file = await self.get_log()
         # with open(log_file, "r") as f:
         #    log = f.read()
-        issue = await self.create_issue(
-            title=bug,
-            body=f"Bug reported by {ctx.author.name}",
-        )
+        gitea_headers = {
+            "accept": "application/json",
+            "Content-Type": "application/json",
+        }
+        gitea_data = {
+            "assignee": "idiotdoomspiral",
+            "body": "```" + messages + "```",
+            "closed": False,
+            "labels": [0],
+            "milestone": 0,
+            "ref": "",
+            "title": f"{bug}",
+        }
+        async with Conn() as resp:
+            resp.post_json(
+                f"{GITEA_ISSUE_URL}?access_token={GITEA_TOKEN}",
+                headers=gitea_headers,
+                data=gitea_data,
+            )
         admin = await self.bot.fetch_user(ADMIN_ROLE)
-        await admin.send(f"New bug reported: {issue.title}\n{issue.html_url}")
+        await admin.send(f"New bug reported.\n{bug}")
         await ctx.reply(
             f"Thanks for reporting a bug!",
             mention_author=False,
