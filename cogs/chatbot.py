@@ -103,16 +103,15 @@ class ChatbotCog(commands.Cog):
             and "waffle" in message.mentions[0].name
             and message.channel not in config.IGNORE_CHANNELS
         ):
+            logger.info(message.channel, config.IGNORE_CHANNELS)
             logger.info(message.type)
             logger.info(message.content)
             ctx = await self.bot.get_context(message)
             i = message.content
             async with ctx.typing():
-                if (
-                    message.content.startswith("<@968919979577704529>")
-                    or message.content.startswith("@waffle")
-                    or message.content.startswith("<@&1087205178194796567>")
-                ):
+                if message.content.startswith(
+                    "<@968919979577704529>"
+                ) or message.content.startswith("@waffle"):
                     i = i.replace("<@968919979577704529>", "")
                     messages.append({"role": "user", "content": i})
                     logger.info(f"Input sent: {i}")
