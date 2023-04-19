@@ -173,7 +173,7 @@ class DebridCog(commands.Cog):
                 if "xxx".upper() not in info["category"]:
                     logger.info(f"Added {torrent['torrentId']} to results.")
                     sanitized_results.append(torrent)
-                if len(sanitized_results) >= 5:
+                if len(sanitized_results) >= 10:
                     logger.info("Max results reached.")
                     break
             if len(sanitized_results) > 0:
@@ -195,7 +195,7 @@ class DebridCog(commands.Cog):
                 elif msg.content.startswith("!pick"):
                     pick = deb.eval_pick(msg.content.replace("!pick", "").strip())
                     # pick = int(msg.content[6:]) - 1
-                    if pick[0] > 5:
+                    if pick[0] > 10:
                         await ctx.send("WRONG")
                     elif len(pick) == 0 or pick[0] < 0:
                         await e.add_reaction("❌")

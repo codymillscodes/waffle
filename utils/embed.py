@@ -226,8 +226,8 @@ def torrent_results(results, emergency: bool = False):
         return embed
     else:
         embed = Embed()
-        if len(results) > 5:
-            results = results[:5]
+        if len(results) > 10:
+            results = results[:10]
         x = 0
         for torrent in results:
             result_value = f"Seeders: {torrent['seeders']} | Leechers: {torrent['leechers']} | Size: {torrent['size']}"
