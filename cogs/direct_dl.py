@@ -151,8 +151,15 @@ class DirectDLCog(commands.Cog):
                 file = discord.File(
                     f"tiktok/{tt_file['fn']}.mp4", filename=f"{tt_file['fn']}.mp4"
                 )
+                tt_message = urllib.parse.unquote(
+                    tt_file["url"]
+                    .replace("https://7aseln.debrid.it/dl/2qlpcij4ec2/", "")
+                    .replace(".480.mp4", "")
+                )
                 await message.delete()
-                await message.channel.send(f"<@{message.author.id}>", file=file)
+                await message.channel.send(
+                    f"<@{message.author.id}>\n{tt_message}", file=file
+                )
 
                 delete = await delete_file(f"tiktok/{tt_file['fn']}.mp4")
                 if delete:
