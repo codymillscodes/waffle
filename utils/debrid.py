@@ -106,7 +106,7 @@ async def get_tiktok_link(url):
                 )
                 logger.info(r)
 
-            if stream_fs >= 8388000:
+            if stream_fs >= 25214400:
                 logger.info("File too large")
                 return 0
 

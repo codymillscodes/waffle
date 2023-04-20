@@ -23,7 +23,7 @@ class EventsCog(commands.Cog):
             if member.id in self.streaming:
                 self.streaming.remove(member.id)
                 # logger.info(f"{member.name} stopped streaming")
-
+    
 
 async def setup(bot):
     await bot.add_cog(EventsCog(bot))
