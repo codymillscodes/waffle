@@ -151,7 +151,7 @@ class DirectDLCog(commands.Cog):
                 file = discord.File(
                     f"tiktok/{tt_file['fn']}.mp4", filename=f"{tt_file['fn']}.mp4"
                 )
-                tt_message = tt_file["url"].split("/", "")
+                tt_message = tt_file["url"].split("/")
                 tt_message = tt_message[-1].replace(".480.mp4", "")
                 await message.delete()
                 await message.channel.send(
