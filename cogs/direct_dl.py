@@ -159,7 +159,7 @@ class DirectDLCog(commands.Cog):
 
                 await message.delete()
                 await message.channel.send(
-                    f"<@{message.author.id}>\n{tt_message}", file=file
+                    f"<@{message.author.id}>\n>>> {tt_message}", file=file
                 )
 
                 delete = await delete_file(f"tiktok/{tt_file['fn']}.mp4")
