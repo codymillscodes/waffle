@@ -152,7 +152,11 @@ class DirectDLCog(commands.Cog):
                     f"tiktok/{tt_file['fn']}.mp4", filename=f"{tt_file['fn']}.mp4"
                 )
                 tt_message = tt_file["url"].split("/")
-                tt_message = tt_message[-1].replace(".480.mp4", "")
+                tt_message = urllib.parse.unquote(
+                    tt_message[-1].replace(".480.mp4", "")
+                )
+                logger.info(f"tt_message: {tt_message}")
+
                 await message.delete()
                 await message.channel.send(
                     f"<@{message.author.id}>\n{tt_message}", file=file
