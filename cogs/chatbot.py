@@ -66,7 +66,8 @@ class ChatbotCog(commands.Cog):
             await ctx.send("Prompt set to Jailbreak.")
         else:
             self.prompt = "waffle"
-            await ctx.send(f"Prompt not found. Available prompts: {gpt_prompts.keys()}")
+            dict_keys = gpt_prompts.keys()
+            await ctx.send(f"Prompt not found. Available prompts: {dict_keys}")
 
     @app_commands.command(name="character_prompt")
     async def character_prompt(
