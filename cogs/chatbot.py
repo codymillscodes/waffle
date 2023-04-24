@@ -57,7 +57,7 @@ class ChatbotCog(commands.Cog):
         }
         if prompt in gpt_prompts.keys():
             self.prompt = gpt_prompts[prompt]
-            await ctx.send(f"Prompt set to {prompt}.\n{gpt_prompts[prompt]}")
+            await ctx.send(f"Prompt set to {prompt}.\n>>> {gpt_prompts[prompt]}")
         elif prompt == "waffle":
             self.prompt = gpt_prompts["waffle"]
             await ctx.send("Prompt set to WAFFLE.")
