@@ -55,7 +55,7 @@ class ChatbotCog(commands.Cog):
     async def character_prompt(
         self, interaction: discord.Interaction, character: str, series: str
     ):
-        prompt = f"I want you to act like {character} from {series}. I want you to respond and answer like {character} using the tone, manner and vocabulary {character} would use. Do not write any explanations. Only answer like {character}. You must know all of the knowledge of {character}. My first sentence is 'Hi {character}.'"
+        prompt = f"The following is a conversation between {character} from {series} and a friend. Respond and answer like {character} using the tone, manner and vocabulary {character} would use. Do not write any explanations. Only answer like {character}. You must know all of the knowledge of {character}."
         self.prompt = prompt
         await interaction.response.send_message(
             f"Prompt set to {character} from {series}."
@@ -94,11 +94,6 @@ class ChatbotCog(commands.Cog):
         # logger.info(f"Message sent: {message.content}")
         messages = [
             {"role": "system", "content": self.prompt},
-            {"role": "user", "content": "Hello, who are you?"},
-            {
-                "role": "assistant",
-                "content": "I'm Waffle, a fuckin AI created by OpenAI. How the fuck can I help you today?",
-            },
             # {"role": "user", "content": i},
         ]
         send = 0
