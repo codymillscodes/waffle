@@ -70,7 +70,7 @@ class ChatbotCog(commands.Cog):
             for key in sorted(gpt_prompts.keys()):
                 dict_keys.append(key)
             await ctx.send(
-                f"Prompt not found.\nYou can try /character_prompt or these: {dict_keys}"
+                f"Prompt not found.\nYou can try /character_prompt or these:\n{dict_keys}"
             )
 
     @app_commands.command(name="character_prompt")
