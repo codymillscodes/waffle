@@ -69,7 +69,9 @@ class ChatbotCog(commands.Cog):
             dict_keys = []
             for key in sorted(gpt_prompts.keys()):
                 dict_keys.append(key)
-            await ctx.send(f"Prompt not found. Available prompts: {dict_keys}")
+            await ctx.send(
+                f"Prompt not found.\nYou can try /character_prompt or these: {dict_keys}"
+            )
 
     @app_commands.command(name="character_prompt")
     async def character_prompt(
