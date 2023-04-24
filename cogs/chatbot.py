@@ -41,12 +41,12 @@ class ChatbotCog(commands.Cog):
     async def setprompt(self, ctx, *, prompt: str):
         if prompt == "waffle":
             PRMPT = WAFFLE_PROMPT
-            ctx.send("Prompt set to WAFFLE.")
+            await ctx.send("Prompt set to WAFFLE.")
         elif prompt == "jailbreak":
             PRMPT = JAILBREAK_PROMPT
-            ctx.send("Prompt set to Jailbreak.")
+            await ctx.send("Prompt set to Jailbreak.")
         else:
-            ctx.send("Prompt not found.")
+            await ctx.send("Prompt not found.")
 
     @app_commands.command(
         name="dream",
