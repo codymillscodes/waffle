@@ -68,12 +68,24 @@ class SearchCog(commands.Cog):
             )
 
     @app_commands.command(name="fn", description="Get fortnite stats")
-    async def fn(self, interaction: discord.Interaction, user: str):
+    async def fn(
+        self,
+        interaction: discord.Interaction,
+        time: Literal["all-time", "seasonal"],
+        user: str,
+    ):
         logger.info(f"{interaction.user} wants {user}'s fortnite stats.")
         try:
-            stats = self.fnapi.stats.fetch_by_name(user, time_window=TimeWindow.SEASON)
-            embed = utils.embed.fortnite(stats)
-            await interaction.response.send_message(embed=embed)
+            if time == "seasonal":
+                stats = self.fnapi.stats.fetch_by_name(
+                    user, time_window=TimeWindow.SEASON
+                )
+                embed = utils.embed.fortnite(stats)
+                await interaction.response.send_message(embed=embed)
+            elif time == "all-time":
+                stats = self.fnapi.stats.fetch_by_name(user)
+                embed = utils.embed.fortnite(stats)
+                await interaction.response.send_message(embed=embed)
         except fortnite_api.errors.NotFound:
             await interaction.response.send_message("That's not a real player.")
 
