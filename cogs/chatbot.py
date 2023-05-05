@@ -21,6 +21,20 @@ class ChatbotCog(commands.Cog):
         # self.previous_messages = []
         openai.aiosession.set(Conn())
         self.prompt = WAFFLE_PROMPT
+        self.chatty = False
+
+    # @commands.command(name="have_waffle_talk_to_itself")
+    # async def have_waffle_talk_to_itself(self, ctx, *, state: bool):
+    #     self.chatty = state
+    #     while self.chatty:
+    #         response = await openai.Completion.create(
+    #             temperature=0.7,
+    #             max_tokens=2048,
+    #             engine=CHAT_ENGINE,
+    #             prompt=self.prompt,
+    #         )
+    #         logger.info(f"Waffle recvd: {response}")
+    #         self.prompt += response.choices[0].text
 
     @app_commands.command(
         name="gpt",
@@ -89,6 +103,7 @@ class ChatbotCog(commands.Cog):
     )
     async def dream(self, interaction: discord.Interaction, prompt: str):
         try:
+            await interaction.response.defer(thinking=True)
             response = await openai.Image.acreate(prompt=prompt, n=1, size="512x512")
             image_url = response["data"][0]["url"]
             filename = prompt
@@ -102,14 +117,12 @@ class ChatbotCog(commands.Cog):
                 # add if file exists check
                 with open(f"dreams/{filename}.png", "wb") as f:
                     f.write(image)
-            await interaction.response.send_message(
-                file=discord.File(f"dreams/{filename}.png")
-            )
+            await interaction.followup.send(file=discord.File(f"dreams/{filename}.png"))
         except openai.InvalidRequestError:
-            await interaction.response.send_message("Too offensive. :(")
+            await interaction.followup.send("Too offensive. :(")
         except Exception as e:
             logger.exception(e)
-            await interaction.response.send_message("Something went wrong. :(")
+            await interaction.followup.send("Something went wrong. :(")
 
     @commands.Cog.listener()
     async def on_message(self, message):
