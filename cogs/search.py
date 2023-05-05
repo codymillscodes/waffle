@@ -7,6 +7,7 @@ from howlongtobeatpy import HowLongToBeat
 from udpy import AsyncUrbanClient
 import fortnite_api
 from fortnite_api.enums import TimeWindow
+from typing import Literal
 import config
 import utils.embed
 from utils.urls import Urls
