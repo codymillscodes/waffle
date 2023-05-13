@@ -13,16 +13,15 @@ class EventsCog(commands.Cog):
     async def on_voice_state_update(self, member, before, after):
         if before.channel and after.channel:
             if (
-                before.self_stream != after.self_stream
-                and member.id not in self.streaming
+                before.self_stream is False and after.self_stream is True and member.id not in self.streaming
             ):
                 twitch_channel = await self.bot.fetch_channel(TWITCH_CHANNEL)
                 self.streaming.append(member.id)
                 await twitch_channel.send(embed=stream_embed(member.id))
-        else:
-            if member.id in self.streaming:
-                self.streaming.remove(member.id)
-                # logger.info(f"{member.name} stopped streaming")
+            else:
+                if member.id in self.streaming:
+                    self.streaming.remove(member.id)
+                    # logger.info(f"{member.name} stopped streaming")
     
 
 async def setup(bot):
