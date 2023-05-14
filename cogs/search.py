@@ -60,7 +60,8 @@ class SearchCog(commands.Cog):
             defs = await self.urban.get_definition(phrase)
         try:
             await interaction.response.send_message(
-                f"""**{defs[0].word}**\n`{defs[0].definition.replace("[", "").replace("]", "")}`\nEx: *{defs[0].example.replace("[", "").replace("]", "")}*"""
+                f"""**{defs[0].word}**\n`{defs[0].definition.replace("[", "").replace("]", "")}`\n"""
+                """Ex: *{defs[0].example.replace("[", "").replace("]", "")}*"""
             )
         except IndexError as ex:
             logger.exception(ex)

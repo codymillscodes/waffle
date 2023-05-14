@@ -56,10 +56,6 @@ async def delete_magnet(magnetid):
         return r["error"]["message"]
 
 
-def restart_magnet(magnetid):
-    pass
-
-
 async def instant_magnet(magnet):
     async with Conn() as resp:
         r = await resp.get_json(Urls.DEBRID_DELETE + magnet)

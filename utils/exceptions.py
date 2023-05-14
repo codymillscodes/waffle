@@ -1,5 +1,5 @@
 DEBRID_ERRORS = {
-    "GENERIC": "An error occured",
+    "GENERIC": "An error occurred",
     "404": "Endpoint doesn't exist",
     "AUTH_MISSING_AGENT": "You must send a meaningful agent parameter, see api docs",
     "AUTH_BAD_AGENT": "Bad agent",
@@ -21,7 +21,8 @@ DEBRID_ERRORS = {
     "STREAM_INVALID_GEN_ID": "Invalid generation ID",
     "STREAM_INVALID_STREAM_ID": "Invalid stream ID",
     "DELAYED_INVALID_ID": "This delayed link id is invalid",
-    "FREE_TRIAL_LIMIT_REACHED": "You have reached the free trial limit (7 days // 25GB downloaded or host uneligible for free trial)",
+    "FREE_TRIAL_LIMIT_REACHED": "You have reached the free trial limit (7 days // 25GB downloaded or host ineligible "
+                                "for free trial)",
     "MUST_BE_PREMIUM": "You must be premium to process this link",
     "MAGNET_INVALID_ID": "This magnet ID does not exists or is invalid",
     "MAGNET_INVALID_URI": "Magnet is not valid",
@@ -31,7 +32,8 @@ DEBRID_ERRORS = {
     "MAGNET_PROCESSING": "Magnet is processing or completed",
     "MAGNET_TOO_MANY_ACTIVE": "Already have maximum allowed active magnets (30)",
     "MAGNET_MUST_BE_PREMIUM": "You must be premium to use this feature",
-    "MAGNET_NO_SERVER": "Server are not allowed to use this feature. Visit https://alldebrid.com/vpn if you're using a VPN.",
+    "MAGNET_NO_SERVER": "Server are not allowed to use this feature. Visit https://alldebrid.com/vpn if you're using "
+                        "a VPN.",
     "MAGNET_TOO_LARGE": "Magnet files are too large (max 1TB)",
     "PIN_ALREADY_AUTHED": "You already have a valid auth apikey",
     "PIN_EXPIRED": "The pin is expired",

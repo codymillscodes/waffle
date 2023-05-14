@@ -1,8 +1,10 @@
-from discord.ext import commands
 import random
+
 import inflect
+from discord.ext import commands
 from loguru import logger
-from lib.buttwords import filter
+
+from lib.buttwords import butt_filter
 
 p = inflect.engine()
 
@@ -14,7 +16,7 @@ class ButtCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.chance = 5
-        self.filter = filter
+        self.filter = butt_filter
         self.pause_count = 0
 
     def buttify(self, message):
@@ -30,8 +32,6 @@ class ButtCog(commands.Cog):
                 words[butt_num] = "butt-" + parts[1]
             else:
                 words[butt_num] = parts[0] + "-butt"
-        elif "ing" in mod_word:
-            mod_word = "butting"
         else:
             if p.singular_noun(mod_word) is not False:
                 words[butt_num] = "butts"
@@ -54,14 +54,13 @@ class ButtCog(commands.Cog):
                 await message.channel.send("Roll tide!")
             else:
                 if (
-                    not message.content.startswith("!")
-                    and not "https://" in message.content
+                        not (message.content.startswith("!") or "https://" not in message.content)
                 ):
                     if (
-                        random.randint(1, 100) <= self.chance
-                        and self.pause_count == 0
-                        and "butt" not in message.content.lower()
-                        and len(message.content.split()) > 3
+                            random.randint(1, 100) <= self.chance
+                            and self.pause_count == 0
+                            and "butt" not in message.content.lower()
+                            and len(message.content.split()) > 3
                     ):
                         new_message = self.buttify(message.content)
 

@@ -8,6 +8,14 @@ from utils.helpers import get_folder_time
 from utils.connection import Connection as Conn
 
 
+async def get_log():
+    logs_folder = "/mnt/thumb/waffle/logs"
+    log_file = max(
+        glob.glob(os.path.join(logs_folder, "*.log")), key=os.path.getctime
+    )
+    return log_file
+
+
 class SystemCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -23,15 +31,8 @@ class SystemCog(commands.Cog):
     )
     async def log(self, ctx):
         logger.info(f"{ctx.author.name} called log command.")
-        log_file = await self.get_log()
+        log_file = await get_log()
         await ctx.reply(file=File(log_file), mention_author=False)
-
-    async def get_log(self):
-        logs_folder = "/mnt/thumb/waffle/logs"
-        log_file = max(
-            glob.glob(os.path.join(logs_folder, "*.log")), key=os.path.getctime
-        )
-        return log_file
 
     @commands.command(name="bug", description="Report a bug.", brief="Report a bug.")
     async def bug(self, ctx, *, bug: str):

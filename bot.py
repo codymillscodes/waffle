@@ -98,7 +98,7 @@ class Waffle(commands.Bot):
                         await self.db.set_twitcher_status(t["user"], True)
                         logger.info(f"{t['user']} is online.")
                         await twitch_channel.send(embed=embed)
-                elif stream_data["data"] == []:
+                elif not stream_data["data"]:
                     if t["online"]:
                         await self.db.set_twitcher_status(t["user"], False)
                         logger.info(f"{t['user']} is offline.")
@@ -121,31 +121,31 @@ class Waffle(commands.Bot):
         queue = list(queue)
         if len(queue) > 0:
             # logger.info(f"{queue}")
-            for id in queue:
-                if "active" in id["status"]:
-                    logger.info(f"Checking: {id['task_id']}")
-                    if "link" in id["type"]:
+            for dl_id in queue:
+                if "active" in dl_id["status"]:
+                    logger.info(f"Checking: {dl_id['task_id']}")
+                    if "link" in dl_id["type"]:
                         async with Conn() as resp:
                             r = await resp.get_json(
-                                Urls.DEBRID_DELAYED + str(id["task_id"])
+                                Urls.DEBRID_DELAYED + str(dl_id["task_id"])
                             )
-                            logger.info(Urls.DEBRID_DELAYED + str(id["task_id"]))
+                            logger.info(Urls.DEBRID_DELAYED + str(dl_id["task_id"]))
                             logger.debug(r)
 
                         if r["data"]["status"] == 2:
                             link = r["data"]["link"]
                             link_split = link.split("/")[-2:]
                             filename = urllib.parse.unquote(link_split[1])
-                            logger.info(f"removing {id['task_id']}")
-                            await self.db.set_status(id["task_id"], "complete")
-                            embed = download_ready(int(id["user_id"]), filename, link)
+                            logger.info(f"removing {dl_id['task_id']}")
+                            await self.db.set_status(dl_id["task_id"], "complete")
+                            embed = download_ready(int(dl_id["user_id"]), filename, link)
                             dl_channel = await self.fetch_channel(DL_CHANNEL)
                             await dl_channel.send(embed=embed)
                     else:
                         try:
                             async with Conn() as resp:
                                 status_json = await resp.get_json(
-                                    Urls.DEBRID_STATUS_ONE + str(id["task_id"])
+                                    Urls.DEBRID_STATUS_ONE + str(dl_id["task_id"])
                                 )
                         except Exception as e:
                             logger.exception(e)
@@ -155,16 +155,16 @@ class Waffle(commands.Bot):
                                 status_json["status"] == "error"
                                 or status_json["data"]["magnets"]["statusCode"] > 4
                             ):
-                                await self.db.set_status(id["task_id"], "failed")
-                                logger.info(f"removing {id['task_id']}")
+                                await self.db.set_status(dl_id["task_id"], "failed")
+                                logger.info(f"removing {dl_id['task_id']}")
 
                             elif "Ready" in status_json["data"]["magnets"]["status"]:
                                 await self.db.set_status(
-                                    task_id=id["task_id"], status="complete"
+                                    task_id=dl_id["task_id"], status="complete"
                                 )
                                 filename = status_json["data"]["magnets"]["filename"]
-                                embed = download_ready(id["user_id"], filename)
-                                logger.info(f"Removed: {id['task_id']}")
+                                embed = download_ready(dl_id["user_id"], filename)
+                                logger.info(f"Removed: {dl_id['task_id']}")
                                 dl_channel = await self.fetch_channel(DL_CHANNEL)
                                 await dl_channel.send(embed=embed)
                         except Exception as e:

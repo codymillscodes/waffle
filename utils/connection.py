@@ -20,9 +20,6 @@ class Connection:
         except TimeoutError:
             logger.info("Timeout error")
             return None
-        except:
-            logger.info(resp.text)
-            return None
 
     async def get_text(self, url):
         async with self.session.get(url, timeout=self.timeout) as resp:

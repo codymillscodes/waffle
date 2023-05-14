@@ -1,17 +1,29 @@
 import os
 import re
 import urllib.parse
-from discord.ext import commands
-from discord import app_commands
+
 import discord
 from bs4 import BeautifulSoup
+from discord import app_commands
+from discord.ext import commands
 from loguru import logger
-from config import DL_CHANNEL, WAFFLE_EMOJI
-from utils.embed import download_ready
-from utils.urls import Urls
+
+from config import DL_CHANNEL
 from utils.connection import Connection as Conn
 from utils.db import DB
 from utils.debrid import get_tiktok_link, download_tiktok_video, delete_file
+from utils.embed import download_ready
+from utils.urls import Urls
+
+
+async def get_title(url):
+    async with Conn() as resp:
+        r = await resp.get_text(url)
+    soup = BeautifulSoup(r, "html.parser")
+    s = soup.find("meta", property="og:title")
+    title = s["content"].split(", by ")
+    logger.info(f"Got title: {title}")
+    return title
 
 
 class DirectDLCog(commands.Cog):
@@ -24,7 +36,7 @@ class DirectDLCog(commands.Cog):
     )
     async def bandcamp(self, interaction: discord.Interaction, url: str):
         await interaction.response.defer(thinking=True)
-        title = await self.get_title(url)
+        title = await get_title(url)
         for t in range(len(title)):
             title[t] = re.sub(r"[^\w\s]", "", title[t].lower())
             title[t] = re.sub(r"\s+", "-", title[t])
@@ -43,30 +55,30 @@ class DirectDLCog(commands.Cog):
             await interaction.response.defer(thinking=True)
             async with Conn() as resp:
                 result = await resp.get_json(Urls.DEBRID_UNLOCK + link)
-            id = result["data"]["id"]
+            yt_id = result["data"]["id"]
             filename = result["data"]["filename"]
-            logger.info(f"Unlocking ({id}) : {filename}")
+            logger.info(f"Unlocking ({yt_id}) : {filename}")
             stream = urllib.parse.quote(result["data"]["streams"][0]["id"])
             async with Conn() as resp:
                 result = await resp.get_json(
-                    f"{Urls.DEBRID_STREAMING}{id}&stream={stream}"
+                    f"{Urls.DEBRID_STREAMING}{yt_id}&stream={stream}"
                 )
-            id = result["data"]["delayed"]
-            logger.info(f"Got delayed ID: {id}")
+            yt_id = result["data"]["delayed"]
+            logger.info(f"Got delayed ID: {yt_id}")
             async with Conn() as resp:
-                re = await resp.get_json(Urls.DEBRID_DELAYED + str(id))
-            if re["data"]["status"] != 2:
-                await DB().add_to_queue([id, filename, interaction.user.id, "link"])
-                logger.info(f"{id} not ready, added to queue.")
+                resp = await resp.get_json(Urls.DEBRID_DELAYED + str(yt_id))
+            if resp["data"]["status"] != 2:
+                await DB().add_to_queue([yt_id, filename, interaction.user.id, "link"])
+                logger.info(f"{yt_id} not ready, added to queue.")
                 await interaction.followup.send(
                     "It's not ready and there's no !stat for this."
                 )
-            elif re["data"]["status"] == 2:
-                link = re["data"]["link"]
-                dlchannel = await self.bot.fetch_channel(DL_CHANNEL)
+            elif resp["data"]["status"] == 2:
+                link = resp["data"]["link"]
+                dl_channel = await self.bot.fetch_channel(DL_CHANNEL)
                 embed = download_ready(interaction.user, filename, link)
-                logger.info(f"{id} ready.")
-                await dlchannel.send(embed=embed)
+                logger.info(f"{yt_id} ready.")
+                await dl_channel.send(embed=embed)
         else:
             await interaction.response.send_message("Only supports youtube for now.")
 
@@ -78,9 +90,9 @@ class DirectDLCog(commands.Cog):
         await interaction.response.defer(thinking=True)
         async with Conn() as resp:
             result = await resp.get_json(Urls.DEBRID_UNLOCK + url)
-        id = result["data"]["id"]
+        vid_id = result["data"]["id"]
         filename = result["data"]["filename"]
-        logger.info(f"Unlocking ({id}) : {filename}")
+        logger.info(f"Unlocking ({vid_id}) : {filename}")
         for stream in result["data"]["streams"]:
             logger.debug(f"Stream: {stream}")
             if stream["quality"] == 1080:
@@ -95,49 +107,33 @@ class DirectDLCog(commands.Cog):
             await interaction.followup.send("No 1080p, 720p, 480p, 360p or 240p found.")
             return
         async with Conn() as resp:
-            result = await resp.get_json(f"{Urls.DEBRID_STREAMING}{id}&stream={stream}")
-        logger.info(f"url: {Urls.DEBRID_STREAMING}{id}&stream={stream}")
+            result = await resp.get_json(f"{Urls.DEBRID_STREAMING}{vid_id}&stream={stream}")
+        logger.info(f"url: {Urls.DEBRID_STREAMING}{vid_id}&stream={stream}")
         try:
-            id = result["data"]["delayed"]
-            logger.info(f"Got delayed ID: {id}")
+            vid_id = result["data"]["delayed"]
+            logger.info(f"Got delayed ID: {vid_id}")
             async with Conn() as resp:
-                re = await resp.get_json(Urls.DEBRID_DELAYED + str(id))
-            if re["data"]["status"] != 2:
-                await DB().add_to_queue([id, filename, interaction.user.id, "link"])
-                logger.info(f"{id} not ready, added to queue.")
+                resp = await resp.get_json(Urls.DEBRID_DELAYED + str(vid_id))
+            if resp["data"]["status"] != 2:
+                await DB().add_to_queue([vid_id, filename, interaction.user.id, "link"])
+                logger.info(f"{vid_id} not ready, added to queue.")
                 # discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
                 await interaction.followup.send(
                     "It's not ready and there's no !stat for this."
                 )
-            elif re["data"]["status"] == 2:
-                link = re["data"]["link"]
-                dlchannel = await self.bot.fetch_channel(DL_CHANNEL)
+            elif resp["data"]["status"] == 2:
+                link = resp["data"]["link"]
+                dl_channel = await self.bot.fetch_channel(DL_CHANNEL)
                 embed = download_ready(interaction.user, filename, link)
-                logger.info(f"{id} ready.")
-                await dlchannel.send(embed=embed)
-        except KeyError:
-            link = result["data"]["link"]
+                logger.info(f"{vid_id} ready.")
+                await dl_channel.send(embed=embed)
+        except KeyError as e:
+            # link = result["data"]["link"]
+            logger.exception(e)
+            await interaction.followup.send('ERROR')
 
         # else:
-        #    await ctx.reply("Only supports youtube for now.", mention_author=False)
-
-    async def get_title(self, url):
-        async with Conn() as resp:
-            r = await resp.get_text(url)
-        soup = BeautifulSoup(r, "html.parser")
-        s = soup.find("meta", property="og:title")
-        title = s["content"].split(", by ")
-        logger.info(f"Got title: {title}")
-        return title
-
-    @commands.command(name="tiktest")
-    async def tiktest(self, ctx, url):
-        link = await get_tiktok_link(url)
-        tt_file = await download_tiktok_video(link)
-        logger.info(f"tt_file: {tt_file}")
-        if tt_file == "Downloaded":
-            file = discord.File("tiktok.mp4", filename="tiktok.mp4")
-            await ctx.reply(file=file, mention_author=False)
+        #    await ctx.reply("Only supports YouTube for now.", mention_author=False)
 
     @commands.Cog.listener()
     async def on_message(self, message):
