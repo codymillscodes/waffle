@@ -44,7 +44,7 @@ def runescape(name, char_stats):
         "Archaeology",
     ]
     stats = {}
-    char_stats = char_stats[0 : len(stat_names)]
+    char_stats = char_stats[0: len(stat_names)]
     for i in range(len(char_stats)):
         stats[stat_names[i]] = char_stats[i][1]
         # combat level = ((max((str + atk), (mag * 2), (rng * 2)) * 1.3) + def + hp + (pray / 2) + (sum / 2)) / 4;
@@ -192,7 +192,7 @@ def debrid_status(all_status):
     return embed
 
 
-def download_ready(author: Member, magnet, link=None):
+def download_ready(author, magnet, link=None):
     embed = Embed(description=f"<@{author}>")
     if link is None:
         link = f"{DEBRID_WEBDAV}magnets/{quote(magnet)}/"
