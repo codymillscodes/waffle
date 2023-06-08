@@ -15,9 +15,18 @@ class DB:
         self.users = self.client["users"]
         self.reco = self.client["reco"]
         self.remind = self.client["reminders"]
+        self.theforest = self.client["theforest"]
 
     # async def get_queue(self):
     #    return self.queue.find({})
+    async def increment_forest_stat(self, user_id):
+        pass
+
+    async def add_forest_stat(self, user_id):
+        pass
+
+    async def get_forest_stat(self, user_id):
+        pass
 
     async def get_active_queue(self):
         return self.queue.find({"status": "active"})
