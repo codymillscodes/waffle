@@ -2,6 +2,7 @@ twitchers.txt
 debrid.txt
 dreams/
 cogs/reminders.py
+test_scripts/
 *.ini
 
 # Byte-compiled / optimized / DLL files

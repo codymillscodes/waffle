@@ -1,6 +1,8 @@
 import os
 import glob
+import discord
 from discord import File
+from discord import app_commands
 from discord.ext import commands
 from loguru import logger
 from config import ADMIN_ROLE, GITEA_TOKEN, GITEA_ISSUE_URL
@@ -10,9 +12,7 @@ from utils.connection import Connection as Conn
 
 async def get_log():
     logs_folder = "/mnt/thumb/waffle/logs"
-    log_file = max(
-        glob.glob(os.path.join(logs_folder, "*.log")), key=os.path.getctime
-    )
+    log_file = max(glob.glob(os.path.join(logs_folder, "*.log")), key=os.path.getctime)
     return log_file
 
 
@@ -34,36 +34,38 @@ class SystemCog(commands.Cog):
         log_file = await get_log()
         await ctx.reply(file=File(log_file), mention_author=False)
 
-    @commands.command(name="bug", description="Report a bug.", brief="Report a bug.")
-    async def bug(self, ctx, *, bug: str):
-        logger.info(f"{ctx.author.name} reported a bug: {bug}")
-        # messages = [message async for message in ctx.channel.history(limit=5)]
-        # messages.reverse()
-        # messages = "\n".join([f"{m.author.name}: {m.content}" for m in messages])
-        # log_file = await self.get_log()
-        # with open(log_file, "r") as f:
-        #    log = f.read()
-        gitea_headers = {"Content-Type": "application/json"}
-        gitea_data = {
-            "assignee": "idiotdoomspiral",
-            "body": f"Bug reported by {ctx.author.name}.",
-            "closed": False,
-            "milestone": 0,
-            "ref": "",
-            "title": f"{bug}",
-        }
-        async with Conn() as resp:
-            resp = await resp.post_json(
-                f"{GITEA_ISSUE_URL}?access_token={GITEA_TOKEN}",
-                headers=gitea_headers,
-                data=gitea_data,
-            )
-        logger.info(resp)
+    @app_commands.command(name="bug", description="Report a bug.")
+    async def bug(self, interaction: discord.Interaction, bug: str):
+        logger.info(f"{interaction.user} reported a bug: {bug}")
+        # gitea_headers = {"Content-Type": "application/json"}
+        # gitea_data = {
+        #     "assignee": "idiotdoomspiral",
+        #     "body": f"Bug reported by {ctx.author.name}.",
+        #     "closed": False,
+        #     "milestone": 0,
+        #     "ref": "",
+        #     "title": f"{bug}",
+        # }
+        # async with Conn() as resp:
+        #     resp = await resp.post_json(
+        #         f"{GITEA_ISSUE_URL}?access_token={GITEA_TOKEN}",
+        #         headers=gitea_headers,
+        #         data=gitea_data,
+        #     )
+        # logger.info(resp)
         admin = await self.bot.fetch_user(ADMIN_ROLE)
         await admin.send(f"New bug reported.\n{bug}")
-        await ctx.reply(
-            f"Thanks for reporting a bug!",
-            mention_author=False,
+        await interaction.response.send_message(
+            "Thanks for reporting a bug!", ephemeral=True
+        )
+
+    @app_commands.command(name="feature_request", description="Request a feature.")
+    async def feature_request(self, interaction: discord.Interaction, *, feature: str):
+        logger.info(f"{interaction.user} requested a feature: {feature}")
+        admin = await self.bot.fetch_user(ADMIN_ROLE)
+        await admin.send(f"New feature requested.\n{feature}")
+        await interaction.response.send_message(
+            "Thanks for requesting a feature!", ephemeral=True
         )
 
     # @commands.command(name="clear")

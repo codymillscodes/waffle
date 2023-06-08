@@ -13,7 +13,7 @@ DISCORD_OAUTH_SECRET = os.environ["DISCORD_OAUTH_SECRET"]
 LOG_CHANNEL = os.environ["LOG_CHANNEL"]
 DL_CHANNEL = os.environ["DL_CHANNEL"]
 RESTART_ROLE = os.environ["RESTART_ROLE"]
-
+MUSIC_CHANNEL = os.environ["MUSIC_CHANNEL"]
 # debrid settings
 DEBRID_AGENT = os.environ["DEBRID_AGENT"]
 DEBRID_KEY = os.environ["DEBRID_KEY"]
@@ -40,6 +40,12 @@ ADMIN_ROLE = os.environ["ADMIN_ROLE"]
 
 GITEA_TOKEN = os.environ["GITEA_TOKEN"]
 GITEA_ISSUE_URL = os.environ["GITEA_ISSUE_URL"]
+
+# Spotify settings
+SPOTIPY_CLIENT_ID = os.environ["SPOTIPY_CLIENT_ID"]
+SPOTIPY_CLIENT_SECRET = os.environ["SPOTIPY_CLIENT_SECRET"]
+SPOTIPY_REDIRECT_URI = os.environ["SPOTIPY_REDIRECT_URI"]
+PLAYLIST_URI = os.environ["PLAYLIST_URI"]
 
 IGNORE_CHANNELS = os.environ["IGNORE_CHANNELS"].split(",")
 for i in range(len(IGNORE_CHANNELS)):

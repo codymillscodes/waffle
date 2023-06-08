@@ -1,3 +1,4 @@
+from discord import app_commands
 from discord.ext import commands
 from random import randint
 from loguru import logger
@@ -8,25 +9,21 @@ class MiscCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="roll", description="Roll a dice")
-    async def roll(self, ctx, dice: str):
+    @app_commands.command(name="roll", description="Roll a dice")
+    async def roll(self, interaction: discord.Interaction, num: int, faces: int):
         """Rolls a die in NdN format."""
-        logger.info(f"{ctx.author} rolled {dice}")
-        minimum = 1
-        if "d" not in dice and dice.isdigit():
-            await ctx.send(f"You rolled a {randint(minimum, int(dice))}")
-        elif "d" in dice:
-            rolls = []
-            num_to_roll = int(dice.split("d")[0])
-            for i in range(num_to_roll):
-                rolls.append(randint(1, int(dice.split("d")[1])))
-            if len(rolls) == 1:
-                await ctx.send(f"You rolled a {rolls[0]}")
-            elif len(rolls) > 1:
-                await ctx.send(f"You rolled {rolls} = {sum(rolls)}")
+        logger.info(f"{interaction.user} rolled {num}d{faces}")
+        rolls = []
+        for i in range(num):
+            rolls.append(randint(1, faces))
+        if len(rolls) == 1:
+            await interaction.response.send_message(f"You rolled a {rolls[0]}")
+        elif len(rolls) > 1:
+            await interaction.response.send_message(
+                f"You rolled {rolls} = {sum(rolls)}"
+            )
         else:
-            await ctx.send("Invalid input")
-            return
+            await interaction.response.send_message("Invalid input")
 
     @commands.command(name="test", description="Test command")
     async def test(self, ctx):

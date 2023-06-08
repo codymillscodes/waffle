@@ -1,3 +1,4 @@
+import discord
 from discord.ext import commands
 from loguru import logger
 from bs4 import BeautifulSoup
@@ -14,13 +15,14 @@ class ImagesCog(commands.Cog):
         description="Receive a random image from a forgotten time, from a forgotten place.",
         brief="Random image.",
     )
-    async def waffle(self, ctx):
+    async def waffle(self, interaction: discord.Interaction):
+        await interaction.response.defer(thinking=True)
         logger.info("Image requested: waffle")
         async with Conn() as resp:
             r = await resp.get_text(Urls.WAFFLE_URL)
         image = BeautifulSoup(r, "html.parser").find("img").attrs["src"]
         logger.info(image)
-        await ctx.reply(Urls.WAFFLE_URL + image, mention_author=False)
+        await interaction.followup.send(Urls.WAFFLE_URL + image, mention_author=False)
 
     @commands.command(
         name="cat",
