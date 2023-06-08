@@ -40,7 +40,7 @@ class MusicCog(commands.Cog):
 
         return add_tracks
 
-    @app_commands.command(name="Playlist URL", description="Get the playlist URL.")
+    @app_commands.command(name="playlist_url", description="Get the playlist URL.")
     async def playlist_url(self, interaction: discord.Interaction):
         await interaction.response.send_message(
             "https://open.spotify.com/playlist/6xHdV7jlRcuon1AaUDVvNb?si=e1ae8290dd4247a8",
