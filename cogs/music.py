@@ -21,6 +21,8 @@ class MusicCog(commands.Cog):
                 client_secret=SPOTIPY_CLIENT_SECRET,
                 redirect_uri=SPOTIPY_REDIRECT_URI,
                 scope="playlist-modify-public",
+                open_browser=False,
+                show_dialog=True,
             )
         )
         self.PLAYLIST_URI = PLAYLIST_URI
@@ -71,8 +73,9 @@ class MusicCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
+        MUSIC_CHANNEL = await self.bot.fetch_channel(MUSIC_CHANNEL)
         if (
-            message.channel.id == MUSIC_CHANNEL
+            message.channel.id == MUSIC_CHANNEL.id
             and "https://open.spotify.com/" in message.content
         ):
             try:
