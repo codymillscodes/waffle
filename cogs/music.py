@@ -76,6 +76,7 @@ class MusicCog(commands.Cog):
             and "https://open.spotify.com/" in message.content
         ):
             try:
+                logger.info(f"Got spotify link: {message.content}")
                 if message.content.startswith("https://open.spotify.com/album/"):
                     album = self.spotify.album(message.content)
                     track_uris = []
