@@ -28,6 +28,9 @@ class DB:
     async def get_forest_stat(self, user_id):
         pass
 
+    async def get_all_forest_stats(self):
+        pass
+
     async def get_active_queue(self):
         return self.queue.find({"status": "active"})
 

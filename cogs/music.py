@@ -28,8 +28,9 @@ class MusicCog(commands.Cog):
         self.PLAYLIST_URI = PLAYLIST_URI
 
     async def check_existing_tracks(self, tracks: list):
+        logger.info(f"Checking {len(tracks)} tracks.")
         playlist_tracks = []
-        playlist = self.spotify.playlist_tracks(PLAYLIST_URI)["items"]
+        playlist = self.spotify.playlist_items(PLAYLIST_URI)["items"]
         for track in playlist:
             playlist_tracks.append(track["track"]["uri"])
         if len(tracks) == 1:
@@ -40,7 +41,7 @@ class MusicCog(commands.Cog):
         for track in tracks:
             if track not in playlist_tracks:
                 add_tracks.append(track)
-
+        logger.info(f"Found {len(add_tracks)} new tracks.")
         return add_tracks
 
     @app_commands.command(name="playlist_url", description="Get the playlist URL.")
@@ -92,7 +93,7 @@ class MusicCog(commands.Cog):
                 if message.content.startswith("https://open.spotify.com/album/"):
                     album = self.spotify.album(message.content)
                     track_uris = []
-
+                    logger.info(f"Got album: {album['name']}")
                     for track in album["tracks"]["items"]:
                         track_uris.append(track["uri"])
 
@@ -100,6 +101,7 @@ class MusicCog(commands.Cog):
 
                 elif message.content.startswith("https://open.spotify.com/track/"):
                     track = self.spotify.track(message.content)
+                    logger.info(f"Got track: {track['name']}")
                     add_tracks = await self.check_existing_tracks([track["uri"]])
 
                 if len(add_tracks) > 0:

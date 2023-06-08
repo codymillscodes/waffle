@@ -78,7 +78,7 @@ class Waffle(commands.Bot):
         twitchers = await self.db.get_twitchers()
         twitchers = list(twitchers)
         # logger.debug("Checking twitchers...")
-        logger.info(f"Checking {len(twitchers)} twitchers...")
+        logger.debug(f"Checking {len(twitchers)} twitchers...")
         for t in twitchers:
             async with Conn() as resp:
                 stream_data = await resp.get_json(
@@ -138,7 +138,9 @@ class Waffle(commands.Bot):
                             filename = urllib.parse.unquote(link_split[1])
                             logger.info(f"removing {dl_id['task_id']}")
                             await self.db.set_status(dl_id["task_id"], "complete")
-                            embed = download_ready(int(dl_id["user_id"]), filename, link)
+                            embed = download_ready(
+                                int(dl_id["user_id"]), filename, link
+                            )
                             dl_channel = await self.fetch_channel(DL_CHANNEL)
                             await dl_channel.send(embed=embed)
                     else:
