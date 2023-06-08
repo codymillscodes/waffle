@@ -95,7 +95,9 @@ class MusicCog(commands.Cog):
 
                 if len(add_tracks) > 0:
                     logger.info(f"Adding {len(add_tracks)} tracks to playlist.")
-                    message.add_reaction("🧇")
+                    await message.add_reaction("🧇")
+                    results = self.spotify.playlist_add_items(PLAYLIST_URI, add_tracks)
+                    logger.info("Spotify:", results)
 
             except spotipy.exceptions.SpotifyException:
                 logger.error("SpotifyException")
