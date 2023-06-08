@@ -40,6 +40,12 @@ class MusicCog(commands.Cog):
 
         return add_tracks
 
+    @app_commands.command(name="Playlist URL", description="Get the playlist URL.")
+    async def playlist_url(self, interaction: discord.Interaction):
+        await interaction.response.send_message(
+            "https://open.spotify.com/playlist/6xHdV7jlRcuon1AaUDVvNb?si=e1ae8290dd4247a8",
+        )
+
     # @app_commands.command(
     #     name="sync_playlist", description="Syncs the playlist with the channel"
     # )
@@ -96,8 +102,7 @@ class MusicCog(commands.Cog):
                 if len(add_tracks) > 0:
                     logger.info(f"Adding {len(add_tracks)} tracks to playlist.")
                     await message.add_reaction("🧇")
-                    results = self.spotify.playlist_add_items(PLAYLIST_URI, add_tracks)
-                    logger.info("Spotify:", results)
+                    self.spotify.playlist_add_items(PLAYLIST_URI, add_tracks)
 
             except spotipy.exceptions.SpotifyException:
                 logger.error("SpotifyException")
