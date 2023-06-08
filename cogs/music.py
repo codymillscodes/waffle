@@ -32,6 +32,9 @@ class MusicCog(commands.Cog):
         playlist = self.spotify.playlist_tracks(PLAYLIST_URI)["items"]
         for track in playlist:
             playlist_tracks.append(track["track"]["uri"])
+        if len(tracks) == 1:
+            if tracks[0] in playlist_tracks:
+                return []
 
         add_tracks = []
         for track in tracks:
