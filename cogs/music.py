@@ -73,9 +73,9 @@ class MusicCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        MUSIC_CHANNEL = await self.bot.fetch_channel(MUSIC_CHANNEL)
+        music_channel = await self.bot.fetch_channel(MUSIC_CHANNEL)
         if (
-            message.channel.id == MUSIC_CHANNEL.id
+            message.channel.id == music_channel.id
             and "https://open.spotify.com/" in message.content
         ):
             try:
