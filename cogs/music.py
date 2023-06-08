@@ -93,7 +93,7 @@ class MusicCog(commands.Cog):
                     track = self.spotify.track(message.content)
                     add_tracks = await self.check_existing_tracks([track["uri"]])
 
-                if add_tracks > 0:
+                if len(add_tracks) > 0:
                     logger.info(f"Adding {len(add_tracks)} tracks to playlist.")
                     message.add_reaction("🧇")
 
