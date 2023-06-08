@@ -27,7 +27,7 @@ class MusicCog(commands.Cog):
         )
         self.PLAYLIST_URI = PLAYLIST_URI
 
-    async def check_existing_tracks(self, tracks):
+    async def check_existing_tracks(self, tracks: list):
         playlist_tracks = []
         playlist = self.spotify.playlist_tracks(PLAYLIST_URI)["items"]
         for track in playlist:
