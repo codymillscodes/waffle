@@ -29,6 +29,7 @@ class MusicCog(commands.Cog):
 
     async def check_existing_tracks(self, tracks: list):
         logger.info(f"Checking {len(tracks)} tracks.")
+        logger.info(f"Tracks: {tracks}")
         playlist_tracks = []
         playlist = self.spotify.playlist_items(PLAYLIST_URI)["items"]
         for track in playlist:
