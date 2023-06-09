@@ -39,7 +39,7 @@ class MusicCog(commands.Cog):
                     tracks.remove(t)
                 else:
                     track_query = self.spotify.track(t)
-                    db_tracks[track_query["track"]["artists"][0]["name"]] = track["uri"]
+                    db_tracks[track_query["name"]] = track["uri"]
 
         # logger.info(f"Playlist tracks: {playlist_tracks}")
         DB().add_to_playlist(db_tracks)
