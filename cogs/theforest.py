@@ -46,3 +46,7 @@ class ForestCog(commands.Cog):
         for key, value in self.forest_stats.items():
             embed.add_field(name=key, value=value)
         await interaction.response.send_message(embed=embed)
+
+
+async def setup(bot):
+    await bot.add_cog(ForestCog(bot))
