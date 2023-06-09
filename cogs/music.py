@@ -10,6 +10,7 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 from loguru import logger
+from utils.db import DB
 
 
 class MusicCog(commands.Cog):
@@ -30,21 +31,20 @@ class MusicCog(commands.Cog):
     async def check_existing_tracks(self, tracks: list):
         logger.info(f"Checking {len(tracks)} tracks.")
         logger.info(f"Tracks: {tracks}")
-        playlist_tracks = []
-        playlist = self.spotify.playlist_items(PLAYLIST_URI)["items"]
-        for track in playlist:
-            playlist_tracks.append(track["track"]["uri"])
-        logger.info(f"Playlist tracks: {playlist_tracks}")
-        if len(tracks) == 1:
-            if tracks[0] in playlist_tracks:
-                return []
+        r = await DB().get_playlist()
+        db_tracks = {}
+        for track in r:
+            for t in tracks:
+                if t == track["uri"]:
+                    tracks.remove(t)
+                else:
+                    track_query = self.spotify.track(t)["items"]
+                    db_tracks[track_query["track"]["artists"][0]["name"]] = track["uri"]
 
-        add_tracks = []
-        for track in tracks:
-            if track not in playlist_tracks:
-                add_tracks.append(track)
-        logger.info(f"Found {len(add_tracks)} new tracks.")
-        return add_tracks
+        # logger.info(f"Playlist tracks: {playlist_tracks}")
+        DB().add_to_playlist(db_tracks)
+        logger.info(f"Found {len(tracks)} new tracks.")
+        return tracks
 
     @app_commands.command(name="playlist_url", description="Get the playlist URL.")
     async def playlist_url(self, interaction: discord.Interaction):

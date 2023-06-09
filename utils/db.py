@@ -16,9 +16,22 @@ class DB:
         self.reco = self.client["reco"]
         self.remind = self.client["reminders"]
         self.theforest = self.client["theforest"]
+        self.playlist = self.client["playlist"]
 
     # async def get_queue(self):
     #    return self.queue.find({})
+    async def get_playlist(self):
+        return self.playlist.find({})
+
+    async def add_to_playlist(self, tracks: list):
+        for track in tracks:
+            data = {
+                "name": track,
+                "uri": tracks[track],
+            }
+            r = self.playlist.insert_one(data)
+        logger.info(f"Added to playlist: {r.inserted_id}")
+
     async def increment_forest_stat(self, user_id):
         pass
 
