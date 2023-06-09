@@ -32,7 +32,7 @@ class ForestCog(commands.Cog):
         self, interaction: discord.Interaction, stat: str, value: int
     ):
         await self.check_forest_file()
-        if int > 1:
+        if value > 1:
             self.forest_stats[stat] += value
         else:
             self.forest_stats[stat] += value
