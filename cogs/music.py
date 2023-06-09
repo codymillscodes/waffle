@@ -45,7 +45,8 @@ class MusicCog(commands.Cog):
                     ] = track_query["uri"]
 
         # logger.info(f"Playlist tracks: {playlist_tracks}")
-        await DB().add_to_playlist(db_tracks)
+        if len(db_tracks) > 0:
+            await DB().add_to_playlist(db_tracks)
         logger.info(f"Found {len(tracks)} new tracks.")
         return tracks
 
