@@ -86,7 +86,9 @@ class ForestCog(commands.Cog):
             interaction.user, f"{datetime.now}| {stat} + {value}"
         )
         logger.info(f"Updated {stat} to {self.forest_stats[stat]}")
-        await interaction.response.send_message(f"Updated {stat} to {value}")
+        await interaction.response.send_message(
+            f"Updated {stat} to {self.forest_stats[stat]}"
+        )
 
     @app_commands.command(name="set_forest_stat", description="Update forest stat")
     async def set_forest_stat(
