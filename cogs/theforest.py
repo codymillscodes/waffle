@@ -77,9 +77,10 @@ class ForestCog(commands.Cog):
         if self.forest_stats.get(stat) is None:
             self.forest_stats[stat] = 0
         if value > 1:
-            self.forest_stats[stat] += value
+            stat_change = int(self.forest_stats[stat]) + value
+            self.forest_stats[stat] = stat_change
         else:
-            self.forest_stats[stat] += value
+            self.forest_stats[stat] = int(self.forest_stats[stat]) + 1
         await self.write_forest_stats()
         await self.write_forest_log(
             interaction.user, f"{datetime.now}| {stat} + {value}"
