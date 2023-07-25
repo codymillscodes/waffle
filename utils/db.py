@@ -25,6 +25,7 @@ class DB:
 
     async def find_track(self, uri):
         count = self.playlist.count_documents({"uri": uri})
+        logger.info(count)
         found = count > 0
         return found
 

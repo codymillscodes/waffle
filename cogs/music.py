@@ -33,7 +33,7 @@ class MusicCog(commands.Cog):
         logger.info(f"Tracks: {tracks}")
         db_tracks = {}
         for t in tracks:
-            if DB().find_track(t):
+            if await DB().find_track(t):
                 track_query = self.spotify.track(t)
                 db_tracks[
                     f"{track_query['artists'][0]['name']} - {track_query['name']}"
