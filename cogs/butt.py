@@ -21,7 +21,7 @@ def is_noun(word):
 class ButtCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.chance = 5
+        self.chance = 50
         self.filter = butt_filter
         self.pause_count = 0
 
@@ -32,9 +32,9 @@ class ButtCog(commands.Cog):
         while (
             words[butt_num] in self.filter
             or words[butt_num].startswith(":")
-            and is_noun(words[butt_num])
+            and not is_noun(words[butt_num])
         ):
-            logger.info(f"{words[butt_num]} is a noun.")
+            logger.info(f"{words[butt_num]} is not a noun.")
             butt_num = randint(1, len(words) - 1)
         mod_word = words[butt_num]
         if "-" in mod_word:
