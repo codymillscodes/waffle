@@ -41,7 +41,7 @@ class ChatbotCog(commands.Cog):
         self.prompt = gpt_prompts["waffle"]
         self.engine = "gpt-3.5-turbo"
 
-    @app_commands.command(name="chatbot_status", description="get engine and prompt")
+    @app_commands.command(name="chatbot_status", description="get engine and")
     async def chatbot_status(self, interaction: discord.Interaction):
         await interaction.response.send_message(
             f">>> **Engine**: {self.engine}\n**Prompt**: {self.prompt}"
@@ -82,14 +82,6 @@ class ChatbotCog(commands.Cog):
         elif prompts == "jailbreak":
             self.prompt = gpt_prompts["jailbreak"]
             await interaction.response.send_message("Prompt set to Jailbreak.")
-        elif prompts in self.prompt_list:
-            self.prompt = gpt_prompts[prompts]
-            await interaction.response.send_message(f"Prompt set to {prompts}.")
-        else:
-            self.prompt = "waffle"
-            await interaction.response.send_message(
-                f"Prompt not found.\nYou can try /character_prompt or these:\n{self.prompt_list}"
-            )
 
     @app_commands.command(name="character_prompt")
     async def character_prompt(
@@ -185,7 +177,7 @@ class ChatbotCog(commands.Cog):
                 response = await openai.ChatCompletion.acreate(
                     temperature=0.7,
                     max_tokens=4000 - tokens,
-                    model=CHAT_ENGINE,
+                    model=self.engine,
                     messages=messages,
                 )
                 r = response.choices[0].message.content
