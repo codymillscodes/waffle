@@ -9,6 +9,52 @@ from utils.urls import Urls
 from random import randint
 
 
+def twitcher_embed(twitchers, online=False):
+    embed = Embed(title="__Twitchers__", color=0x00FF00)
+    for t in twitchers:
+        if online and t["online"]:
+            embed.add_field(
+                name=f"{t['user']}",
+                value=f"Status: ONLINE\nGame: {t['game']}\n{Urls.TWITCH_CHANNEL}{t['user']}",
+                inline=False,
+            )
+        elif online == False:
+            if t["online"]:
+                embed.add_field(
+                    name=f"{t['user']}",
+                    value=f"Status: ONLINE\nGame: {t['game']}\n{Urls.TWITCH_CHANNEL}{t['user']}",
+                    inline=False,
+                )
+            else:
+                embed.add_field(
+                    name=f"{t['user']}",
+                    value=f"Status: OFFLINE\n{Urls.TWITCH_CHANNEL}{t['user']}",
+                    inline=False,
+                )
+    return embed
+
+
+def juiceme():
+    embed = Embed(title="Community Links")
+    embed.add_field(
+        name="**Minecraft Realm**",
+        value="https://realms.gg/3b-xkx4knfE",
+        inline=False,
+    )
+    embed.add_field(
+        name="YouTube Channel",
+        value="https://www.youtube.com/@turbulent_juice",
+        inline=False,
+    )
+    embed.add_field(
+        name="bad-music Playlist",
+        value="https://open.spotify.com/playlist/6xHdV7jlRcuon1AaUDVvNb?si=e1ae8290dd4247a8",
+        inline=False,
+    )
+
+    return embed
+
+
 def runescape(name, char_stats):
     embed = Embed(title=f"{name}'s stats", color=0x00FF00)
     logger.info(f"Building embed for {name}")
@@ -192,7 +238,7 @@ def debrid_status(all_status):
     return embed
 
 
-def download_ready(author: int, magnet, link=None):
+def download_ready(author, magnet, link=None):
     embed = Embed(description=f"<@{author}>")
     if link is None:
         link = f"{DEBRID_WEBDAV}magnets/{quote(magnet)}/"
@@ -203,47 +249,26 @@ def download_ready(author: int, magnet, link=None):
     return embed
 
 
-def torrent_results(results, emergency: bool = False):
-    if emergency:
-        embed = Embed(
-            description=":rotating_light::bangbang:__***YOU HAVE DECLARED A TORRENT EMERGENCY***__:bangbang::rotating_light:"
-        )
-        if len(results["torrent_results"]) > 10:
-            results = results["torrent_results"][:10]
-        else:
-            results = results["torrent_results"]
-        x = 0
-        for m in results:
-            x = x + 1
-            result_value = f"Seeders: {m['seeders']} | Leechers: {m['leechers']} | Size: {size(int(m['size']))}"
-            embed.add_field(name=f"{x}. {m['title']}", value=result_value, inline=False)
-
+def torrent_results(results):
+    embed = Embed()
+    if len(results) > 10:
+        results = results[:10]
+    x = 0
+    for torrent in results:
+        result_value = f"Seeders: {torrent['seeders']} | Leechers: {torrent['leechers']} | Size: {torrent['size']}"
         embed.add_field(
-            name="----------------",
-            value=f"More results, longer timeout. Don't fuck it up cause it probably won't work twice in a row!\n*!pick 1-{len(results)}*",
+            name=f"{x+1}. {torrent['name']}",
+            value=result_value,
             inline=False,
         )
-        return embed
-    else:
-        embed = Embed()
-        if len(results) > 5:
-            results = results[:5]
-        x = 0
-        for torrent in results:
-            result_value = f"Seeders: {torrent['seeders']} | Leechers: {torrent['leechers']} | Size: {torrent['size']}"
-            embed.add_field(
-                name=f"{x+1}. {torrent['name']}",
-                value=result_value,
-                inline=False,
-            )
-            x = x + 1
-        embed.add_field(
-            name="----------------",
-            value="You should pick the one with the most seeders and a reasonable filesize. Pay attention to the quality. You dont want a cam or TS.\n*!pick 1-5*",
-            inline=False,
-        )
-        logger.info("Built embed for torrent results")
-        return embed
+        x = x + 1
+    embed.add_field(
+        name="----------------",
+        value="You should pick the one with the most seeders and a reasonable filesize. Pay attention to the quality. You dont want a cam or TS.\n*!pick 1-10, !pick 1,3,5, !pick 1.\nSupports range or comma-separated picks.*",
+        inline=False,
+    )
+    logger.info("Built embed for torrent results")
+    return embed
 
 
 def stream_embed(name, title=None, game=None):

@@ -15,9 +15,22 @@ class DB:
         self.users = self.client["users"]
         self.reco = self.client["reco"]
         self.remind = self.client["reminders"]
+        self.theforest = self.client["theforest"]
+        self.playlist = self.client["playlist"]
 
     # async def get_queue(self):
     #    return self.queue.find({})
+    async def get_playlist(self):
+        return self.playlist.find({})
+
+    async def add_to_playlist(self, tracks: list):
+        for track in tracks:
+            data = {
+                "name": track,
+                "uri": tracks[track],
+            }
+            r = self.playlist.insert_one(data)
+        logger.info(f"Added to playlist: {r.inserted_id}")
 
     async def get_active_queue(self):
         return self.queue.find({"status": "active"})
@@ -48,8 +61,10 @@ class DB:
     async def get_twitchers(self):
         return self.users.find({"twitcher": {"$eq": True}})
 
-    async def set_twitcher_status(self, user, online: bool):
-        r = self.users.update_one({"user": user}, {"$set": {"online": online}})
+    async def set_twitcher_status(self, user, online: bool, game=None):
+        r = self.users.update_one(
+            {"user": user}, {"$set": {"online": online, "game": game}}
+        )
         logger.info(f"Set twitcher status of {user} to {online}")
         logger.info(f"Matched: {r.matched_count}, Modified: {r.modified_count}")
 

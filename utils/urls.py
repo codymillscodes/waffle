@@ -21,7 +21,8 @@ class Urls(StrEnum):
     DEBRID_STREAMING = f"{DEBRID_BASE_URL}link/streaming?{DEBRID_CRED}&id="
     DEBRID_DELAYED = f"{DEBRID_BASE_URL}link/delayed?{DEBRID_CRED}&id="
     # rarbg urls
-    RARBG_API = "https://torrentapi.org/pubapi_v2.php?app_id=waffle&mode=search&sort=seeders&format=json_extended&category=18;41;54;50;45;44;17;48;14&token="
+    RARBG_API = "https://torrentapi.org/pubapi_v2.php?app_id=waffle&mode=search&sort=seeders&format=json_extended" \
+                "&category=18;41;54;50;45;44;17;48;14&token="
     TOKEN_URL = "https://torrentapi.org/pubapi_v2.php?app_id=waffle&get_token=get_token"
     # cat urls
     CAT_BASE_URL = "https://api.thecatapi.com/v1/"
