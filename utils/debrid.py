@@ -50,7 +50,7 @@ async def get_magnet_status(magnetid):
 async def delete_magnet(magnetid):
     try:
         async with Conn() as resp:
-            r = await resp.get_json(Urls.DEBRID_DELETE + magnetid)
+            r = await resp.get_json(Urls.DEBRID_DELETE + str(magnetid))
         return r["data"]["message"]
     except KeyError:
         return r["error"]["message"]

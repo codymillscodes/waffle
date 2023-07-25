@@ -3,11 +3,19 @@ from discord.ext import commands
 from random import randint
 from loguru import logger
 import discord
+from utils.db import DB
+from utils.embed import twitcher_embed, juiceme
+from typing import Literal
 
 
 class MiscCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+
+    @app_commands.command(name="juiceme", description="get relevant community urls")
+    async def juiceme(self, interaction: discord.Interaction):
+        logger.info(f"{interaction.user} wants to juice")
+        await interaction.response.send_message(embed=juiceme())
 
     @app_commands.command(name="roll", description="Roll a dice")
     async def roll(self, interaction: discord.Interaction, num: int, faces: int):
@@ -24,6 +32,17 @@ class MiscCog(commands.Cog):
             )
         else:
             await interaction.response.send_message("Invalid input")
+
+    @app_commands.command(name="twitchers", description="Get twitcher status")
+    async def twitchers(
+        self, interaction: discord.Interaction, option: Literal["all", "online"]
+    ):
+        logger.info(f"{interaction.user} wants twitcher status")
+        if option == "all":
+            embed = twitcher_embed(await DB().get_twitchers(), False)
+        elif option == "online":
+            embed = twitcher_embed(await DB().get_twitchers(), True)
+        await interaction.response.send_message(embed=embed)
 
     @commands.command(name="test", description="Test command")
     async def test(self, ctx):

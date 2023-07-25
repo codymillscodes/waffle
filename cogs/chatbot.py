@@ -12,15 +12,13 @@ from typing import Literal
 import config
 from utils.connection import Connection as Conn
 
-ENGINE = "text-davinci-003"
-CHAT_ENGINE = "gpt-3.5-turbo"
 openai.api_key = config.OPENAI_KEY
 
 
 async def count_tokens_in_messages(messages):
     num_tokens = 0
     try:
-        encoding = tiktoken.encoding_for_model(CHAT_ENGINE)
+        encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
     except KeyError:
         encoding = tiktoken.get_encoding("cl100k_base")
     for message in messages:
@@ -39,44 +37,43 @@ async def count_tokens_in_messages(messages):
 class ChatbotCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        # self.previous_messages = []
         openai.aiosession.set(Conn())
         self.prompt = gpt_prompts["waffle"]
-        self.chatty = False
-        # self.prompt_tuple = tuple(Literal[prompt] for prompt in self.prompt_list)
-
-    # @commands.command(name="have_waffle_talk_to_itself")
-    # async def have_waffle_talk_to_itself(self, ctx, *, state: bool):
-    #     self.chatty = state
-    #     while self.chatty:
-    #         response = await openai.Completion.create(
-    #             temperature=0.7,
-    #             max_tokens=2048,
-    #             engine=CHAT_ENGINE,
-    #             prompt=self.prompt,
-    #         )
-    #         logger.info(f"Waffle recvd: {response}")
-    #         self.prompt += response.choices[0].text
+        self.engine = "gpt-3.5-turbo"
 
     @app_commands.command(
         name="gpt",
         description="Send a raw prompt to GPT.",
     )
+    async def chatbot_status(self, interaction: discord.Interaction):
+        await interaction.response.send_message(
+            f">>> **Engine**: {self.engine}\n**Prompt**: {self.prompt}"
+        )
+
     async def gpt(self, interaction: discord.Interaction, prompt: str):
         await interaction.response.defer(thinking=True)
         response = await openai.Completion.acreate(
-            temperature=0.7, max_tokens=2048, engine=ENGINE, prompt=prompt
+            temperature=0.7, max_tokens=2048, engine=self.engine, prompt=prompt
         )
         logger.info(f"GPT recvd: {response}")
         await interaction.followup.send(
             f">>> {prompt}\n```\n{response.choices[0].text[-4500:]}\n```"
         )
 
-    prompt_list = sorted(gpt_prompts.keys())
+    @app_commands.command(name="setengine")
+    async def setengine(
+        self,
+        interaction: discord.Interaction,
+        engines: Literal["gpt-4", "gpt-3.5-turbo"],
+    ):
+        self.engine = engines
+        await interaction.response.send_message(f"Engine set to {engines}")
 
     @app_commands.command(name="setprompt")
     async def setprompt(
-        self, interaction: discord.Interaction, prompts: Literal["waffle", "jailbreak"]
+        self,
+        interaction: discord.Interaction,
+        prompts: Literal["waffle", "jailbreak", "qb"],
     ):
         if prompts == "waffle":
             self.prompt = gpt_prompts["waffle"]
@@ -200,6 +197,8 @@ class ChatbotCog(commands.Cog):
                 if len(r) > 2000:
                     r = r[:2000]
                 await message.reply(r, mention_author=False)
+            except openai.error.ServiceUnavailableError:
+                await message.channel.send("The server is overloaded or not ready yet.")
             except Exception as e:
                 logger.exception(e)
                 await message.channel.send("The server is overloaded or not ready yet.")

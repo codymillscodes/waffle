@@ -9,6 +9,52 @@ from utils.urls import Urls
 from random import randint
 
 
+def twitcher_embed(twitchers, online=False):
+    embed = Embed(title="__Twitchers__", color=0x00FF00)
+    for t in twitchers:
+        if online and t["online"]:
+            embed.add_field(
+                name=f"{t['user']}",
+                value=f"Status: ONLINE\nGame: {t['game']}\n{Urls.TWITCH_CHANNEL}{t['user']}",
+                inline=False,
+            )
+        elif online == False:
+            if t["online"]:
+                embed.add_field(
+                    name=f"{t['user']}",
+                    value=f"Status: ONLINE\nGame: {t['game']}\n{Urls.TWITCH_CHANNEL}{t['user']}",
+                    inline=False,
+                )
+            else:
+                embed.add_field(
+                    name=f"{t['user']}",
+                    value=f"Status: OFFLINE\n{Urls.TWITCH_CHANNEL}{t['user']}",
+                    inline=False,
+                )
+    return embed
+
+
+def juiceme():
+    embed = Embed(title="Community Links")
+    embed.add_field(
+        name="**Minecraft Realm**",
+        value="https://realms.gg/3b-xkx4knfE",
+        inline=False,
+    )
+    embed.add_field(
+        name="YouTube Channel",
+        value="https://www.youtube.com/@turbulent_juice",
+        inline=False,
+    )
+    embed.add_field(
+        name="bad-music Playlist",
+        value="https://open.spotify.com/playlist/6xHdV7jlRcuon1AaUDVvNb?si=e1ae8290dd4247a8",
+        inline=False,
+    )
+
+    return embed
+
+
 def runescape(name, char_stats):
     embed = Embed(title=f"{name}'s stats", color=0x00FF00)
     logger.info(f"Building embed for {name}")

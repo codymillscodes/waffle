@@ -95,15 +95,20 @@ class Waffle(commands.Bot):
                             stream_data["data"][0]["title"],
                             stream_data["data"][0]["game_name"],
                         )
-                        await self.db.set_twitcher_status(t["user"], True)
+                        await self.db.set_twitcher_status(
+                            t["user"], True, stream_data["data"][0]["game_name"]
+                        )
                         logger.info(f"{t['user']} is online.")
                         await twitch_channel.send(embed=embed)
                 elif not stream_data["data"]:
                     if t["online"]:
                         await self.db.set_twitcher_status(t["user"], False)
                         logger.info(f"{t['user']} is offline.")
-            except (TypeError, KeyError, IndexError, UnboundLocalError) as e:
+            except (KeyError, IndexError, UnboundLocalError) as e:
                 logger.exception(e)
+            except TypeError:
+                logger.info("Twitch API is down.")
+                await self.get_twitch_headers()
         # except KeyError as e:
         #    logger.exception(e)
         #    await self.get_twitch_headers()

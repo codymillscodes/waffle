@@ -61,8 +61,10 @@ class DB:
     async def get_twitchers(self):
         return self.users.find({"twitcher": {"$eq": True}})
 
-    async def set_twitcher_status(self, user, online: bool):
-        r = self.users.update_one({"user": user}, {"$set": {"online": online}})
+    async def set_twitcher_status(self, user, online: bool, game=None):
+        r = self.users.update_one(
+            {"user": user}, {"$set": {"online": online, "game": game}}
+        )
         logger.info(f"Set twitcher status of {user} to {online}")
         logger.info(f"Matched: {r.matched_count}, Modified: {r.modified_count}")
 
