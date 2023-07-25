@@ -82,6 +82,9 @@ class ChatbotCog(commands.Cog):
         elif prompts == "jailbreak":
             self.prompt = gpt_prompts["jailbreak"]
             await interaction.response.send_message("Prompt set to Jailbreak.")
+        elif prompts in gpt_prompts:
+            self.prompt = gpt_prompts[prompts]
+            await interaction.response.send_message(f"Prompt set to {prompts}")
 
     @app_commands.command(name="character_prompt")
     async def character_prompt(
