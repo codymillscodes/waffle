@@ -23,6 +23,11 @@ class DB:
     async def get_playlist(self):
         return self.playlist.find({})
 
+    async def find_track(self, uri):
+        count = self.playlist.count_documents({"uri": uri})
+        found = count > 0
+        return found
+
     async def add_to_playlist(self, tracks: list):
         for track in tracks:
             data = {

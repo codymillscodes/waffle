@@ -31,18 +31,16 @@ class MusicCog(commands.Cog):
     async def check_existing_tracks(self, tracks: list):
         logger.info(f"Checking {len(tracks)} tracks.")
         logger.info(f"Tracks: {tracks}")
-        r = await DB().get_playlist()
         db_tracks = {}
-        for track in r:
-            for t in tracks:
-                if t == track["uri"]:
-                    tracks.remove(t)
-                    logger.info(f"Removing {t} from tracks.")
-                else:
-                    track_query = self.spotify.track(t)
-                    db_tracks[
-                        f"{track_query['artists'][0]['name']} - {track_query['name']}"
-                    ] = track_query["uri"]
+        for t in tracks:
+            if DB().find_track(t):
+                track_query = self.spotify.track(t)
+                db_tracks[
+                    f"{track_query['artists'][0]['name']} - {track_query['name']}"
+                ] = track_query["uri"]
+            else:
+                tracks.remove(t)
+                logger.info(f"Removing {t} from tracks.")
 
         # logger.info(f"Playlist tracks: {playlist_tracks}")
         if len(db_tracks) > 0:
