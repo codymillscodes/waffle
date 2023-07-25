@@ -41,15 +41,16 @@ class ChatbotCog(commands.Cog):
         self.prompt = gpt_prompts["waffle"]
         self.engine = "gpt-3.5-turbo"
 
-    @app_commands.command(
-        name="gpt",
-        description="Send a raw prompt to GPT.",
-    )
+    @app_commands.command(name="chatbot_status", description="get engine and prompt")
     async def chatbot_status(self, interaction: discord.Interaction):
         await interaction.response.send_message(
             f">>> **Engine**: {self.engine}\n**Prompt**: {self.prompt}"
         )
 
+    @app_commands.command(
+        name="gpt",
+        description="Send a raw prompt to GPT.",
+    )
     async def gpt(self, interaction: discord.Interaction, prompt: str):
         await interaction.response.defer(thinking=True)
         response = await openai.Completion.acreate(
