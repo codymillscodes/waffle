@@ -65,7 +65,7 @@ class ButtCog(commands.Cog):
                 await message.channel.send("Roll tide!")
             else:
                 if not (
-                    message.content.startswith("!") or "https://" in message.content
+                    message.content.startswith("!") or "https://" not in message.content
                 ):
                     if (
                         randint(1, 100) <= self.chance
