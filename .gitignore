@@ -4,7 +4,7 @@ dreams/
 cogs/reminders.py
 test_scripts/
 *.ini
-
+tiktok/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
