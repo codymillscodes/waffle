@@ -1,6 +1,7 @@
 from random import randint, choice
 
 import inflect
+import nltk
 from discord.ext import commands
 from loguru import logger
 
@@ -10,6 +11,11 @@ p = inflect.engine()
 
 message_count = 0
 pause_count = 0
+
+
+def is_noun(word):
+    pos_tags = nltk.pos_tag([word])
+    return pos_tags[0][1].startswith("N")
 
 
 class ButtCog(commands.Cog):
@@ -23,7 +29,12 @@ class ButtCog(commands.Cog):
         words = message.split()
         logger.info(f"Buttifying {message}")
         butt_num = randint(1, len(words) - 1)
-        while words[butt_num] in self.filter or words[butt_num].startswith(":"):
+        while (
+            words[butt_num] in self.filter
+            or words[butt_num].startswith(":")
+            and is_noun(words[butt_num])
+        ):
+            logger.info(f"{words[butt_num]} is a noun.")
             butt_num = randint(1, len(words) - 1)
         mod_word = words[butt_num]
         if "-" in mod_word:
