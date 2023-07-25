@@ -60,6 +60,13 @@ class ButtCog(commands.Cog):
 
             if self.bot.user in message.mentions:
                 return
+            if "crazy" in message.content.lower():
+                logger.info(
+                    "Crazy? I was crazy once. They put me in a room. A rubber room. A rubber room with rats. The rats made me crazy."
+                )
+                await message.channel.send(
+                    "Crazy? I was crazy once. They put me in a room. A rubber room. A rubber room with rats. The rats made me crazy."
+                )
 
             if "roll tide" in message.content.lower():
                 logger.info(f"Roll tide detected in {message.content}")
