@@ -120,7 +120,9 @@ class ChatbotCog(commands.Cog):
                 # add if file exists check
                 with open(f"dreams/{filename}.png", "wb") as f:
                     f.write(image)
-            await interaction.followup.send(file=discord.File(f"dreams/{filename}.png"))
+            await interaction.followup.send(
+                f"`{prompt}`", file=discord.File(f"dreams/{filename}.png")
+            )
         except openai.InvalidRequestError:
             await interaction.followup.send("Too offensive. :(")
         except Exception as e:
