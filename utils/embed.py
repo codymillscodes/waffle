@@ -17,7 +17,7 @@ def full_radio_status_embed(info):
     else:
         status = "🔴"
     embed = Embed(
-        title=f"WaffleFM - {status}",
+        title=f"WaffleFM ({status})))",
         description=f"Listeners: {info['listeners']['total']}",
     )
     song_info = info["now_playing"]["song"]
@@ -54,7 +54,7 @@ def mini_radio_status_embed(info):
     else:
         status = "🔴"
     embed = Embed(
-        title=f"WaffleFM - {status}",
+        title=f"WaffleFM ({status})))",
         description=f"Listeners: {info['listeners']['total']}",
     )
     song_info = info["now_playing"]["song"]
