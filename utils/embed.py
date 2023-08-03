@@ -1,12 +1,73 @@
+from random import randint
 from discord import Embed
 from loguru import logger
 from hurry.filesize import size
 from utils.helpers import percentage
 from utils.random import get_link_msg
-from config import DEBRID_WEBDAV, TWITCH_NOTIFY_ROLE
+from config import DEBRID_WEBDAV, TWITCH_NOTIFY_ROLE, AZURA_PUBLIC
 from urllib.parse import quote
 from utils.urls import Urls
-from random import randint
+from utils import azura
+from helpers import convert_seconds
+
+
+def full_radio_status_embed(info):
+    if info["is_online"]:
+        status = "🟢"
+    else:
+        status = "🔴"
+    embed = Embed(
+        title="WaffleFM",
+        description=f"Listeners: {info['listeners']['total']}             {status}\n-------------",
+    )
+    song_info = info["now_playing"]["song"]
+    if info["now_playing"]["is_request"]:
+        requested = "☑️"
+    else:
+        requested = "◼️"
+    embed.add_field(
+        name="Now Playing:",
+        value=f"{info['now_playing']['elapsed']} / {info['now_playing']['duration']}\nSong: {song_info['title']}\nArtist: {song_info['artist']}\nAlbum: {song_info['album']}\nRequested?: {requested}",
+        inline=False,
+    )
+    next_song = info["playing_next"]
+    if next_song["is_request"]:
+        next_requested = "☑️"
+    else:
+        next_requested = "◼️"
+    embed.add_field(
+        name="Playing Next:",
+        value=f"Song: {next_song['song']['title']}\nArtist: {next_song['song']['artist']}\nAlbum: {next_song['song']['album']}\nDuration: {convert_seconds(next_song['duration'])} | Requested?: {next_requested}",
+        inline=False,
+    )
+    embed.add_field(
+        name="URLs:",
+        value=f"Front: {AZURA_PUBLIC}/public/waffle\nMP3: {AZURA_PUBLIC}:8000/radio.mp3\nm3u playlist: {AZURA_PUBLIC}/public/wafflefm/playlist.m3u\npls playlist: {AZURA_PUBLIC}/public/wafflefm/playlist.pls",
+        inline=False,
+    )
+    return embed
+
+
+def mini_radio_status_embed(info):
+    if info["is_online"]:
+        status = "🟢"
+    else:
+        status = "🔴"
+    embed = Embed(
+        title="WaffleFM",
+        description=f"Listeners: {info['listeners']['total']}             {status}\n-------------",
+    )
+    song_info = info["now_playing"]["song"]
+    if info["now_playing"]["is_request"]:
+        requested = "☑️"
+    else:
+        requested = "◼️"
+    embed.add_field(
+        name="Now Playing:",
+        value=f"{info['now_playing']['elapsed']} / {info['now_playing']['duration']}\nSong: {song_info['title']} - {song_info['artist']}\nAlbum: {song_info['album']}\nRequested?: {requested}",
+        inline=False,
+    )
+    return embed
 
 
 def twitcher_embed(twitchers, online=False):

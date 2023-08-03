@@ -20,10 +20,6 @@ class Urls(StrEnum):
     DEBRID_UNLOCK = f"{DEBRID_BASE_URL}link/unlock?{DEBRID_CRED}&link="
     DEBRID_STREAMING = f"{DEBRID_BASE_URL}link/streaming?{DEBRID_CRED}&id="
     DEBRID_DELAYED = f"{DEBRID_BASE_URL}link/delayed?{DEBRID_CRED}&id="
-    # rarbg urls
-    RARBG_API = "https://torrentapi.org/pubapi_v2.php?app_id=waffle&mode=search&sort=seeders&format=json_extended" \
-                "&category=18;41;54;50;45;44;17;48;14&token="
-    TOKEN_URL = "https://torrentapi.org/pubapi_v2.php?app_id=waffle&get_token=get_token"
     # cat urls
     CAT_BASE_URL = "https://api.thecatapi.com/v1/"
     CAT_RANDOM = f"{CAT_BASE_URL}images/search?api_key={config.CAT_KEY}"
@@ -37,3 +33,25 @@ class Urls(StrEnum):
     TWITCH_URL = "https://api.twitch.tv/helix/streams?user_login="
     TWITCH_CHANNEL = "https://www.twitch.tv/"
     TWITCH_TOKEN_REQUEST = "https://id.twitch.tv/oauth2/token"
+    # azura
+
+
+class Azura(StrEnum):
+    IP = config.AZURA_IP
+    STATION = config.AZURA_STATION_ID
+    STATION_URL = f"{IP}/station/{STATION}"
+    GET_API_STATUS = f"{IP}/status"
+    GET_CPU_STATS = f"{IP}/admin/server/stats"
+
+    GET_STATION_STATUS = f"{STATION_URL}/status"
+    RESTART_STATION = f"{STATION_URL}/restart"
+
+    GET_NOW_PLAYING = f"{IP}/nowplaying/{STATION}"
+    GET_REQUESTS = f"{STATION_URL}/requests"
+    SEND_REQUEST = f"{STATION_URL}/request/"
+    GET_PLAYBACK_HISTORY = f"{STATION_URL}/history"
+    GET_LISTENERS = f"{STATION_URL}/listeners"
+    GET_QUEUE = f"{STATION_URL}/queue"
+    DELETE_QUEUE_ITEM = f"{STATION_URL}/"
+    SEND_FILE = f"{STATION_URL}/files"
+    # add custom field urls

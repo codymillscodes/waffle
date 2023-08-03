@@ -50,3 +50,7 @@ PLAYLIST_URI = os.environ["PLAYLIST_URI"]
 IGNORE_CHANNELS = os.environ["IGNORE_CHANNELS"].split(",")
 for i in range(len(IGNORE_CHANNELS)):
     IGNORE_CHANNELS[i] = int(IGNORE_CHANNELS[i])
+
+AZURA_PUBLIC = os.environ["AZURA_PUBLIC"]
+AZURA_IP = os.environ["AZURA_IP"]
+AZURA_STATION_ID = os.environ["AZURA_STATION_ID"]

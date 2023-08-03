@@ -10,6 +10,9 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 from loguru import logger
+from typing import Literal
+from utils.embed import full_radio_status_embed, mini_radio_status_embed
+from utils import azura
 from utils.db import DB
 
 
@@ -54,36 +57,18 @@ class MusicCog(commands.Cog):
             "https://open.spotify.com/playlist/6xHdV7jlRcuon1AaUDVvNb?si=e1ae8290dd4247a8",
         )
 
-    # @app_commands.command(
-    #     name="sync_playlist", description="Syncs the playlist with the channel"
-    # )
-    # @commands.has_permissions(administrator=True)
-    # async def sync_playlist(self, interaction: discord.Interaction):
-    #     await interaction.response.defer(thinking=True)
-    #     channel = await self.bot.fetch_channel(MUSIC_CHANNEL)
-    #     messages = [message async for message in channel.history(limit=None)]
-    #     spotify_urls = []
-    #     for message in messages:
-    #         if "https://open.spotify.com/" in message.content:
-    #             if message.content.startswith("https://open.spotify.com/album"):
-    #                 album = self.spotify.album(message.content)
-    #                 for track in album["tracks"]["items"]:
-    #                     spotify_urls.append(track["uri"])
-    #             elif message.content.startswith("https://open.spotify.com/track"):
-    #                 spotify_urls.append(message.content)
+    @app_commands.command(name="radio_info", description="Get radio info")
+    async def radio_info(
+        self, interaction: discord.Interaction, display: Literal["full", "mini"]
+    ):
+        await interaction.response.defer(thinking=True)
+        info = await azura.get_now_playing()
+        if display == "full":
+            embed = full_radio_status_embed(info)
+        else:
+            embed = mini_radio_status_embed(info)
 
-    #     spotify_urls = list(set(spotify_urls))
-    #     add_tracks = await self.check_existing_tracks(spotify_urls)
-    #     if len(add_tracks) > 0:
-    #         logger.info(f"Adding {len(add_tracks)} tracks to playlist.")
-    #         await interaction.followup.send(
-    #             f"Adding {len(add_tracks)} tracks to playlist."
-    #         )
-    #         if len(add_tracks) > 100:
-    #             logger.info("Too many tracks. Adding 100.")
-    #             #    await interaction.followup.send("Too many tracks. Adding 100.")
-    #             add_tracks = add_tracks[:100]
-    #         await self.spotify.playlist_add_items(PLAYLIST_URI, add_tracks)
+        await interaction.followup.send(embed=embed)
 
     @commands.Cog.listener()
     async def on_message(self, message):
