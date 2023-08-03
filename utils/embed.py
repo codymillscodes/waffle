@@ -8,7 +8,7 @@ from config import DEBRID_WEBDAV, TWITCH_NOTIFY_ROLE, AZURA_PUBLIC
 from urllib.parse import quote
 from utils.urls import Urls
 from utils import azura
-from helpers import convert_seconds
+from utils.helpers import convert_seconds
 
 
 def full_radio_status_embed(info):
