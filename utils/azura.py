@@ -1,4 +1,4 @@
-from urls import Azura
+from utils.urls import Azura
 from loguru import logger
 from utils.connection import Connection as Conn
 import aiohttp
