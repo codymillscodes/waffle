@@ -11,65 +11,6 @@ from utils import azura
 from utils.helpers import convert_seconds
 
 
-def full_radio_status_embed(info):
-    if info["is_online"]:
-        status = "🟢"
-    else:
-        status = "🔴"
-    embed = Embed(
-        title=f"WaffleFM ({status})))",
-        description=f"Listeners: {info['listeners']['total']}",
-    )
-    song_info = info["now_playing"]["song"]
-    if info["now_playing"]["is_request"]:
-        requested = "☑️"
-    else:
-        requested = "◼️"
-    embed.add_field(
-        name="__Now Playing:__",
-        value=f"**Song:** *{song_info['title']}*\n**Artist:** {song_info['artist']}\n**Album:** {song_info['album']}\n{convert_seconds(info['now_playing']['elapsed'])} / {convert_seconds(info['now_playing']['duration'])} | **Requested?** {requested}",
-        inline=False,
-    )
-    next_song = info["playing_next"]
-    if next_song["is_request"]:
-        next_requested = "☑️"
-    else:
-        next_requested = "◼️"
-    embed.add_field(
-        name="__Playing Next:__",
-        value=f"**Song:** *{next_song['song']['title']}*\n**Artist:** {next_song['song']['artist']}\n**Album:** {next_song['song']['album']}\n**Duration:** {convert_seconds(next_song['duration'])} | **Requested?** {next_requested}",
-        inline=False,
-    )
-    embed.add_field(
-        name="__URLs:__",
-        value=f"Front: {AZURA_PUBLIC}/public/waffle\nMP3: {AZURA_PUBLIC}:8000/radio.mp3\nm3u playlist: {AZURA_PUBLIC}/public/wafflefm/playlist.m3u\npls playlist: {AZURA_PUBLIC}/public/wafflefm/playlist.pls",
-        inline=False,
-    )
-    return embed
-
-
-def mini_radio_status_embed(info):
-    if info["is_online"]:
-        status = "🟢"
-    else:
-        status = "🔴"
-    embed = Embed(
-        title=f"WaffleFM ({status})))",
-        description=f"Listeners: {info['listeners']['total']}",
-    )
-    song_info = info["now_playing"]["song"]
-    if info["now_playing"]["is_request"]:
-        requested = "☑️"
-    else:
-        requested = "◼️"
-    embed.add_field(
-        name="__Now Playing:__",
-        value=f"*{song_info['title']}* - {song_info['artist']}\n{song_info['album']}\n{convert_seconds(info['now_playing']['elapsed'])} / {convert_seconds(info['now_playing']['duration'])} | Requested? {requested}",
-        inline=False,
-    )
-    return embed
-
-
 def twitcher_embed(twitchers, online=False):
     embed = Embed(title="__Twitchers__", color=0x00FF00)
     for t in twitchers:

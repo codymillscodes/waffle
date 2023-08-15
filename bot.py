@@ -78,7 +78,7 @@ class Waffle(commands.Bot):
         twitchers = await self.db.get_twitchers()
         twitchers = list(twitchers)
         # logger.debug("Checking twitchers...")
-        logger.debug(f"Checking {len(twitchers)} twitchers...")
+        # logger.debug(f"Checking {len(twitchers)} twitchers...")
         for t in twitchers:
             async with Conn() as resp:
                 stream_data = await resp.get_json(

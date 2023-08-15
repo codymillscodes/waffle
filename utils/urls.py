@@ -34,24 +34,3 @@ class Urls(StrEnum):
     TWITCH_CHANNEL = "https://www.twitch.tv/"
     TWITCH_TOKEN_REQUEST = "https://id.twitch.tv/oauth2/token"
     # azura
-
-
-class Azura(StrEnum):
-    IP = config.AZURA_IP
-    STATION = config.AZURA_STATION_ID
-    STATION_URL = f"{IP}/api/station/{STATION}"
-    GET_API_STATUS = f"{IP}/api/status"
-    GET_CPU_STATS = f"{IP}/api/admin/server/stats"
-
-    GET_STATION_STATUS = f"{STATION_URL}/api/status"
-    RESTART_STATION = f"{STATION_URL}/api/restart"
-
-    GET_NOW_PLAYING = f"{IP}/api/nowplaying/{STATION}"
-    GET_REQUESTS = f"{STATION_URL}/api/requests"
-    SEND_REQUEST = f"{STATION_URL}/api/request/"
-    GET_PLAYBACK_HISTORY = f"{STATION_URL}/api/history"
-    GET_LISTENERS = f"{STATION_URL}/api/listeners"
-    GET_QUEUE = f"{STATION_URL}/api/queue"
-    DELETE_QUEUE_ITEM = f"{STATION_URL}/"
-    SEND_FILE = f"{STATION_URL}/api/files"
-    # add custom field urls
