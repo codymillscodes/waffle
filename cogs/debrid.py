@@ -1,6 +1,5 @@
 import asyncio
 import time
-import concurrent.futures
 
 import discord
 from discord import app_commands
@@ -29,22 +28,6 @@ async def get_token():
         return token
     except IndexError:
         logger.error(f"Failed to get torrent api token.\n{r.json()}")
-
-
-async def torrent_search_handler(query):
-    results = await torrents.search(query, sortBy="seeders", order="desc")
-    logger.info(f"{len(results['items'])} torrent results.")
-    sanitized_results = []
-    for torrent in results["items"]:
-        info = await torrents.info(torrentId=torrent["torrentId"])
-        logger.info(f"{info['category']} {torrent['torrentId']}")
-        if "xxx".upper() not in info["category"]:
-            logger.info(f"Added {torrent['torrentId']} to results.")
-            sanitized_results.append(torrent)
-        if len(sanitized_results) >= 10:
-            logger.info("Max results reached.")
-            break
-    return sanitized_results
 
 
 class DebridCog(commands.Cog):
@@ -166,9 +149,18 @@ class DebridCog(commands.Cog):
     async def search(self, ctx, *, query: str):
         logger.info(f"{ctx.invoked_with} {query}")
 
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            future = await executor.submit(torrent_search_handler, query)
-            sanitized_results = await asyncio.to_thread(future.result)
+        results = torrents.search(query, sortBy="seeders", order="desc")
+        logger.info(f"{len(results['items'])} torrent results.")
+        sanitized_results = []
+        for torrent in results["items"]:
+            info = torrents.info(torrentId=torrent["torrentId"])
+            logger.info(f"{info['category']} {torrent['torrentId']}")
+            if "xxx".upper() not in info["category"]:
+                logger.info(f"Added {torrent['torrentId']} to results.")
+                sanitized_results.append(torrent)
+            if len(sanitized_results) >= 10:
+                logger.info("Max results reached.")
+                break
         if len(sanitized_results) > 0:
             embed = utils.embed.torrent_results(sanitized_results)
             e = await ctx.reply(embed=embed, mention_author=False)
