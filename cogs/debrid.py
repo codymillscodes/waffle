@@ -149,11 +149,11 @@ class DebridCog(commands.Cog):
     async def search(self, ctx, *, query: str):
         logger.info(f"{ctx.invoked_with} {query}")
 
-        results = torrents.search(query, sortBy="seeders", order="desc")
+        results = await torrents.search(query, sortBy="seeders", order="desc")
         logger.info(f"{len(results['items'])} torrent results.")
         sanitized_results = []
         for torrent in results["items"]:
-            info = torrents.info(torrentId=torrent["torrentId"])
+            info = await torrents.info(torrentId=torrent["torrentId"])
             logger.info(f"{info['category']} {torrent['torrentId']}")
             if "xxx".upper() not in info["category"]:
                 logger.info(f"Added {torrent['torrentId']} to results.")
