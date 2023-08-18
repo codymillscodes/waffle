@@ -1,5 +1,6 @@
 import asyncio
 import time
+import concurrent.futures
 
 import discord
 from discord import app_commands
@@ -165,7 +166,9 @@ class DebridCog(commands.Cog):
     async def search(self, ctx, *, query: str):
         logger.info(f"{ctx.invoked_with} {query}")
 
-        sanitized_results = await torrent_search_handler(query)
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            future = executor.submit(torrent_search_handler, query)
+            sanitized_results = await asyncio.wrap_future(future)
         if len(sanitized_results) > 0:
             embed = utils.embed.torrent_results(sanitized_results)
             e = await ctx.reply(embed=embed, mention_author=False)
