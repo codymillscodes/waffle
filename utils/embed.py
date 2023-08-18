@@ -4,11 +4,9 @@ from loguru import logger
 from hurry.filesize import size
 from utils.helpers import percentage
 from utils.random import get_link_msg
-from config import DEBRID_WEBDAV, TWITCH_NOTIFY_ROLE, AZURA_PUBLIC
+from config import DEBRID_WEBDAV, TWITCH_NOTIFY_ROLE
 from urllib.parse import quote
 from utils.urls import Urls
-from utils import azura
-from utils.helpers import convert_seconds
 
 
 def twitcher_embed(twitchers, online=False):

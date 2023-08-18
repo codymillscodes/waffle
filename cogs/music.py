@@ -11,8 +11,6 @@ from discord.ext import commands
 from discord import app_commands
 from loguru import logger
 from typing import Literal
-from utils.embed import full_radio_status_embed, mini_radio_status_embed
-from utils import azura
 from utils.db import DB
 
 
@@ -56,19 +54,6 @@ class MusicCog(commands.Cog):
         await interaction.response.send_message(
             "https://open.spotify.com/playlist/6xHdV7jlRcuon1AaUDVvNb?si=e1ae8290dd4247a8",
         )
-
-    @app_commands.command(name="radio_info", description="Get radio info")
-    async def radio_info(
-        self, interaction: discord.Interaction, display: Literal["full", "mini"]
-    ):
-        await interaction.response.defer(thinking=True)
-        info = await azura.get_now_playing()
-        if display == "full":
-            embed = full_radio_status_embed(info)
-        else:
-            embed = mini_radio_status_embed(info)
-
-        await interaction.followup.send(embed=embed)
 
     @commands.Cog.listener()
     async def on_message(self, message):
