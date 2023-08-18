@@ -168,7 +168,7 @@ class DebridCog(commands.Cog):
 
         with concurrent.futures.ThreadPoolExecutor() as executor:
             future = executor.submit(torrent_search_handler, query)
-            sanitized_results = await asyncio.wrap_future(future)
+            sanitized_results = await asyncio.to_thread(future.result)
         if len(sanitized_results) > 0:
             embed = utils.embed.torrent_results(sanitized_results)
             e = await ctx.reply(embed=embed, mention_author=False)
