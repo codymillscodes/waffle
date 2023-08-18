@@ -33,4 +33,3 @@ class Urls(StrEnum):
     TWITCH_URL = "https://api.twitch.tv/helix/streams?user_login="
     TWITCH_CHANNEL = "https://www.twitch.tv/"
     TWITCH_TOKEN_REQUEST = "https://id.twitch.tv/oauth2/token"
-    # azura
