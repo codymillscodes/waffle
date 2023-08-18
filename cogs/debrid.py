@@ -30,6 +30,22 @@ async def get_token():
         logger.error(f"Failed to get torrent api token.\n{r.json()}")
 
 
+async def torrent_search_handler(query):
+    results = await torrents.search(query, sortBy="seeders", order="desc")
+    logger.info(f"{len(results['items'])} torrent results.")
+    sanitized_results = []
+    for torrent in results["items"]:
+        info = await torrents.info(torrentId=torrent["torrentId"])
+        logger.info(f"{info['category']} {torrent['torrentId']}")
+        if "xxx".upper() not in info["category"]:
+            logger.info(f"Added {torrent['torrentId']} to results.")
+            sanitized_results.append(torrent)
+        if len(sanitized_results) >= 10:
+            logger.info("Max results reached.")
+            break
+    return sanitized_results
+
+
 class DebridCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -149,18 +165,7 @@ class DebridCog(commands.Cog):
     async def search(self, ctx, *, query: str):
         logger.info(f"{ctx.invoked_with} {query}")
 
-        results = await torrents.search(query, sortBy="seeders", order="desc")
-        logger.info(f"{len(results['items'])} torrent results.")
-        sanitized_results = []
-        for torrent in results["items"]:
-            info = await torrents.info(torrentId=torrent["torrentId"])
-            logger.info(f"{info['category']} {torrent['torrentId']}")
-            if "xxx".upper() not in info["category"]:
-                logger.info(f"Added {torrent['torrentId']} to results.")
-                sanitized_results.append(torrent)
-            if len(sanitized_results) >= 10:
-                logger.info("Max results reached.")
-                break
+        sanitized_results = await torrent_search_handler(query)
         if len(sanitized_results) > 0:
             embed = utils.embed.torrent_results(sanitized_results)
             e = await ctx.reply(embed=embed, mention_author=False)
