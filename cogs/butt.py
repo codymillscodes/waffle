@@ -2,9 +2,11 @@ from random import randint, choice
 
 import inflect
 import nltk
+import discord
 from discord.ext import commands
+from discord import app_commands
 from loguru import logger
-
+from typing import Literal
 from lib.buttwords import butt_filter
 
 p = inflect.engine()
@@ -24,6 +26,18 @@ class ButtCog(commands.Cog):
         self.chance = 5
         self.filter = butt_filter
         self.pause_count = 0
+        self.tea = False
+
+    @app_commands.command(name="drama")
+    async def drama(
+        self, interaction: discord.Interaction, toggle: Literal["on", "off"]
+    ):
+        if toggle == "on":
+            self.tea = True
+            await interaction.response.send("Enjoy your tea! :tea:")
+        elif toggle == "off":
+            self.tea = False
+            await interaction.response.send("Let's get weird.")
 
     def buttify(self, message):
         words = message.split()
@@ -53,8 +67,7 @@ class ButtCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        on = True
-        if on:
+        if not self.tea:
             if message.author == self.bot.user:
                 return
 
