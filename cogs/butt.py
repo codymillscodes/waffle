@@ -34,10 +34,10 @@ class ButtCog(commands.Cog):
     ):
         if toggle == "on":
             self.tea = True
-            await interaction.response.send("Enjoy your tea! :tea:")
+            await interaction.response.send_message("Enjoy your tea! :tea:")
         elif toggle == "off":
             self.tea = False
-            await interaction.response.send("Let's get weird.")
+            await interaction.response.send_message("Let's get weird.")
 
     def buttify(self, message):
         words = message.split()
