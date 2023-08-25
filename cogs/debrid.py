@@ -1,11 +1,14 @@
 import asyncio
 import time
+import os
 
 import discord
 from discord import app_commands
 from discord.ext import commands
 from loguru import logger
 from py1337x import py1337x
+import requests
+from bs4 import BeautifulSoup as bs
 
 import config
 import utils.debrid as deb
@@ -112,6 +115,38 @@ class DebridCog(commands.Cog):
             except Exception as ex:
                 logger.warning(f"Error Occurred: {ex}")
                 await ctx.reply("Error occurred. Try again later.")
+
+    @commands.command(
+        name="m3u",
+        description="generate playlist of debrid links for easy streaming in vlc",
+        brief="make an m3u!",
+    )
+    async def m3u_gen(self, interaction: discord.Interaction, url: str):
+        await interaction.response.defer(thinking=True)
+        logger.info("Generating M3U")
+        exclude_files = ["txt", "../"]
+        files = []
+        r = requests.get(url).text
+        m3u_name = f"{url.split('/')[-2]}.m3u"
+        # m3u_name = m3u_name
+        soup = bs(r, "html.parser")
+        for tag in soup.find_all("a"):
+            if (
+                tag.get("href")[-3:] in exclude_files
+                or tag.get("href") in exclude_files
+            ):
+                continue
+
+            files.append(f"{url}{tag.get('href')}\n")
+
+        logger.info(f"M3U List: {files}")
+        logger.info(f"File name: {m3u_name}")
+        with open(f"tmp/{m3u_name}", "a") as f:
+            for file in files:
+                f.write(file)
+        await interaction.followup.send(file=discord.File(f"tmp/{m3u_name}"))
+        os.remove(f"tmp/{m3u_name}")
+        logger.info("Sent and removed M3U.")
 
     @commands.command(
         name="clearqueue",
