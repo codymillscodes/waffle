@@ -116,10 +116,9 @@ class DebridCog(commands.Cog):
                 logger.warning(f"Error Occurred: {ex}")
                 await ctx.reply("Error occurred. Try again later.")
 
-    @commands.command(
+    @app_commands.command(
         name="m3u",
         description="generate playlist of debrid links for easy streaming in vlc",
-        brief="make an m3u!",
     )
     async def m3u_gen(self, interaction: discord.Interaction, url: str):
         await interaction.response.defer(thinking=True)
