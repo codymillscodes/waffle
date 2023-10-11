@@ -12,7 +12,7 @@ from typing import Literal
 class MiscCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        with open("lib/p4-enemy.json", "r", encoding="utf-16") as f:
+        with open("lib/p4-enemy.json", "r") as f:
             self.p4_data = json.load(f)
 
     @app_commands.command(name="juiceme", description="get relevant community urls")
