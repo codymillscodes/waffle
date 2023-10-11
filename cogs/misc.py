@@ -84,8 +84,8 @@ class MiscCog(commands.Cog):
         """
 
         results = []
-        for key, value in self.p4_data.items():
-            if enemy.lower() in key.lower() or enemy.lower() in value.lower():
+        for key in self.p4_data.items():
+            if enemy.lower() in key.lower():
                 results.append(key)
 
         if not results:
