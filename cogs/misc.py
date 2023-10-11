@@ -2,6 +2,7 @@ from discord import app_commands
 from discord.ext import commands
 from random import randint
 from loguru import logger
+import json
 import discord
 from utils.db import DB
 from utils.embed import twitcher_embed, juiceme
@@ -11,6 +12,8 @@ from typing import Literal
 class MiscCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        with open("lib/p4-enemy.json", "r", encoding="utf-16") as f:
+            self.p4_data = json.load(f)
 
     @app_commands.command(name="juiceme", description="get relevant community urls")
     async def juiceme(self, interaction: discord.Interaction):
@@ -32,6 +35,22 @@ class MiscCog(commands.Cog):
             )
         else:
             await interaction.response.send_message("Invalid input")
+
+    @app_commands.command(name="p4", description="search enemy info for Persona 4")
+    async def p4(self, interaction: discord.Interaction, enemy: str):
+        results = []
+        for key, value in self.p4_data.items():
+            if enemy in key or enemy in value:
+                results.append(key)
+        p4_embed = discord.Embed(title="P4 Resists")
+        for x in results:
+            # phys, fire, ice, elec, wind, light, dark
+            p4_embed.add_field(name=x.key, value=x["resists"])
+        p4_embed.add_field(
+            name="info",
+            value="I'll make this better but\nin this order: phys, fire, ice, elec, wind, light, dark\ns:strong, w:weak, r:repel, n:null, d:drain",
+        )
+        await interaction.response.send_message(embed=p4_embed)
 
     @app_commands.command(name="twitchers", description="Get twitcher status")
     async def twitchers(
