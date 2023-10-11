@@ -94,18 +94,18 @@ class MiscCog(commands.Cog):
             )
             return
 
-        for x in results:
-            p4_embed = discord.Embed(title=x)
-            resists_dict = parse_resists(self.p4_data[x]["resists"])
-            for element, resist in resists_dict.items():
-                p4_embed.add_field(name=element.upper(), value=resist)
+        p4_embed = discord.Embed(title=results[0])
+        # resists_dict = parse_resists(self.p4_data[x]["resists"])
+        # for element, resist in resists_dict.items():
+        #    p4_embed.add_field(name=element.upper(), value=resist)
+        p4_embed.add_field(name="resists", value=self.p4_data[results[0]]["resists"])
 
-            p4_embed.add_field(
-                name="info",
-                value="I'll make this better but\nin this order: phys, fire, ice, elec, wind, light, dark\ns:strong, w:weak, r:repel, n:null, d:drain",
-            )
+        p4_embed.add_field(
+            name="info",
+            value="I'll make this better but\nin this order: phys, fire, ice, elec, wind, light, dark\ns:strong, w:weak, r:repel, n:null, d:drain",
+        )
 
-            await interaction.response.send_message(embed=p4_embed)
+        await interaction.response.send_message(embed=p4_embed)
 
     @app_commands.command(name="twitchers", description="Get twitcher status")
     async def twitchers(
