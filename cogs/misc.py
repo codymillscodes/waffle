@@ -85,7 +85,7 @@ class MiscCog(commands.Cog):
 
         results = []
         for key, value in self.p4_data.items():
-            if enemy in key or enemy in value:
+            if enemy.lower() in key.lower() or enemy.lower() in value.lower():
                 results.append(key)
 
         if not results:
@@ -95,7 +95,7 @@ class MiscCog(commands.Cog):
             return
 
         for x in results:
-            p4_embed = discord.Embed(title=x.key)
+            p4_embed = discord.Embed(title=x)
 
             resists_dict = parse_resists(x["resists"])
             for element, resist in resists_dict.items():
