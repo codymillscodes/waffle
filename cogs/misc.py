@@ -98,7 +98,9 @@ class MiscCog(commands.Cog):
         # resists_dict = parse_resists(self.p4_data[x]["resists"])
         # for element, resist in resists_dict.items():
         #    p4_embed.add_field(name=element.upper(), value=resist)
-        p4_embed.add_field(name="resists", value=self.p4_data[results[0]]["resists"])
+        p4_embed.add_field(
+            name="resists", value=self.p4_data[results[0]]["resists"][:-1]
+        )
 
         p4_embed.add_field(
             name="info",
