@@ -96,8 +96,7 @@ class MiscCog(commands.Cog):
 
         for x in results:
             p4_embed = discord.Embed(title=x)
-            print(x)
-            resists_dict = parse_resists(x["resists"])
+            resists_dict = parse_resists(self.p4_data[x]["resists"])
             for element, resist in resists_dict.items():
                 p4_embed.add_field(name=element.upper(), value=resist)
 
