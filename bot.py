@@ -30,6 +30,11 @@ class Waffle(commands.Bot):
         logger.add("logs/waffle.log", rotation="7 MB", retention="10 days")
         logger.level("DEBUG")
         logger.info("Logging is set up!")
+        self.twitchers = {}
+        with open("twitchers.txt", "r") as f:
+            for line in f:
+                line = line.strip()
+                self.twitchers["line"] = False
 
         self.twitch_headers = ""
         self.db = DB()
@@ -75,35 +80,31 @@ class Waffle(commands.Bot):
     @tasks.loop(seconds=15)
     async def twitch_check(self):
         twitch_channel = await self.fetch_channel(TWITCH_CHANNEL)
-        twitchers = await self.db.get_twitchers()
-        twitchers = list(twitchers)
         # logger.debug("Checking twitchers...")
         # logger.debug(f"Checking {len(twitchers)} twitchers...")
-        for t in twitchers:
+        for user in self.twitchers.keys():
             async with Conn() as resp:
                 stream_data = await resp.get_json(
-                    Urls.TWITCH_URL + t["user"], headers=self.twitch_headers
+                    Urls.TWITCH_URL + user, headers=self.twitch_headers
                 )
             try:
-                if (
-                    stream_data["data"] != []
-                    and stream_data["data"][0]["type"] == "live"
-                ):
-                    if not t["online"]:
-                        embed = stream_embed(
-                            t["user"],
-                            stream_data["data"][0]["title"],
-                            stream_data["data"][0]["game_name"],
-                        )
-                        await self.db.set_twitcher_status(
-                            t["user"], True, stream_data["data"][0]["game_name"]
-                        )
-                        logger.info(f"{t['user']} is online.")
-                        await twitch_channel.send(embed=embed)
-                elif not stream_data["data"]:
-                    if t["online"]:
-                        await self.db.set_twitcher_status(t["user"], False)
-                        logger.info(f"{t['user']} is offline.")
+                if "data" in stream_data:
+                    if stream_data["data"][0]["type"] == "live":
+                        if self.twitchers[user]:
+                            embed = stream_embed(
+                                user,
+                                stream_data["data"][0]["title"],
+                                stream_data["data"][0]["game_name"],
+                            )
+                            self.twitchers[user] = True
+                            logger.info(f"{user} is online.")
+                            await twitch_channel.send(embed=embed)
+                    elif not stream_data["data"]:
+                        if self.twitchers[user]:
+                            self.twitchers[user] = False
+                            logger.info(f"{user} is offline.")
+                else:
+                    logger.info(stream_data)
             except (KeyError, IndexError, UnboundLocalError) as e:
                 logger.exception(e)
             except TypeError:
@@ -128,7 +129,7 @@ class Waffle(commands.Bot):
             # logger.info(f"{queue}")
             for dl_id in queue:
                 if "active" in dl_id["status"]:
-                    logger.info(f"Checking: {dl_id['task_id']}")
+                    # logger.info(f"Checking: {dl_id['task_id']}")
                     if "link" in dl_id["type"]:
                         async with Conn() as resp:
                             r = await resp.get_json(

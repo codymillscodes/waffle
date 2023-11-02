@@ -26,7 +26,7 @@ class ButtCog(commands.Cog):
         self.chance = 5
         self.filter = butt_filter
         self.pause_count = 0
-        self.tea = False
+        self.tea = True
 
     @app_commands.command(name="drama")
     async def drama(
