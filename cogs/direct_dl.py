@@ -102,9 +102,12 @@ class DirectDLCog(commands.Cog):
             await interaction.followup.send("No results. :(")
         else:
             download = self.books.resolve_download_links(results[0])
-            await interaction.followup.send(
-                f"{results[0]['Title']} by {results[0]['Author']} ({results[0]['Year']})\nURL: {download['GET']}"
+            embed = discord.Embed(description=f"<@{interaction.user}>")
+            embed.add_field(
+                name=f"{results[0]['Title']} by {results[0]['Author']} ({results[0]['Year']})",
+                value=f"[downloooooad]({download['GET']})",
             )
+            await interaction.followup.send(embed)
 
     @app_commands.command(name="video")
     async def video(self, interaction: discord.Interaction, url: str):
