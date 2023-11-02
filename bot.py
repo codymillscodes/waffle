@@ -80,8 +80,8 @@ class Waffle(commands.Bot):
     @tasks.loop(seconds=15)
     async def twitch_check(self):
         twitch_channel = await self.fetch_channel(TWITCH_CHANNEL)
-        # logger.debug("Checking twitchers...")
-        # logger.debug(f"Checking {len(twitchers)} twitchers...")
+        logger.debug("Checking twitchers...")
+        logger.debug(f"Checking {len(self.twitchers)} twitchers...")
         for user in self.twitchers.keys():
             async with Conn() as resp:
                 stream_data = await resp.get_json(
