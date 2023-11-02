@@ -107,7 +107,7 @@ class DirectDLCog(commands.Cog):
                 name=f"{results[0]['Title']} by {results[0]['Author']} ({results[0]['Year']})",
                 value=f"[downloooooad]({download['GET']})",
             )
-            await interaction.followup.send(embed)
+            await interaction.followup.send(embed=embed)
 
     @app_commands.command(name="video")
     async def video(self, interaction: discord.Interaction, url: str):
