@@ -80,11 +80,9 @@ class Waffle(commands.Bot):
     @tasks.loop(seconds=15)
     async def twitch_check(self):
         twitch_channel = await self.fetch_channel(TWITCH_CHANNEL)
-        logger.debug("Checking twitchers...")
-        logger.debug(f"Checking {len(self.twitchers)} twitchers...")
-        logger.debug(self.twitchers)
+        # logger.debug("Checking twitchers...")
+        # logger.debug(f"Checking {len(self.twitchers)} twitchers...")
         for user in self.twitchers.keys():
-            logger.info(user)
             async with Conn() as resp:
                 stream_data = await resp.get_json(
                     Urls.TWITCH_URL + user, headers=self.twitch_headers
@@ -92,6 +90,7 @@ class Waffle(commands.Bot):
             try:
                 if "data" in stream_data:
                     if stream_data["data"] != []:
+                        logger.info(stream_data)
                         if stream_data["data"][0]["type"] == "live":
                             if self.twitchers[user]:
                                 embed = stream_embed(
