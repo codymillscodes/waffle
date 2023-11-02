@@ -172,7 +172,7 @@ class ChatbotCog(commands.Cog):
                 ctx = await self.bot.get_context(message)
                 i = message.content
                 async with ctx.typing():
-                    i = i.replace("<@968919979577704529>", "@waffle")
+                    i = i.replace("<@968919979577704529>", "")
                     messages.append({"role": "user", "content": i})
                     logger.info(f"Input sent: {i}")
                     send = 1
