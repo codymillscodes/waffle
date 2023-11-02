@@ -95,6 +95,9 @@ async def get_tiktok_link(url):
                     stream_id = s["id"]
                     stream_fs = s["filesize"]
                     break
+                else:
+                    logger.info("Couldnt find h264")
+                    return 0
 
             async with Conn() as resp:
                 r = await resp.get_json(
