@@ -102,7 +102,7 @@ class DirectDLCog(commands.Cog):
             await interaction.followup.send("No results. :(")
         else:
             download = self.books.resolve_download_links(results[0])
-            embed = discord.Embed(description=f"@{interaction.user}")
+            embed = discord.Embed(description=interaction.user.mention)
             embed.add_field(
                 name=f"{results[0]['Title']} by {results[0]['Author']} ({results[0]['Year']})",
                 value=f"[downloooooad]({download['GET']})",
