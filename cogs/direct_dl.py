@@ -103,7 +103,7 @@ class DirectDLCog(commands.Cog):
         else:
             download = self.books.resolve_download_links(results[0])
             await interaction.followup.send(
-                f"{results[0]['title']} by {results[0]['Author']} ({results[0]['Year']})\nURL: {download['GET']}"
+                f"{results[0]['Title']} by {results[0]['Author']} ({results[0]['Year']})\nURL: {download['GET']}"
             )
 
     @app_commands.command(name="video")
