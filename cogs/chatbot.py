@@ -197,9 +197,11 @@ class ChatbotCog(commands.Cog):
                 await message.reply(r, mention_author=False)
             except openai.error.ServiceUnavailableError:
                 await message.channel.send("The server is overloaded or not ready yet.")
+            except openai.error.RateLimitError:
+                await message.channel.send("PAY THE BILL!!!")
             except Exception as e:
                 logger.exception(e)
-                await message.channel.send("The server is overloaded or not ready yet.")
+                await message.channel.send(e.__class__.__name__)
 
 
 async def setup(bot):
