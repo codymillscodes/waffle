@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 from discord import app_commands
 from discord.ext import commands
 from loguru import logger
+from libgen_api import LibgenSearch
 
 from config import DL_CHANNEL
 from utils.connection import Connection as Conn
@@ -14,6 +15,7 @@ from utils.db import DB
 from utils.debrid import get_tiktok_link, download_tiktok_video, delete_file
 from utils.embed import download_ready
 from utils.urls import Urls
+from typing import Literal
 
 
 async def get_title(url):
@@ -29,6 +31,7 @@ async def get_title(url):
 class DirectDLCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.books = LibgenSearch()
 
     @app_commands.command(
         name="bandcamp",
@@ -82,6 +85,27 @@ class DirectDLCog(commands.Cog):
         else:
             await interaction.response.send_message("Only supports youtube for now.")
 
+    @app_commands.command(name="book_search")
+    async def book_search(
+        self,
+        interaction: discord.Interaction,
+        author: str,
+        title: str,
+        extension: Literal["epub", "mobi", "pdf"],
+    ):
+        await interaction.response.defer(thinking=True)
+        filters = {"Extension": extension, "Author": author}
+        results = self.books.search_title_filtered(title, filters, exact_match=False)
+        logger.info(f"libgen search: {title} by {author}")
+        logger.info(f"Results: {len(results)}")
+        if len(results) == 0:
+            await interaction.followup.send("No results. :(")
+        else:
+            download = self.books.resolve_download_links(results[0])
+            await interaction.followup.send(
+                f"{results[0]['title']} by {results[0]['Author']} ({results[0]['Year']})\nURL: {download['GET']}"
+            )
+
     @app_commands.command(name="video")
     async def video(self, interaction: discord.Interaction, url: str):
         resolutions = [720, 480, 360, 240]
@@ -107,7 +131,9 @@ class DirectDLCog(commands.Cog):
             await interaction.followup.send("No 1080p, 720p, 480p, 360p or 240p found.")
             return
         async with Conn() as resp:
-            result = await resp.get_json(f"{Urls.DEBRID_STREAMING}{vid_id}&stream={stream}")
+            result = await resp.get_json(
+                f"{Urls.DEBRID_STREAMING}{vid_id}&stream={stream}"
+            )
         logger.info(f"url: {Urls.DEBRID_STREAMING}{vid_id}&stream={stream}")
         try:
             vid_id = result["data"]["delayed"]
@@ -130,7 +156,7 @@ class DirectDLCog(commands.Cog):
         except KeyError as e:
             # link = result["data"]["link"]
             logger.exception(e)
-            await interaction.followup.send('ERROR')
+            await interaction.followup.send("ERROR")
 
         # else:
         #    await ctx.reply("Only supports YouTube for now.", mention_author=False)
