@@ -34,7 +34,7 @@ class Waffle(commands.Bot):
         with open("twitchers.txt", "r") as f:
             for line in f:
                 line = line.strip()
-                self.twitchers["line"] = False
+                self.twitchers[line] = False
 
         self.twitch_headers = ""
         self.db = DB()
