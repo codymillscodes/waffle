@@ -92,7 +92,7 @@ class Waffle(commands.Bot):
                     if stream_data["data"] != []:
                         logger.info(stream_data)
                         if stream_data["data"][0]["type"] == "live":
-                            logger.info(self.twitcher[user])
+                            logger.info(self.twitchers[user])
                             if self.twitchers[user]:
                                 embed = stream_embed(
                                     user,
