@@ -82,6 +82,7 @@ class Waffle(commands.Bot):
         twitch_channel = await self.fetch_channel(TWITCH_CHANNEL)
         logger.debug("Checking twitchers...")
         logger.debug(f"Checking {len(self.twitchers)} twitchers...")
+        logger.debug(self.twitchers)
         for user in self.twitchers.keys():
             async with Conn() as resp:
                 stream_data = await resp.get_json(
