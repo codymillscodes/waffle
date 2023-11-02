@@ -275,8 +275,8 @@ def stream_embed(name, title=None, game=None):
     embed = Embed(description=f"<@&{TWITCH_NOTIFY_ROLE}>")
     if title is not None:
         embed.add_field(
-            name=f"""{name} is live: {title} playing {game}""",
-            value=f"{Urls.TWITCH_CHANNEL}{name}",
+            name=f"""{name} is live!""",
+            value=f"{title}\n{game}\n{Urls.TWITCH_CHANNEL}{name}",
         )
     else:
         embed.add_field(
