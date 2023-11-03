@@ -112,7 +112,8 @@ class Waffle(commands.Bot):
                 logger.exception(e)
             except TypeError:
                 logger.info("Twitch API is down.")
-                await self.get_twitch_headers()
+                logger.exception(e)
+                # await self.get_twitch_headers()
         # except KeyError as e:
         #    logger.exception(e)
         #    await self.get_twitch_headers()
