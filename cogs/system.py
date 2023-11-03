@@ -11,7 +11,7 @@ from utils.connection import Connection as Conn
 
 
 async def get_log():
-    logs_folder = "/mnt/thumb/waffle/logs"
+    logs_folder = "/root/waffle/logs"
     log_file = max(glob.glob(os.path.join(logs_folder, "*.log")), key=os.path.getctime)
     return log_file
 
