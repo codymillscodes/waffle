@@ -90,7 +90,7 @@ async def get_tiktok_link(url):
             logger.info(file_id, streams)
             for s in streams:
                 logger.info(s)
-                if ["h264", "bytevc1"] in s["format"]:
+                if "h264" in s["format"] or "bytevc1" in s["format"]:
                     logger.info("Found stream")
                     stream_id = s["id"]
                     stream_fs = s["filesize"]
