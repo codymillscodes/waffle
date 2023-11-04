@@ -110,7 +110,7 @@ class Waffle(commands.Bot):
                     logger.info(stream_data)
             except (KeyError, IndexError, UnboundLocalError) as e:
                 logger.exception(e)
-            except TypeError:
+            except TypeError as e:
                 logger.info("Twitch API is down.")
                 logger.exception(e)
                 # await self.get_twitch_headers()
