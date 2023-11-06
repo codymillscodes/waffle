@@ -80,7 +80,7 @@ class ChatbotCog(commands.Cog):
             temperature=0.7,
             max_tokens=1024,
             model=self.engine,
-            prompt=messages,
+            messages=messages,
         )
         logger.info(f"Response recvd. Tokens used: {response['usage']['total_tokens']}")
         await interaction.followup.send(response.choices[0].message.content)
