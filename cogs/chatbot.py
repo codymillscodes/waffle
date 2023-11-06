@@ -69,7 +69,7 @@ class ChatbotCog(commands.Cog):
         messages = [
             {
                 "role": "system",
-                "content": "You will act as an expert of blackjack. I will tell you the upcards, and you will advise me on my best course of action. Please repeat the cards in play with your response.",
+                "content": "You will act as an expert of blackjack. I will tell you the upcards, and you will advise me on my best course of action. No need to explain rules. Just math and what to do. Please repeat the cards in play with your response.",
             },
             {
                 "role": "user",
