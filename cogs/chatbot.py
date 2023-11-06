@@ -79,7 +79,7 @@ class ChatbotCog(commands.Cog):
         response = await openai.ChatCompletion.acreate(
             temperature=0.7,
             max_tokens=1024,
-            engine=self.engine,
+            model=self.engine,
             prompt=messages,
         )
         logger.info(f"Response recvd. Tokens used: {response['usage']['total_tokens']}")
