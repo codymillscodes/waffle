@@ -61,6 +61,20 @@ class ChatbotCog(commands.Cog):
             f">>> {prompt}\n```\n{response.choices[0].text[-4500:]}\n```"
         )
 
+    @app_commands.command(name="bj", description="im cheating at blackjack")
+    async def bj(
+        self, interaction: discord.Interaction, dealer: str, up1: str, up2: str
+    ):
+        await interaction.response.defer(thinking=True)
+        response = await openai.Completion.acreate(
+            temperature=0.7,
+            max_tokens=1024,
+            engine=self.engine,
+            prompt=f"blackjack: dealer has {dealer}. I have {up1}, {up2}.",
+        )
+        logger.info(f"BJ recvd: {response}")
+        await interaction.followup.send(response.choices[0].text)
+
     @app_commands.command(name="setengine")
     async def setengine(
         self,
