@@ -29,6 +29,18 @@ class DB:
         logger.info(f"Found bool: {found}, count: {count}")
         return not found
 
+    async def set_status(self, task_id, status):
+        r = self.queue.update_many(
+            {"task_id": task_id},
+            {
+                "$set": {"status": status, "updated_at": get_time()},
+            },
+        )
+        logger.info(
+            f"Matched: {r.matched_count}, Modified: {r.modified_count}, acknowledged: {r.acknowledged}"
+        )
+        logger.info(f"Set status of {task_id} to {status}")
+
     async def add_to_playlist(self, tracks: list):
         for track in tracks:
             data = {
