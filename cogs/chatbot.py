@@ -53,7 +53,7 @@ class ChatbotCog(commands.Cog):
     )
     async def gpt(self, interaction: discord.Interaction, prompt: str):
         await interaction.response.defer(thinking=True)
-        response = await openai.Completion.acreate(
+        response = await openai.ChatCompletion.acreate(
             temperature=0.7, max_tokens=2048, engine=self.engine, prompt=prompt
         )
         logger.info(f"GPT recvd: {response}")
@@ -66,14 +66,24 @@ class ChatbotCog(commands.Cog):
         self, interaction: discord.Interaction, dealer: str, up1: str, up2: str
     ):
         await interaction.response.defer(thinking=True)
-        response = await openai.Completion.acreate(
+        messages = [
+            {
+                "role": "system",
+                "content": "You will act as an expert of blackjack. I will tell you the upcards, and you will advise me, briefly, on my best course of action.",
+            },
+            {
+                "role": "user",
+                "content": f"blackjack: dealer has {dealer}. I have {up1}, {up2}.",
+            },
+        ]
+        response = await openai.ChatCompletion.acreate(
             temperature=0.7,
             max_tokens=1024,
             engine=self.engine,
-            prompt=f"blackjack: dealer has {dealer}. I have {up1}, {up2}.",
+            prompt=messages,
         )
-        logger.info(f"BJ recvd: {response}")
-        await interaction.followup.send(response.choices[0].text)
+        logger.info(f"Response recvd. Tokens used: {response['usage']['total_tokens']}")
+        await interaction.followup.send(response.choices[0].message.content)
 
     @app_commands.command(name="setengine")
     async def setengine(
