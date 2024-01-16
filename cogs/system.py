@@ -24,7 +24,9 @@ class SystemCog(commands.Cog):
     async def ping(self, ctx):
         await ctx.reply("fuck you", mention_author=False)
 
-    @commands.command()
+    @commands.command(
+        name="leave", description="leave a guild by name", brief="leave a guild"
+    )
     async def leaveg(self, ctx, *, guild_name):
         guild = discord.utils.get(
             self.bot.guilds, name=guild_name
