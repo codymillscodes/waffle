@@ -24,6 +24,17 @@ class SystemCog(commands.Cog):
     async def ping(self, ctx):
         await ctx.reply("fuck you", mention_author=False)
 
+    @commands.command()
+    async def leaveg(self, ctx, *, guild_name):
+        guild = discord.utils.get(
+            self.bot.guilds, name=guild_name
+        )  # Get the guild by name
+        if guild is None:
+            print("No guild with that name found.")  # No guild found
+            return
+        await guild.leave()  # Guild found
+        await ctx.send(f"I left: {guild.name}!")
+
     @commands.command(
         name="log",
         description="Uploads the most recent logfile.",
