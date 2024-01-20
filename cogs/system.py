@@ -24,16 +24,16 @@ class SystemCog(commands.Cog):
     async def ping(self, ctx):
         await ctx.reply("fuck you", mention_author=False)
 
-    @app_commands.command(name="leave", description="leave a guild by name")
-    async def leaveg(self, interaction: discord.Interaction, guild_name: str):
-        guild = discord.utils.get(
-            self.bot.guilds, name=guild_name
-        )  # Get the guild by name
-        if guild is None:
-            print("No guild with that name found.")  # No guild found
-            return
-        await guild.leave()  # Guild found
-        await interaction.response.send_message(f"I left: {guild.name}!")
+    # @app_commands.command(name="leave", description="leave a guild by name")
+    # async def leaveg(self, interaction: discord.Interaction, guild_name: str):
+    #     guild = discord.utils.get(
+    #         self.bot.guilds, name=guild_name
+    #     )  # Get the guild by name
+    #     if guild is None:
+    #         print("No guild with that name found.")  # No guild found
+    #         return
+    #     await guild.leave()  # Guild found
+    #     await interaction.response.send_message(f"I left: {guild.name}!")
 
     @commands.command(
         name="log",

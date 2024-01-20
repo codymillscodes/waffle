@@ -291,7 +291,7 @@ def torrent_results(results):
 
 
 def stream_embed(name, title=None, game=None):
-    embed = Embed(description=f"<@&{TWITCH_NOTIFY_ROLE}>")
+    embed = Embed(description=f":rotating_light:")
     if title is not None:
         embed.add_field(
             name=f"""{name} is live!""",
