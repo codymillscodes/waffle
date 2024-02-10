@@ -184,6 +184,7 @@ class DebridCog(commands.Cog):
         logger.info(f"{ctx.invoked_with} {query}")
 
         results = torrents.search(query, sortBy="seeders", order="desc")
+        logger.info(f"Results:\n{results}")
         logger.info(f"{len(results['items'])} torrent results.")
         sanitized_results = []
         for torrent in results["items"]:
