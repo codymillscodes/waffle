@@ -39,6 +39,7 @@ class DebridCog(commands.Cog):
         self.api_key = config.DEBRID_KEY
         self.api_host = config.DEBRID_AGENT
         self.token = ""
+        self.cookie = config.COOKIE_1337X
 
     @commands.command(
         name="deletetorrents",
@@ -183,8 +184,10 @@ class DebridCog(commands.Cog):
     async def search(self, ctx, *, query: str):
         logger.info(f"{ctx.invoked_with} {query}")
 
-        results = torrents.search(query, sortBy="seeders", order="desc")
-        logger.info(f"Results:\n{results}")
+        results = torrents.search(
+            query, sortBy="seeders", order="desc", cookie=self.cookie
+        )
+        # logger.info(f"Results:\n{results}")
         logger.info(f"{len(results['items'])} torrent results.")
         sanitized_results = []
         for torrent in results["items"]:

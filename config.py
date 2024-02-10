@@ -54,3 +54,4 @@ for i in range(len(IGNORE_CHANNELS)):
 AZURA_PUBLIC = os.environ["AZURA_PUBLIC"]
 AZURA_IP = os.environ["AZURA_IP"]
 AZURA_STATION_ID = os.environ["AZURA_STATION_ID"]
+COOKIE_1337X = os.environ["COOKIE_1337X"]
