@@ -14,7 +14,6 @@ from loguru import logger
 from utils.connection import Connection as Conn
 import urllib.parse
 from utils.urls import Urls
-from utils.random import get_link_msg
 from utils.embed import download_ready, stream_embed
 from utils.db import DB
 
