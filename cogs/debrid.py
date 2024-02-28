@@ -178,17 +178,23 @@ class DebridCog(commands.Cog):
                 mention_author=False,
             )
 
-    @commands.command(name="fg", description="search fitgirl")
+    @commands.command(name="fg", aliases=["search"], description="searchin")
     async def fg(self, ctx, *, query: str):
         logger.info(f"{ctx.invoked_with} {query}")
 
-        results = await yar.search_fitgirl(query)
+        if ctx.invoked_with == "fg":
+            results = await yar.search_fitgirl(query)
+        if ctx.invoked_with == "search":
+            results = await yar.search_rarbg(query)
         if results["status"] != "Error":
             embed = discord.Embed()
             x = 0
-            fg_reply = "__**FITGIRL TORRENTS**__\n>>> "
+
+            fg_reply = "__**TORRENT RESULTS**__\n>>> "
             for r in results["results"]:
                 fg_reply = fg_reply + f"{x+1}. **{r['name']}**\n"
+
+            fg_reply = fg_reply + "*!pick #*"
 
             e = await ctx.reply(fg_reply, mention_author=False)
 
@@ -212,9 +218,14 @@ class DebridCog(commands.Cog):
                     else:
                         dl_channel = await self.bot.fetch_channel(config.DL_CHANNEL)
                         not_ready = 0
-                        magnet_link = await yar.magnet_fitgirl(
-                            list(results["results"])[pick]["url"]
-                        )
+                        if ctx.invoked_with == "fg":
+                            magnet_link = await yar.magnet_fitgirl(
+                                list(results["results"])[pick]["url"]
+                            )
+                        else:
+                            magnet_link = await yar.magnet_rarbg(
+                                list(results["results"])[pick]["url"]
+                            )
                         mag = await deb.upload_magnet(magnet_link)
                         if mag[2]:
                             embed = utils.embed.download_ready(ctx.author.id, mag[1])
@@ -240,84 +251,84 @@ class DebridCog(commands.Cog):
                 await e.add_reaction("❌")
                 await ctx.send("something broke lol")
 
-    @commands.command(
-        name="search",
-        description="Search 1337x",
-    )
-    async def search(self, ctx, *, query: str):
-        logger.info(f"{ctx.invoked_with} {query}")
+    # @commands.command(
+    #     name="search",
+    #     description="Search 1337x",
+    # )
+    # async def search(self, ctx, *, query: str):
+    #     logger.info(f"{ctx.invoked_with} {query}")
 
-        results = torrents.search(query, sortBy="seeders", order="desc")
-        # logger.info(f"Results:\n{results}")
-        logger.info(f"{len(results['items'])} torrent results.")
-        sanitized_results = []
-        for torrent in results["items"]:
-            info = torrents.info(torrentId=torrent["torrentId"])
-            logger.info(f"{info['category']} {torrent['torrentId']}")
-            if "xxx".upper() not in info["category"]:
-                logger.info(f"Added {torrent['torrentId']} to results.")
-                sanitized_results.append(torrent)
-            if len(sanitized_results) >= 10:
-                logger.info("Max results reached.")
-                break
-        if len(sanitized_results) > 0:
-            embed = utils.embed.torrent_results(sanitized_results)
-            e = await ctx.reply(embed=embed, mention_author=False)
-        else:
-            await ctx.reply("Zero results.", mention_author=False)
+    #     results = torrents.search(query, sortBy="seeders", order="desc")
+    #     # logger.info(f"Results:\n{results}")
+    #     logger.info(f"{len(results['items'])} torrent results.")
+    #     sanitized_results = []
+    #     for torrent in results["items"]:
+    #         info = torrents.info(torrentId=torrent["torrentId"])
+    #         logger.info(f"{info['category']} {torrent['torrentId']}")
+    #         if "xxx".upper() not in info["category"]:
+    #             logger.info(f"Added {torrent['torrentId']} to results.")
+    #             sanitized_results.append(torrent)
+    #         if len(sanitized_results) >= 10:
+    #             logger.info("Max results reached.")
+    #             break
+    #     if len(sanitized_results) > 0:
+    #         embed = utils.embed.torrent_results(sanitized_results)
+    #         e = await ctx.reply(embed=embed, mention_author=False)
+    #     else:
+    #         await ctx.reply("Zero results.", mention_author=False)
 
-        def check(m):
-            return m.author == ctx.author and m.content.startswith(
-                ("!pick", "!Pick", "!search")
-            )
+    #     def check(m):
+    #         return m.author == ctx.author and m.content.startswith(
+    #             ("!pick", "!Pick", "!search")
+    #         )
 
-        try:
-            msg = await self.bot.wait_for("message", check=check, timeout=60)
-            if msg.content.startswith("!search"):
-                # await ctx.invoke(self.search, input=msg.content[8:])
-                await e.add_reaction("❌")
-            elif msg.content.startswith("!pick"):
-                pick = deb.eval_pick(msg.content.replace("!pick", "").strip())
-                # pick = int(msg.content[6:]) - 1
-                if pick[0] > 10:
-                    await ctx.send("WRONG")
-                elif len(pick) == 0 or pick[0] < 0:
-                    await e.add_reaction("❌")
-                else:
-                    dl_channel = await self.bot.fetch_channel(config.DL_CHANNEL)
-                    not_ready = 0
-                    for p in pick:
-                        # logger.info(f"results: {results}")
-                        magnet_link = torrents.info(
-                            torrentId=sanitized_results[p]["torrentId"]
-                        )["magnetLink"]
-                        # add magnet, get ready, name, id
-                        mag = await deb.upload_magnet(magnet_link)
-                        if mag[2]:
-                            embed = utils.embed.download_ready(ctx.author.id, mag[1])
-                            await dl_channel.send(embed=embed)
-                        else:
-                            await DB().add_to_queue(
-                                [mag[0], query, ctx.author.id, "magnet"]
-                            )
-                            not_ready += 1
-                    if not_ready == 0:
-                        download_word = "download" if len(pick) == 1 else "downloads"
-                        await ctx.reply(
-                            f"Sent {len(pick)} {download_word} to <#{config.DL_CHANNEL}>",
-                            mention_author=False,
-                        )
-                    else:
-                        await ctx.reply(
-                            f"Sent {len(pick) - not_ready} downloads to <#{config.DL_CHANNEL}>. {not_ready} not "
-                            "ready.",
-                            mention_author=False,
-                        )
-        except asyncio.TimeoutError:
-            # await ctx.send("TOO SLOW", mention_author=False)
-            # add reaction to previously sent em_result embed
-            await e.add_reaction("❌")
-            # await ctx.message.add_reaction("❌")
+    #     try:
+    #         msg = await self.bot.wait_for("message", check=check, timeout=60)
+    #         if msg.content.startswith("!search"):
+    #             # await ctx.invoke(self.search, input=msg.content[8:])
+    #             await e.add_reaction("❌")
+    #         elif msg.content.startswith("!pick"):
+    #             pick = deb.eval_pick(msg.content.replace("!pick", "").strip())
+    #             # pick = int(msg.content[6:]) - 1
+    #             if pick[0] > 10:
+    #                 await ctx.send("WRONG")
+    #             elif len(pick) == 0 or pick[0] < 0:
+    #                 await e.add_reaction("❌")
+    #             else:
+    #                 dl_channel = await self.bot.fetch_channel(config.DL_CHANNEL)
+    #                 not_ready = 0
+    #                 for p in pick:
+    #                     # logger.info(f"results: {results}")
+    #                     magnet_link = torrents.info(
+    #                         torrentId=sanitized_results[p]["torrentId"]
+    #                     )["magnetLink"]
+    #                     # add magnet, get ready, name, id
+    #                     mag = await deb.upload_magnet(magnet_link)
+    #                     if mag[2]:
+    #                         embed = utils.embed.download_ready(ctx.author.id, mag[1])
+    #                         await dl_channel.send(embed=embed)
+    #                     else:
+    #                         await DB().add_to_queue(
+    #                             [mag[0], query, ctx.author.id, "magnet"]
+    #                         )
+    #                         not_ready += 1
+    #                 if not_ready == 0:
+    #                     download_word = "download" if len(pick) == 1 else "downloads"
+    #                     await ctx.reply(
+    #                         f"Sent {len(pick)} {download_word} to <#{config.DL_CHANNEL}>",
+    #                         mention_author=False,
+    #                     )
+    #                 else:
+    #                     await ctx.reply(
+    #                         f"Sent {len(pick) - not_ready} downloads to <#{config.DL_CHANNEL}>. {not_ready} not "
+    #                         "ready.",
+    #                         mention_author=False,
+    #                     )
+    #     except asyncio.TimeoutError:
+    #         # await ctx.send("TOO SLOW", mention_author=False)
+    #         # add reaction to previously sent em_result embed
+    #         await e.add_reaction("❌")
+    #         # await ctx.message.add_reaction("❌")
 
 
 async def setup(bot):

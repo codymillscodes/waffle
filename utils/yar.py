@@ -3,28 +3,41 @@ import requests
 import httpx
 
 
-def search_rarbg(query):
+async def search_rarbg(query):
     url = f"https://therarbg.to/get-posts/keywords:{query}:ncategory:XXX/"
-    resp = requests.get(url)
+    async with httpx.AsyncClient() as client:
+        resp = await client.get(url)
     soup = bs(resp.text, features="html.parser")
     # print(soup.prettify())
     tbody = soup.find("tbody")
     # torr = tbody.find_all('div')
     # print(tbody)
-    torrents = []
+    torrents = {"status": "Success", "results": []}
     for t in tbody:
         soup = bs(str(t), features="html.parser")
         try:
+            if len(torrents["results"]) > 9:
+                break
             name = soup.find("td", class_="cellName")
             url = name.a
             size = soup.find("td", class_="sizeCell")
 
             # print(name.a.string, '\n', url['href'], '\n', size.string, '\n')
             torrent = {"name": name.a.string, "url": url["href"], "size": size.string}
-            torrents.append(torrent)
+            torrents["results"].append(torrent)
         except:
-            print("durr")
-    print(torrents)
+            continue
+    return torrents
+
+
+async def magnet_rarbg(url):
+    url = f"https://therarbg.com{url}"
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url)
+
+    tpage = bs(response.text, features="html.parser")
+    magnet_link = tpage.select_one("a[href*=magnet]")
+    return magnet_link["href"]
 
 
 async def search_fitgirl(query):
@@ -55,14 +68,3 @@ async def magnet_fitgirl(url):
     game_page = bs(response.text, features="html.parser")
     magnet_link = game_page.select_one("a[href*=magnet]")
     return magnet_link["href"]
-
-
-async def main():
-    results = await search_fitgirl("elden ring")
-    print(list(results["results"])[1])
-
-
-if __name__ == "__main__":
-    import asyncio
-
-    asyncio.run(main())
