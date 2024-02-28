@@ -4,7 +4,7 @@ import httpx
 
 
 async def search_rarbg(query):
-    url = f"https://therarbg.to/get-posts/keywords:{query}:ncategory:XXX/"
+    url = f"https://therarbg.to/get-posts/keywords:{query}:ncategory:XXX:order:-se/"
     async with httpx.AsyncClient() as client:
         resp = await client.get(url)
     soup = bs(resp.text, features="html.parser")
