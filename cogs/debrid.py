@@ -186,9 +186,9 @@ class DebridCog(commands.Cog):
         if results["status"] != "Error":
             embed = discord.Embed()
             x = 0
-            fg_reply = "__**FITGIRL TORRENTS**__\n\n"
+            fg_reply = "__**FITGIRL TORRENTS**__\n>>> "
             for r in results["results"]:
-                fg_reply = fg_reply + f"{x+1}. {r['name']}\n"
+                fg_reply = fg_reply + f"{x+1}. **{r['name']}**\n"
 
             e = await ctx.reply(fg_reply, mention_author=False)
 
@@ -225,9 +225,6 @@ class DebridCog(commands.Cog):
                             )
                             not_ready += 1
                             if not_ready == 0:
-                                download_word = (
-                                    "download" if len(pick) == 1 else "downloads"
-                                )
                                 await ctx.reply(
                                     f"Sent download to <#{config.DL_CHANNEL}>",
                                     mention_author=False,
