@@ -186,8 +186,9 @@ class DebridCog(commands.Cog):
         if results["status"] != "Error":
             embed = discord.Embed()
             x = 0
+            message = "__**FITGIRL TORRENTS**__\n\n"
             for r in results["results"]:
-                embed.add_field(name=f"{x+1}. {r['name']}", inline=False)
+                message = message + f"{x+1}. {r['name']}\n"
 
             e = await ctx.reply(embed=embed, mention_author=False)
 
