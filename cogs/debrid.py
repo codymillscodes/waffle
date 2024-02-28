@@ -186,11 +186,11 @@ class DebridCog(commands.Cog):
         if results["status"] != "Error":
             embed = discord.Embed()
             x = 0
-            message = "__**FITGIRL TORRENTS**__\n\n"
+            fg_reply = "__**FITGIRL TORRENTS**__\n\n"
             for r in results["results"]:
-                message = message + f"{x+1}. {r['name']}\n"
+                fg_reply = fg_reply + f"{x+1}. {r['name']}\n"
 
-            e = await ctx.reply(embed=embed, mention_author=False)
+            e = await ctx.reply(fg_reply, mention_author=False)
 
             def check(m):
                 return m.author == ctx.author and m.content.startswith(
