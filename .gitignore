@@ -9,7 +9,7 @@ tiktok/
 __pycache__/
 *.py[cod]
 *$py.class
-
+test/
 # C extensions
 *.so
 

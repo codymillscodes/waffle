@@ -3,7 +3,7 @@ from discord import Embed
 from loguru import logger
 from hurry.filesize import size
 from utils.helpers import percentage
-from utils.random import get_link_msg
+from utils.random_msg import get_link_msg
 from config import DEBRID_WEBDAV, TWITCH_NOTIFY_ROLE
 from urllib.parse import quote
 from utils.urls import Urls
