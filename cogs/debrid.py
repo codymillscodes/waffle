@@ -204,10 +204,10 @@ class DebridCog(commands.Cog):
                     await e.add_reaction("❌")
                 elif msg.content.startswith("!pick"):
                     pick = deb.eval_pick(msg.content.replace("!pick", "").strip())
-                    # pick = int(msg.content[6:]) - 1
-                    if pick[0] > 10:
+                    pick = int(msg.content[6:]) - 1
+                    if pick > 10:
                         await ctx.send("WRONG")
-                    elif len(pick) == 0 or pick[0] < 0:
+                    elif pick < 0:
                         await e.add_reaction("❌")
                     else:
                         dl_channel = await self.bot.fetch_channel(config.DL_CHANNEL)
