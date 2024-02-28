@@ -224,16 +224,16 @@ class DebridCog(commands.Cog):
                                 [mag[0], query, ctx.author.id, "magnet"]
                             )
                             not_ready += 1
-                            if not_ready == 0:
-                                await ctx.reply(
-                                    f"Sent download to <#{config.DL_CHANNEL}>",
-                                    mention_author=False,
-                                )
-                            else:
-                                await ctx.reply(
-                                    f"Not ready. Added to queue.",
-                                    mention_author=False,
-                                )
+                    if not_ready == 0:
+                        await ctx.reply(
+                            f"Sent download to <#{config.DL_CHANNEL}>",
+                            mention_author=False,
+                        )
+                    else:
+                        await ctx.reply(
+                            f"Not ready. Added to queue.",
+                            mention_author=False,
+                        )
             except asyncio.TimeoutError:
                 # await ctx.send("TOO SLOW", mention_author=False)
                 # add reaction to previously sent em_result embed
