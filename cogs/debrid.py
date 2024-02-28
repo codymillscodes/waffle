@@ -178,7 +178,7 @@ class DebridCog(commands.Cog):
                 mention_author=False,
             )
 
-    @commands.commands(name="fg", description="search fitgirl")
+    @commands.command(name="fg", description="search fitgirl")
     async def fg(self, ctx, *, query: str):
         logger.info(f"{ctx.invoked_with} {query}")
 
