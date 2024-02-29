@@ -196,7 +196,7 @@ class DebridCog(commands.Cog):
         if ctx.invoked_with == "search":
             results = await yar.search_tgx(query)
             if results["status"] != "Error":
-                embed = utils.torrent_results(results["results"])
+                embed = utils.embed.torrent_results(results["results"])
                 e = await ctx.reply(embed=embed, mention_author=False)
             else:
                 await ctx.reply(
