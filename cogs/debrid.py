@@ -187,7 +187,7 @@ class DebridCog(commands.Cog):
             x = 0
 
             fg_reply = "__**TORRENT RESULTS**__\n>>> "
-            if results["results"]:
+            if results["status"] != "Error":
                 for r in results["results"]:
                     fg_reply = fg_reply + f"{x+1}. **{r['name']}**\n"
 
