@@ -230,9 +230,8 @@ class DebridCog(commands.Cog):
                                 list(results["results"])[pick]["url"]
                             )
                         else:
-                            magnet_link = await yar.magnet_rarbg(
-                                list(results["results"])[pick]["url"]
-                            )
+                            magnet_link = list(results["results"])[pick]["url"]
+
                         mag = await deb.upload_magnet(magnet_link)
                         if mag[2]:
                             embed = utils.embed.download_ready(ctx.author.id, mag[1])
