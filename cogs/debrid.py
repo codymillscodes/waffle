@@ -187,11 +187,13 @@ class DebridCog(commands.Cog):
             x = 0
 
             fg_reply = "__**TORRENT RESULTS**__\n>>> "
-            for r in results["results"]:
-                fg_reply = fg_reply + f"{x+1}. **{r['name']}**\n"
+            if results["results"]:
+                for r in results["results"]:
+                    fg_reply = fg_reply + f"{x+1}. **{r['name']}**\n"
 
-            fg_reply = fg_reply + "*!pick #*"
-
+                fg_reply = fg_reply + "*!pick #*"
+            else:
+                fg_reply = "Something broke! Try, try again."
             e = await ctx.reply(fg_reply, mention_author=False)
         if ctx.invoked_with == "search":
             results = await yar.search_tgx(query)
