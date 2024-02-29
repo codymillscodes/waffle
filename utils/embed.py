@@ -270,8 +270,6 @@ def download_ready(author, magnet, link=None):
 
 def torrent_results(results):
     embed = Embed()
-    if len(results) > 10:
-        results = results[:10]
     x = 0
     for torrent in results:
         result_value = f"Seeders: {torrent['seeders']} | Leechers: {torrent['leechers']} | Size: {torrent['size']}"

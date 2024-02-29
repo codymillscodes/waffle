@@ -184,10 +184,6 @@ class DebridCog(commands.Cog):
 
         if ctx.invoked_with == "fg":
             results = await yar.search_fitgirl(query)
-        if ctx.invoked_with == "search":
-            results = await yar.search_rarbg(query)
-        if results["status"] != "Error":
-            embed = discord.Embed()
             x = 0
 
             fg_reply = "__**TORRENT RESULTS**__\n>>> "
@@ -197,6 +193,17 @@ class DebridCog(commands.Cog):
             fg_reply = fg_reply + "*!pick #*"
 
             e = await ctx.reply(fg_reply, mention_author=False)
+        if ctx.invoked_with == "search":
+            results = await yar.search_tgx(query)
+            if results["status"] != "Error":
+                embed = utils.torrent_results(results["results"])
+                e = await ctx.reply(embed=embed, mention_author=False)
+            else:
+                await ctx.reply(
+                    "It's probably rate-limited. Give it 1-5 minutes.",
+                    mention_author=False,
+                )
+        if results["status"] != "Error":
 
             def check(m):
                 return m.author == ctx.author and m.content.startswith(

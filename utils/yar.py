@@ -11,28 +11,37 @@ async def search_tgx(query):
     async with httpx.AsyncClient() as client:
         resp = await client.get(url)
     soup = bs(resp.text, features="html.parser")
-    row = soup.find_all("div", class_="tgxtablerow txlight")
-    torrents = {"status": "Success", "results": []}
-    print(row)
-    # window title: TGx:GalaxyFence
-    for t in row:
-        print(t, "\n")
-        soup = bs(str(t), features="html.parser")
-        cells = soup.find_all("div", class_="tgxtablecell")
-        try:
-            if len(torrents["results"]) > 9:
-                break
-            name = cells[3]
-            url = cells[4]
-            size = cells[7]
-            ratio = cells[10]
+    if "TGx:GalaxyFence" not in soup.title.name:
+        row = soup.find_all("div", class_="tgxtablerow txlight")
+        torrents = {"status": "Success", "results": []}
+        # print(row)
+        # window title: TGx:GalaxyFence
+        for t in row:
+            # print(t, "\n")
+            soup = bs(str(t), features="html.parser")
+            cells = soup.find_all("div", class_="tgxtablecell")
+            try:
+                if len(torrents["results"]) > 9:
+                    break
+                name = cells[3].span.b.string
+                url = cells[4].select_one("a[href*=magnet]")["href"]
+                size = cells[7].span.string
+                seeders = cells[10].span.font.string
+                leechers = cells[10].span.font.next_sibling.next_sibling.string
+                # print(name.a.string, '\n', url['href'], '\n', size.string, '\n')
+                torrent = {
+                    "name": name,
+                    "url": url,
+                    "size": size,
+                    "seeders": seeders,
+                    "leechers": leechers,
+                }
+                torrents["results"].append(torrent)
+            except:
+                continue
+        return torrents
 
-            # print(name.a.string, '\n', url['href'], '\n', size.string, '\n')
-            torrent = {"name": name.a.string, "url": url["href"], "size": size.string}
-            torrents["results"].append(torrent)
-        except:
-            continue
-    return torrents
+    return {"status": "Error", "message": "captcha", "soup": soup}
 
 
 async def search_fitgirl(query):
@@ -65,11 +74,15 @@ async def magnet_fitgirl(url):
     return magnet_link["href"]
 
 
-async def main():
-    print(await search_tgx("jackass 4"))
+# async def main():
+#     try:
+#         results = await search_tgx("jackass 4")
+#         print(results)
+#     except Exception as e:
+#         print(e, results)
 
 
-if __name__ == "__main__":
-    import asyncio
+# if __name__ == "__main__":
+#     import asyncio
 
-    asyncio.run(main())
+#     asyncio.run(main())
