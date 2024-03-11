@@ -16,7 +16,7 @@ async def search_tgx(query):
         resp = await client.get(url, headers=headers, timeout=timeout_settings)
     print(resp.status_code)
     soup = bs(resp.text, features="html.parser")
-    # if "TGx:GalaxyFence" not in soup.title.name:
+    print(soup.head.title)
     row = soup.find_all("div", class_="tgxtablerow txlight")
     torrents = {"status": "Success", "results": []}
     # print(row)
