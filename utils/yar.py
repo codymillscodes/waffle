@@ -8,7 +8,7 @@ async def search_tgx(query):
     url = (
         f"https://torrentgalaxy.to/torrents.php?search={query}&sort=seeders&order=desc"
     )
-    timeout_settings = httpx.Timeout(connect=20.0, read=40.0)
+    timeout_settings = httpx.Timeout(20.0)
     headers = {
         "User-Agent": '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"'
     }
