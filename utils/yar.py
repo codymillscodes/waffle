@@ -10,39 +10,37 @@ async def search_tgx(query):
     )
     async with httpx.AsyncClient() as client:
         resp = await client.get(url)
+    print(resp.status_code)
     soup = bs(resp.text, features="html.parser")
-    try:
-        if "TGx:GalaxyFence" not in soup.title.name:
-            row = soup.find_all("div", class_="tgxtablerow txlight")
-            torrents = {"status": "Success", "results": []}
-            # print(row)
-            # window title: TGx:GalaxyFence
-            for t in row:
-                # print(t, "\n")
-                soup = bs(str(t), features="html.parser")
-                cells = soup.find_all("div", class_="tgxtablecell")
-                try:
-                    if len(torrents["results"]) > 9:
-                        break
-                    name = cells[3].span.b.string
-                    url = cells[4].select_one("a[href*=magnet]")["href"]
-                    size = cells[7].span.string
-                    seeders = cells[10].span.font.string
-                    leechers = cells[10].span.font.next_sibling.next_sibling.string
-                    # print(name.a.string, '\n', url['href'], '\n', size.string, '\n')
-                    torrent = {
-                        "name": name,
-                        "url": url,
-                        "size": size,
-                        "seeders": seeders,
-                        "leechers": leechers,
-                    }
-                    torrents["results"].append(torrent)
-                except:
-                    continue
-            return torrents
-    except:
-        print(resp.text)
+    if "TGx:GalaxyFence" not in soup.title.name:
+        row = soup.find_all("div", class_="tgxtablerow txlight")
+        torrents = {"status": "Success", "results": []}
+        # print(row)
+        # window title: TGx:GalaxyFence
+        for t in row:
+            # print(t, "\n")
+            soup = bs(str(t), features="html.parser")
+            cells = soup.find_all("div", class_="tgxtablecell")
+            try:
+                if len(torrents["results"]) > 9:
+                    break
+                name = cells[3].span.b.string
+                url = cells[4].select_one("a[href*=magnet]")["href"]
+                size = cells[7].span.string
+                seeders = cells[10].span.font.string
+                leechers = cells[10].span.font.next_sibling.next_sibling.string
+                # print(name.a.string, '\n', url['href'], '\n', size.string, '\n')
+                torrent = {
+                    "name": name,
+                    "url": url,
+                    "size": size,
+                    "seeders": seeders,
+                    "leechers": leechers,
+                }
+                torrents["results"].append(torrent)
+            except:
+                continue
+        return torrents
 
     return {"status": "Error", "message": "captcha", "soup": soup}
 
