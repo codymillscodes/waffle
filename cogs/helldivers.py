@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from discord import app_commands
 from loguru import logger
 import utils.hd2
 
@@ -8,7 +9,7 @@ class HelldiversCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="hd2events", description="Get active Helldivers events")
+    @app_commands.command(name="hd2events", description="Get active Helldivers events")
     async def hd2events(self, interaction: discord.Interaction):
         await interaction.response.defer(thinking=True)
         logger.info("hd2 events requested.")
