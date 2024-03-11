@@ -1,52 +1,75 @@
 from bs4 import BeautifulSoup as bs
 import requests
 import httpx
+from config import JACKETT_URL
 
 
-async def search_tgx(query):
-    query = query.replace(" ", "+")
-    url = (
-        f"https://torrentgalaxy.to/torrents.php?search={query}&sort=seeders&order=desc"
+async def sort_and_filter_xml(xml_data):
+    soup = bs(xml_data, "xml")
+    items = soup.find_all("item")
+
+    # Filter out items with seeders=0
+    filtered_items = [
+        item
+        for item in items
+        if item.find("torznab:attr", attrs={"name": "seeders", "value": "0"}) is None
+    ]
+
+    # Sort items by seeders (ascending order)
+    sorted_items = sorted(
+        filtered_items,
+        key=lambda x: int(x.find("torznab:attr", attrs={"name": "seeders"})["value"]),
+        reverse=True,
     )
-    timeout_settings = httpx.Timeout(20.0)
-    headers = {
-        "User-Agent": '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"'
-    }
-    async with httpx.AsyncClient() as client:
-        resp = await client.get(url, headers=headers, timeout=timeout_settings)
-    print(resp.status_code)
-    soup = bs(resp.text, features="html.parser")
-    print(soup.head.title)
-    row = soup.find_all("div", class_="tgxtablerow txlight")
-    torrents = {"status": "Success", "results": []}
-    # print(row)
-    # window title: TGx:GalaxyFence
-    for t in row:
-        # print(t, "\n")
-        soup = bs(str(t), features="html.parser")
-        cells = soup.find_all("div", class_="tgxtablecell")
-        try:
-            if len(torrents["results"]) > 9:
-                break
-            name = cells[3].span.b.string
-            url = cells[4].select_one("a[href*=magnet]")["href"]
-            size = cells[7].span.string
-            seeders = cells[10].span.font.string
-            leechers = cells[10].span.font.next_sibling.next_sibling.string
-            # print(name.a.string, '\n', url['href'], '\n', size.string, '\n')
-            torrent = {
-                "name": name,
-                "url": url,
-                "size": size,
-                "seeders": seeders,
-                "leechers": leechers,
-            }
-            torrents["results"].append(torrent)
-        except:
-            continue
-    return torrents
 
-    return {"status": "Error", "message": "captcha", "soup": soup}
+    return sorted_items
+
+
+async def rarbg(url):
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url)
+
+    tpage = bs(response.text, features="html.parser")
+    magnet_link = tpage.select_one("a[href*=magnet]")
+    return magnet_link["href"]
+
+
+async def sizeof_fmt(num, suffix="B"):
+    for unit in ("", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi"):
+        if abs(num) < 1024.0:
+            return f"{num:3.1f}{unit}{suffix}"
+        num /= 1024.0
+    return f"{num:.1f}Yi{suffix}"
+
+
+async def search_jackett(query):
+    url = f"{JACKETT_URL}{query.replace(' ', '+')}"
+    timeout_settings = httpx.Timeout(20.0)
+    async with httpx.AsyncCleint() as client:
+        r = await client.get(url, timeout=timeout_settings)
+    sorted_filtered_items = await sort_and_filter_xml(r.text)[:10]
+    results = []
+    for s in sorted_filtered_items:
+        title = s.find("title").text
+        seeders = s.find("torznab:attr", attrs={"name": "seeders"})["value"]
+        indexer = s.find("jackettindexer").text
+        size = s.find("size").text
+        try:
+            magnet = s.find("torznab:attr", attrs={"name": "magneturl"})["value"]
+        except:
+            if "TheRARBG" in indexer:
+                url = s.find("guid").text
+                magnet = await rarbg(url)
+        torrent = {
+            "name": title,
+            "seeders": seeders,
+            "indexer": indexer,
+            "magnet": magnet,
+            "size": await sizeof_fmt(int(size)),
+        }
+        results.append(torrent)
+
+    return results
 
 
 async def search_fitgirl(query):

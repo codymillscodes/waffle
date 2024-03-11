@@ -196,7 +196,7 @@ class DebridCog(commands.Cog):
                 fg_reply = "Something broke! Try, try again."
             e = await ctx.reply(fg_reply, mention_author=False)
         if ctx.invoked_with == "search":
-            results = await yar.search_tgx(query)
+            results = await yar.search_jackett(query)
             if results["status"] != "Error":
                 embed = utils.embed.torrent_results(results["results"])
                 e = await ctx.reply(embed=embed, mention_author=False)
@@ -257,7 +257,7 @@ class DebridCog(commands.Cog):
                 # await ctx.send("TOO SLOW", mention_author=False)
                 # add reaction to previously sent em_result embed
                 await e.add_reaction("❌")
-                await ctx.send("something broke lol")
+                # await ctx.send("something broke lol")
 
     # @commands.command(
     #     name="search",
