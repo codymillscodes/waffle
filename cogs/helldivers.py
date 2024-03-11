@@ -16,7 +16,7 @@ class HelldiversCog(commands.Cog):
         events = await utils.hd2.helldivers_events()
         for e in events:
             embed = discord.Embed(title=e["title"], description=e["message"])
-            await interaction.followup.send(embed=embed, mention_author=False)
+            await interaction.followup.send(embed=embed)
 
 
 async def setup(bot):
