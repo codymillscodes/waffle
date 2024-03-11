@@ -42,7 +42,7 @@ async def search_tgx(query):
                     continue
             return torrents
     except:
-        print(soup)
+        print(resp.text)
 
     return {"status": "Error", "message": "captcha", "soup": soup}
 
