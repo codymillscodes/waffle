@@ -8,8 +8,11 @@ async def search_tgx(query):
     url = (
         f"https://torrentgalaxy.to/torrents.php?search={query}&sort=seeders&order=desc"
     )
+    headers = {
+        "User-Agent": '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"'
+    }
     async with httpx.AsyncClient() as client:
-        resp = await client.get(url)
+        resp = await client.get(url, headers=headers)
     print(resp.status_code)
     soup = bs(resp.text, features="html.parser")
     if "TGx:GalaxyFence" not in soup.title.name:
