@@ -2,7 +2,6 @@ from discord import app_commands
 from discord.ext import commands
 from random import randint
 from loguru import logger
-import json
 import discord
 from utils.db import DB
 from utils.embed import twitcher_embed, juiceme
@@ -12,8 +11,6 @@ from typing import Literal
 class MiscCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        with open("lib/p4-enemy.json", "r") as f:
-            self.p4_data = json.load(f)
 
     @app_commands.command(name="juiceme", description="get relevant community urls")
     async def juiceme(self, interaction: discord.Interaction):
@@ -35,17 +32,6 @@ class MiscCog(commands.Cog):
             )
         else:
             await interaction.response.send_message("Invalid input")
-
-    @app_commands.command(name="twitchers", description="Get twitcher status")
-    async def twitchers(
-        self, interaction: discord.Interaction, option: Literal["all", "online"]
-    ):
-        logger.info(f"{interaction.user} wants twitcher status")
-        if option == "all":
-            embed = twitcher_embed(await DB().get_twitchers(), False)
-        elif option == "online":
-            embed = twitcher_embed(await DB().get_twitchers(), True)
-        await interaction.response.send_message(embed=embed)
 
 
 async def setup(bot):
