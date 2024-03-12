@@ -18,10 +18,7 @@ from utils.db import DB
 from utils.urls import Urls
 import utils.yar as yar
 
-torrents = py1337x(proxy="1337x.to", cookie=config.COOKIE_1337X)
 
-
-# torrents.search('harry potter', category='movies', sortBy='seeders', order='desc')
 async def get_token():
     try:
         async with Conn() as resp:
