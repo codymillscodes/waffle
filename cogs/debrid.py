@@ -222,10 +222,10 @@ class DebridCog(commands.Cog):
                         not_ready = 0
                         if ctx.invoked_with == "fg":
                             magnet_link = await yar.magnet_fitgirl(
-                                list(results)[pick]["url"]
+                                list(results)[pick]["magnet"]
                             )
                         else:
-                            magnet_link = list(results)[pick]["url"]
+                            magnet_link = list(results)[pick]["magnet"]
 
                         mag = await deb.upload_magnet(magnet_link)
                         if mag[2]:
