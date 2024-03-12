@@ -47,7 +47,8 @@ async def search_jackett(query):
     timeout_settings = httpx.Timeout(20.0)
     async with httpx.AsyncClient() as client:
         r = await client.get(url, timeout=timeout_settings)
-    sorted_filtered_items = await sort_and_filter_xml(r.text)[:10]
+    sorted_filtered_items = await sort_and_filter_xml(r.text)
+    sorted_filtered_items = sorted_filtered_items[:10]
     results = []
     for s in sorted_filtered_items:
         title = s.find("title").text
