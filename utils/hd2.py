@@ -8,6 +8,7 @@ async def helldivers_events():  # events for now
         resp = await client.get(url)
 
     events = resp.json()["globalEvents"]
+    print(events)
     return events
 
 
