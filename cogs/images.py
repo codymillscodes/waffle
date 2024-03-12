@@ -24,28 +24,6 @@ class ImagesCog(commands.Cog):
         logger.info(image)
         await interaction.followup.send(Urls.WAFFLE_URL + image, mention_author=False)
 
-    @commands.command(
-        name="cat",
-        aliases=["catgif", "neb"],
-        description="CAT PICTURE!",
-        brief="CAT PICTURE!",
-    )
-    async def cat(self, ctx):
-        cmd = str(ctx.command)
-        logger.info(f"Image requested: {cmd}")
-        cat_search = ""
-        if cmd == "cat":
-            cat_search = Urls.CAT_RANDOM
-        elif cmd == "catgif":
-            cat_search = Urls.CAT_GIF
-        elif cmd == "neb":
-            cat_search = Urls.CAT_NEB
-
-        async with Conn() as resp:
-            j = await resp.get_json(cat_search)
-        image = j[0]["url"]
-        await ctx.reply(image, mention_author=False)
-
 
 async def setup(bot):
     await bot.add_cog(ImagesCog(bot))

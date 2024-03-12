@@ -20,11 +20,6 @@ class Urls(StrEnum):
     DEBRID_UNLOCK = f"{DEBRID_BASE_URL}link/unlock?{DEBRID_CRED}&link="
     DEBRID_STREAMING = f"{DEBRID_BASE_URL}link/streaming?{DEBRID_CRED}&id="
     DEBRID_DELAYED = f"{DEBRID_BASE_URL}link/delayed?{DEBRID_CRED}&id="
-    # cat urls
-    CAT_BASE_URL = "https://api.thecatapi.com/v1/"
-    CAT_RANDOM = f"{CAT_BASE_URL}images/search?api_key={config.CAT_KEY}"
-    CAT_GIF = f"{CAT_BASE_URL}images/search?mime_types=gif&api_key={config.CAT_KEY}"
-    CAT_NEB = f"{CAT_BASE_URL}images/search?breed_ids=nebe&api_key={config.CAT_KEY}"
     # runescape urls
     RUNESCAPE3_HISCORE = "https://secure.runescape.com/m=hiscore/index_lite.ws?player="
     # waffle urls
