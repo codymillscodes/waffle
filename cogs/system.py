@@ -5,9 +5,7 @@ from discord import File
 from discord import app_commands
 from discord.ext import commands
 from loguru import logger
-from config import ADMIN_ROLE, GITEA_TOKEN, GITEA_ISSUE_URL
-from utils.helpers import get_folder_time
-from utils.connection import Connection as Conn
+from config import ADMIN_ROLE
 
 
 async def get_log():
