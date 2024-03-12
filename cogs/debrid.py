@@ -206,6 +206,7 @@ class DebridCog(commands.Cog):
                 )
 
             try:
+                not_ready = 0
                 msg = await self.bot.wait_for("message", check=check, timeout=60)
                 if not msg.content.startswith(("!pick", "!Pick")):
                     # await ctx.invoke(self.search, input=msg.content[8:])
@@ -219,7 +220,6 @@ class DebridCog(commands.Cog):
                         await e.add_reaction("❌")
                     else:
                         dl_channel = await self.bot.fetch_channel(config.DL_CHANNEL)
-                        not_ready = 0
                         if ctx.invoked_with == "fg":
                             magnet_link = await yar.magnet_fitgirl(
                                 list(results)[pick]["magnet"]
