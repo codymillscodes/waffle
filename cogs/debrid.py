@@ -199,7 +199,6 @@ class DebridCog(commands.Cog):
             results = await yar.search_jackett(query)
             embed = utils.embed.torrent_results(results)
             e = await ctx.reply(embed=embed, mention_author=False)
-        if results["status"] != "Error":
 
             def check(m):
                 return m.author == ctx.author and m.content.startswith(
