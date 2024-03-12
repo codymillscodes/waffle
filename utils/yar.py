@@ -45,7 +45,7 @@ async def sizeof_fmt(num, suffix="B"):
 async def search_jackett(query):
     url = f"{JACKETT_URL}{query.replace(' ', '+')}"
     timeout_settings = httpx.Timeout(20.0)
-    async with httpx.AsyncCleint() as client:
+    async with httpx.AsyncClient() as client:
         r = await client.get(url, timeout=timeout_settings)
     sorted_filtered_items = await sort_and_filter_xml(r.text)[:10]
     results = []
