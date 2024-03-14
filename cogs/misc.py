@@ -23,7 +23,7 @@ class MiscCog(commands.Cog):
             r = await resp.get(Urls.WAFFLE_URL)
         image = BeautifulSoup(r.text, "html.parser").find("img").attrs["src"]
         logger.info(image)
-        await interaction.followup.send(Urls.WAFFLE_URL + image, mention_author=False)
+        await interaction.followup.send(Urls.WAFFLE_URL + image)
 
     @app_commands.command(name="roll", description="Roll a dice")
     async def roll(self, interaction: discord.Interaction, num: int, faces: int):
