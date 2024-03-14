@@ -20,8 +20,8 @@ class MiscCog(commands.Cog):
         await interaction.response.defer(thinking=True)
         logger.info("Image requested: waffle")
         async with httpx.AsyncClient() as resp:
-            r = await resp.get(Urls.WAFFLE_URL).text
-        image = BeautifulSoup(r, "html.parser").find("img").attrs["src"]
+            r = await resp.get(Urls.WAFFLE_URL)
+        image = BeautifulSoup(r.text, "html.parser").find("img").attrs["src"]
         logger.info(image)
         await interaction.followup.send(Urls.WAFFLE_URL + image, mention_author=False)
 
