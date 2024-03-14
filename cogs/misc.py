@@ -3,19 +3,27 @@ from discord.ext import commands
 from random import randint
 from loguru import logger
 import discord
-from utils.db import DB
-from utils.embed import twitcher_embed, juiceme
-from typing import Literal
+from utils.urls import Urls
+from bs4 import BeautifulSoup
+import httpx
 
 
 class MiscCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @app_commands.command(name="juiceme", description="get relevant community urls")
-    async def juiceme(self, interaction: discord.Interaction):
-        logger.info(f"{interaction.user} wants to juice")
-        await interaction.response.send_message(embed=juiceme())
+    @discord.app_commands.command(
+        name="waffle",
+        description="Receive a random image from a forgotten time, from a forgotten place.",
+    )
+    async def waffle(self, interaction: discord.Interaction):
+        await interaction.response.defer(thinking=True)
+        logger.info("Image requested: waffle")
+        async with httpx.AsyncClient() as resp:
+            r = await resp.get(Urls.WAFFLE_URL).text
+        image = BeautifulSoup(r, "html.parser").find("img").attrs["src"]
+        logger.info(image)
+        await interaction.followup.send(Urls.WAFFLE_URL + image, mention_author=False)
 
     @app_commands.command(name="roll", description="Roll a dice")
     async def roll(self, interaction: discord.Interaction, num: int, faces: int):
