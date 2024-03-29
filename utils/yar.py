@@ -59,7 +59,7 @@ async def search_jackett(query):
             magnet = s.find("torznab:attr", attrs={"name": "magneturl"})["value"]
         except:
             if "TheRARBG" in indexer:
-                url = s.find("guid").text
+                url = s.find("guid").text.replace("?format=json", "")
                 magnet = await rarbg(url)
         torrent = {
             "name": title,
