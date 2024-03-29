@@ -19,10 +19,6 @@ DEBRID_AGENT = os.environ["DEBRID_AGENT"]
 DEBRID_KEY = os.environ["DEBRID_KEY"]
 DEBRID_SESSION = os.environ["DEBRID_SESSION"]
 DEBRID_WEBDAV = os.environ["DEBRID_WEBDAV"]
-# cat api key
-CAT_KEY = os.environ["CAT_KEY"]
-# openai key
-OPENAI_KEY = os.environ["OPENAI_KEY"]
 # twitch settings
 TWITCH_CLIENT_ID = os.environ["TWITCH_CLIENT_ID"]
 TWITCH_SECRET = os.environ["TWITCH_SECRET"]
@@ -38,9 +34,6 @@ MONGO_PASS = os.environ["MONGO_PASS"]
 
 ADMIN_ROLE = os.environ["ADMIN_ROLE"]
 
-GITEA_TOKEN = os.environ["GITEA_TOKEN"]
-GITEA_ISSUE_URL = os.environ["GITEA_ISSUE_URL"]
-
 # Spotify settings
 SPOTIPY_CLIENT_ID = os.environ["SPOTIPY_CLIENT_ID"]
 SPOTIPY_CLIENT_SECRET = os.environ["SPOTIPY_CLIENT_SECRET"]
@@ -50,9 +43,4 @@ PLAYLIST_URI = os.environ["PLAYLIST_URI"]
 IGNORE_CHANNELS = os.environ["IGNORE_CHANNELS"].split(",")
 for i in range(len(IGNORE_CHANNELS)):
     IGNORE_CHANNELS[i] = int(IGNORE_CHANNELS[i])
-
-AZURA_PUBLIC = os.environ["AZURA_PUBLIC"]
-AZURA_IP = os.environ["AZURA_IP"]
-AZURA_STATION_ID = os.environ["AZURA_STATION_ID"]
-COOKIE_1337X = os.environ["COOKIE_1337X"]
 JACKETT_URL = os.environ["JACKETT_URL"]

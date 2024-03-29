@@ -5,9 +5,7 @@ from discord import File
 from discord import app_commands
 from discord.ext import commands
 from loguru import logger
-from config import ADMIN_ROLE, GITEA_TOKEN, GITEA_ISSUE_URL
-from utils.helpers import get_folder_time
-from utils.connection import Connection as Conn
+from config import ADMIN_ROLE
 
 
 async def get_log():
@@ -44,51 +42,6 @@ class SystemCog(commands.Cog):
         logger.info(f"{ctx.author.name} called log command.")
         log_file = await get_log()
         await ctx.reply(file=File(log_file), mention_author=False)
-
-    @app_commands.command(name="bug", description="Report a bug.")
-    async def bug(self, interaction: discord.Interaction, bug: str):
-        logger.info(f"{interaction.user} reported a bug: {bug}")
-        # gitea_headers = {"Content-Type": "application/json"}
-        # gitea_data = {
-        #     "assignee": "idiotdoomspiral",
-        #     "body": f"Bug reported by {ctx.author.name}.",
-        #     "closed": False,
-        #     "milestone": 0,
-        #     "ref": "",
-        #     "title": f"{bug}",
-        # }
-        # async with Conn() as resp:
-        #     resp = await resp.post_json(
-        #         f"{GITEA_ISSUE_URL}?access_token={GITEA_TOKEN}",
-        #         headers=gitea_headers,
-        #         data=gitea_data,
-        #     )
-        # logger.info(resp)
-        admin = await self.bot.fetch_user(ADMIN_ROLE)
-        await admin.send(f"New bug reported.\n{bug}")
-        await interaction.response.send_message(
-            "Thanks for reporting a bug!", ephemeral=True
-        )
-
-    @app_commands.command(name="feature_request", description="Request a feature.")
-    async def feature_request(self, interaction: discord.Interaction, *, feature: str):
-        logger.info(f"{interaction.user} requested a feature: {feature}")
-        admin = await self.bot.fetch_user(ADMIN_ROLE)
-        await admin.send(f"New feature requested.\n{feature}")
-        await interaction.response.send_message(
-            "Thanks for requesting a feature!", ephemeral=True
-        )
-
-    # @commands.command(name="clear")
-    # async def clear(self, ctx):
-    #     guild = ctx.guild
-    #     synced = await ctx.bot.tree.sync(guild=guild)
-    #     c = await ctx.bot.tree.fetch_commands(guild=guild)
-    #     for i in c:
-    #         ctx.bot.tree.remove_command(i.name, guild=guild)
-    #     logger.info(f"Clearing {len(c)} commands.")
-    #     synced = await ctx.bot.tree.sync(guild=guild)
-    #     await ctx.reply(f"Synced {len(synced)} commands.", mention_author=False)
 
     @commands.command(name="sync")
     async def sync(self, ctx):
