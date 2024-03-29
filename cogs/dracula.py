@@ -26,12 +26,7 @@ class ButtCog(commands.Cog):
             await message.channel.send("Roll tide!")
         else:
             if not (message.content.startswith("!") or "https://" in message.content):
-                if (
-                    randint(1, 100) <= self.chance
-                    and self.pause_count == 0
-                    and "butt" not in message.content.lower()
-                    and len(message.content.split()) > 3
-                ):
+                if randint(1, 100) <= self.chance and self.pause_count == 0:
                     new_message = dracula[randint(0, len(dracula))]
 
                     if new_message != message.content:
