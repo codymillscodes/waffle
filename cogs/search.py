@@ -7,7 +7,7 @@ import fortnite_api
 from fortnite_api.enums import TimeWindow
 from typing import Literal
 import config
-import utils.embed
+import helpers.embed
 
 
 class SearchCog(commands.Cog):
