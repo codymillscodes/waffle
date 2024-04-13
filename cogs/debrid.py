@@ -192,6 +192,7 @@ class DebridCog(commands.Cog):
                     dl_channel = await self.bot.fetch_channel(config.DL_CHANNEL)
                     picked_torrent = list(results)[pick]
                     if picked_torrent["indexer"] == "TheRARBG":
+                        logger.info(picked_torrent["url"])
                         magnet_link = await yar.rarbg(picked_torrent["url"])
                     else:
                         magnet_link = picked_torrent["magnet"]
