@@ -13,7 +13,7 @@ class TasksCog(commands.Cog):
         # self.twitch_online = False
         # self.tiktok_online = False
         self.twitch_headers = {}
-        self.stream_channel = 803751758726692920
+        self.stream_channel = 1196601048291352576
         self.twitchers = {}
         with open("twitchers.txt", "r") as f:
             for line in f:
