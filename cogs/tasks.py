@@ -35,7 +35,8 @@ class TasksCog(commands.Cog):
         auth = await Twitch(config.TWITCH_CLIENT_ID, config.TWITCH_SECRET)
 
         try:
-            async for s in Twitch.get_streams(auth, user_login=self.twitchers.keys()):
+            users = list(self.twitchers.keys())
+            async for s in Twitch.get_streams(auth, user_login=users):
                 if s.user_login in users:
                     logger.info(s.user_login + " online.")
 
