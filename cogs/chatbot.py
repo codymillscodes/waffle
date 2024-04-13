@@ -73,9 +73,9 @@ class ChatbotCog(commands.Cog):
         if send == 1:
             try:
                 response = await g4f.ChatCompletion.create_async(
-                    model=g4f.models.gpt_4,
+                    model="mixtral-8x22b",
                     messages=messages,
-                    provider=g4f.Provider.Bing,
+                    provider=g4f.Provider.DeepInfra,
                 )
                 r = response
                 if len(r) > 2000:

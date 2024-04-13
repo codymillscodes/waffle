@@ -56,8 +56,8 @@ class TasksCog(commands.Cog):
                             self.twitchers[user] = False
                             logger.info(f"{user} is offline.")
                             # await self.update_stream_channel(False)
-                        else:
-                            logger.info(stream_data)
+                        # else:
+                        #     logger.info(stream_data)
         except (KeyError, IndexError, UnboundLocalError) as e:
             logger.exception(e)
         except TypeError as e:
