@@ -153,10 +153,5 @@ class TasksCog(commands.Cog):
                             logger.exception(e)
                             pass
 
-    @debrid_check.before_loop
-    async def before_task(self):
-        await self.wait_until_ready()
-
-
 async def setup(bot):
     await bot.add_cog(TasksCog(bot))
