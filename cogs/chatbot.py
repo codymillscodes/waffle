@@ -34,29 +34,29 @@ class ChatbotCog(commands.Cog):
         ]
         send = 0
         if message.channel.id not in config.IGNORE_CHANNELS:
-            # if message.reference:
-            #     replied_message = await message.channel.fetch_message(
-            #         message.reference.message_id
-            #     )
-            #     if replied_message.author.id == 968919979577704529:
-            #         m = [
-            #             {"role": "assistant", "content": replied_message.content},
-            #             {"role": "user", "content": message.content},
-            #         ]
-            #         if replied_message.reference:
-            #             second_reply = await message.channel.fetch_message(
-            #                 replied_message.reference.message_id
-            #             )
-            #             m = [{"role": "user", "content": second_reply.content}] + m
-            #             if second_reply.reference:
-            #                 third_reply = await message.channel.fetch_message(
-            #                     second_reply.reference.message_id
-            #                 )
-            #                 m = [
-            #                     {"role": "assistant", "content": third_reply.content}
-            #                 ] + m
+            if message.reference:
+                replied_message = await message.channel.fetch_message(
+                    message.reference.message_id
+                )
+                if replied_message.author.id == 968919979577704529:
+                    m = [
+                        {"role": "assistant", "content": replied_message.content},
+                        {"role": "user", "content": message.content},
+                    ]
+                    if replied_message.reference:
+                        second_reply = await message.channel.fetch_message(
+                            replied_message.reference.message_id
+                        )
+                        m = [{"role": "user", "content": second_reply.content}] + m
+                        if second_reply.reference:
+                            third_reply = await message.channel.fetch_message(
+                                second_reply.reference.message_id
+                            )
+                            m = [
+                                {"role": "assistant", "content": third_reply.content}
+                            ] + m
 
-            #         messages = messages + m
+                    messages = messages + m
             if "<@968919979577704529>" in message.content or (
                 len(message.mentions) > 0 and "waffle" in message.mentions[0].name
             ):
