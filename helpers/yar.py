@@ -27,7 +27,7 @@ async def sort_and_filter_xml(xml_data):
 
 async def rarbg(url):
     async with httpx.AsyncClient() as client:
-        response = await client.get(url)
+        response = await client.get(url.replace("?format=json", ""))
 
     tpage = bs(response.text, features="html.parser")
     magnet_link = tpage.select_one("a[href*=magnet]")
