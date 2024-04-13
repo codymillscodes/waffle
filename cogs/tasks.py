@@ -15,6 +15,7 @@ class TasksCog(commands.Cog):
         self.twitch_headers = {}
         self.stream_channel = 1196601048291352576
         self.twitchers = {}
+        self.db = helper.db.DB()
         with open("twitchers.txt", "r") as f:
             for line in f:
                 line = line.strip()
