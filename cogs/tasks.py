@@ -32,7 +32,7 @@ class TasksCog(commands.Cog):
         twitch_channel = await self.bot.fetch_channel(self.stream_channel)
         # logger.debug("Checking twitchers...")
         # logger.debug(f"Checking {len(self.twitchers)} twitchers...")
-        auth = Twitch(config.TWITCH_CLIENT_ID, config.TWITCH_SECRET)
+        auth = await Twitch(config.TWITCH_CLIENT_ID, config.TWITCH_SECRET)
 
         try:
             async for s in Twitch.get_streams(auth, user_login=self.twitchers.keys()):
