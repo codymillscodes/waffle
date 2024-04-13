@@ -73,7 +73,7 @@ class ChatbotCog(commands.Cog):
         if send == 1:
             try:
                 response = await g4f.ChatCompletion.create_async(
-                    model="gemini",
+                    model="dbrx-instruct",
                     messages=messages,
                     #provider=g4f.Provider.DeepInfra,
                 )
