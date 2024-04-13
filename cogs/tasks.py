@@ -4,7 +4,7 @@ from strings.urls import Urls
 import helpers.embed
 import helpers.db
 import config
-import httpx
+from twitchAPI.twitch import Twitch
 
 
 class TasksCog(commands.Cog):
@@ -12,7 +12,6 @@ class TasksCog(commands.Cog):
         self.bot = bot
         # self.twitch_online = False
         # self.tiktok_online = False
-        self.twitch_headers = {}
         self.stream_channel = 1196601048291352576
         self.twitchers = {}
         self.db = helpers.db.DB()
@@ -33,67 +32,36 @@ class TasksCog(commands.Cog):
         twitch_channel = await self.bot.fetch_channel(self.stream_channel)
         # logger.debug("Checking twitchers...")
         # logger.debug(f"Checking {len(self.twitchers)} twitchers...")
-        for user in self.twitchers.keys():
-            async with httpx.AsyncClient() as resp:
-                stream_data = await resp.get(
-                    f"https://api.twitch.tv/helix/streams?user_login={user}",
-                    headers=self.twitch_headers,
-                )
-            try:
-                if stream_data:
-                    if "data" in stream_data:
-                        if stream_data["data"] != []:
-                            # logger.info(stream_data)
-                            if stream_data["data"][0]["type"] == "live":
-                                # logger.info(self.twitchers[user])
-                                if not self.twitchers[user]:
-                                    embed = helpers.embed.stream_embed(
-                                        user,
-                                        stream_data["data"][0]["title"],
-                                        stream_data["data"][0]["game_name"],
-                                    )
-                                    self.twitchers[user] = True
-                                    logger.info(f"{user} is online.")
-                                    # await self.update_stream_channel(True)
-                                    await twitch_channel.send("@everyone")
-                                    await twitch_channel.send(embed=embed)
-                        else:
-                            if self.twitchers[user]:
-                                self.twitchers[user] = False
-                                logger.info(f"{user} is offline.")
-                                # await self.update_stream_channel(False)
-                    else:
-                        logger.info(stream_data)
-            except (KeyError, IndexError, UnboundLocalError) as e:
-                logger.exception(e)
-            except TypeError as e:
-                logger.info("Twitch API is down.")
-                logger.exception(e)
+        auth = Twitch(config.TWITCH_CLIENT_ID, config.TWITCH_SECRET)
 
-    async def get_twitch_headers(self):
         try:
-            body = {
-                "client_id": config.TWITCH_CLIENT_ID,
-                "client_secret": config.TWITCH_SECRET,
-                "grant_type": "client_credentials",
-            }
-            async with httpx.AsyncClient() as resp:
-                keys = await resp.post_json(
-                    "https://id.twitch.tv/oauth2/token", data=body
-                )
-            self.twitch_headers = {
-                "Client-ID": config.TWITCH_CLIENT_ID,
-                "Authorization": "Bearer " + keys["access_token"],
-            }
-            logger.info("Got twitch headers.")
-        except Exception as e:
-            logger.exception(e)
-            pass
+            async for s in Twitch.get_streams(auth, user_login=self.twitchers.keys()):
+                if s.user_login in users:
+                    logger.info(s.user_login + " online.")
 
-    @stream_monitor.before_loop
-    async def before_twitch_check(self):
-        # await self.wait_until_ready()
-        await self.get_twitch_headers()
+                    if not self.twitchers[user]:
+                        embed = helpers.embed.stream_embed(
+                            user,
+                            s.title,
+                            s.game_name,
+                        )
+                        self.twitchers[user] = True
+                        logger.info(f"{user} is online.")
+                        # await self.update_stream_channel(True)
+                        await twitch_channel.send("<@1196954735647920230>")
+                        await twitch_channel.send(embed=embed)
+                    else:
+                        if self.twitchers[user]:
+                            self.twitchers[user] = False
+                            logger.info(f"{user} is offline.")
+                            # await self.update_stream_channel(False)
+                        else:
+                            logger.info(stream_data)
+        except (KeyError, IndexError, UnboundLocalError) as e:
+            logger.exception(e)
+        except TypeError as e:
+            logger.info("Twitch API is down.")
+            logger.exception(e)
 
     async def debrid_check(self):
         # await self.twitch_check()
