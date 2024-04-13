@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 from loguru import logger
-import utils.hd2
+import helpers.hd2
 
 
 class HelldiversCog(commands.Cog):
@@ -13,7 +13,7 @@ class HelldiversCog(commands.Cog):
     async def hd2events(self, interaction: discord.Interaction):
         # await interaction.response.defer(thinking=True)
         logger.info("hd2 events requested.")
-        events = await utils.hd2.helldivers_events()
+        events = await helpers.hd2.helldivers_events()
         embeds = []
         for e in events:
             embeds.append(discord.Embed(title=e["title"], description=e["message"]))

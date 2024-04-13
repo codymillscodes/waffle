@@ -3,7 +3,7 @@ from discord.ext import commands
 from random import randint
 from loguru import logger
 import discord
-from utils.urls import Urls
+from strings.urls import Urls
 from bs4 import BeautifulSoup
 import httpx
 

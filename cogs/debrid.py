@@ -6,16 +6,15 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 from loguru import logger
-import requests
+import httpx
 from bs4 import BeautifulSoup as bs
 
 import config
-import utils.debrid as deb
-import utils.embed
-from utils.connection import Connection as Conn
-from utils.db import DB
-from utils.urls import Urls
-import utils.yar as yar
+import helpers.debrid as deb
+import helpers.embed
+from helpers.db import DB
+from strings.urls import Urls
+import helpers.yar as yar
 
 
 class DebridCog(commands.Cog):
@@ -31,9 +30,9 @@ class DebridCog(commands.Cog):
         brief="Delete x amount of old torrents.",
     )
     async def deletetorrents(self, ctx, *, num: int):
-        async with Conn() as resp:
-            r = await resp.get_json(Urls.DEBRID_STATUS_READY)
-            r = r["data"]["magnets"]
+        async with httpx.AsyncClient() as resp:
+            r = await resp.get(Urls.DEBRID_STATUS_READY)
+            r = r.json()["data"]["magnets"]
 
         logger.info(f"{len(r)} torrents cached.")
         mag_slice = []
@@ -70,7 +69,7 @@ class DebridCog(commands.Cog):
             mag = await deb.upload_magnet(magnet)
             logger.info(f"Adding magnet for {mag[1]}")
             if mag[2]:
-                embed = utils.embed.download_ready(interaction.user, mag[1])
+                embed = helpers.embed.download_ready(interaction.user, mag[1])
                 logger.info(f"{mag[1]} is ready.")
                 dl_channel = await self.bot.fetch_channel(config.DL_CHANNEL)
                 await dl_channel.send(embed=embed)
@@ -95,7 +94,7 @@ class DebridCog(commands.Cog):
             await ctx.send("No active downloads.")
         else:
             try:
-                embed = utils.embed.debrid_status(all_status)
+                embed = helpers.embed.debrid_status(all_status)
                 await ctx.reply(embed=embed, mention_author=False)
             except Exception as ex:
                 logger.warning(f"Error Occurred: {ex}")
@@ -110,7 +109,9 @@ class DebridCog(commands.Cog):
         logger.info("Generating M3U")
         exclude_files = ["txt", "../"]
         files = []
-        r = requests.get(url).text
+        async with httpx.AsyncClient() as resp:
+            r = await resp.get(url)
+        r = r.json()
         m3u_name = f"{url.split('/')[-2]}.m3u"
         # m3u_name = m3u_name
         soup = bs(r, "html.parser")
@@ -165,75 +166,60 @@ class DebridCog(commands.Cog):
     async def fg(self, ctx, *, query: str):
         logger.info(f"{ctx.invoked_with} {query}")
 
-        if ctx.invoked_with == "fg":
-            results = await yar.search_fitgirl(query)
-            x = 0
+        results = await yar.search_jackett(query)
+        embed = helpers.embed.torrent_results(results)
+        e = await ctx.reply(embed=embed, mention_author=False)
 
-            fg_reply = "__**TORRENT RESULTS**__\n>>> "
-            if results["status"] != "Error":
-                for r in results["results"]:
-                    fg_reply = fg_reply + f"{x+1}. **{r['name']}**\n"
+        def check(m):
+            return m.author == ctx.author and m.content.startswith(
+                ("!pick", "!Pick", "!search")
+            )
 
-                fg_reply = fg_reply + "*!pick #*"
-            else:
-                fg_reply = "Something broke! Try, try again."
-            e = await ctx.reply(fg_reply, mention_author=False)
-        if ctx.invoked_with == "search":
-            results = await yar.search_jackett(query)
-            embed = utils.embed.torrent_results(results)
-            e = await ctx.reply(embed=embed, mention_author=False)
-
-            def check(m):
-                return m.author == ctx.author and m.content.startswith(
-                    ("!pick", "!Pick", "!search")
-                )
-
-            try:
-                not_ready = 0
-                msg = await self.bot.wait_for("message", check=check, timeout=60)
-                if not msg.content.startswith(("!pick", "!Pick")):
-                    # await ctx.invoke(self.search, input=msg.content[8:])
-                    await e.add_reaction("❌")
-                elif msg.content.startswith("!pick"):
-                    pick = deb.eval_pick(msg.content.replace("!pick", "").strip())
-                    pick = int(msg.content[6:]) - 1
-                    if pick > 10:
-                        await ctx.send("WRONG")
-                    elif pick < 0:
-                        await e.add_reaction("❌")
-                    else:
-                        dl_channel = await self.bot.fetch_channel(config.DL_CHANNEL)
-                        if ctx.invoked_with == "fg":
-                            magnet_link = await yar.magnet_fitgirl(
-                                list(results)[pick]["magnet"]
-                            )
-                        else:
-                            magnet_link = list(results)[pick]["magnet"]
-
-                        mag = await deb.upload_magnet(magnet_link)
-                        if mag[2]:
-                            embed = utils.embed.download_ready(ctx.author.id, mag[1])
-                            await dl_channel.send(embed=embed)
-                        else:
-                            await DB().add_to_queue(
-                                [mag[0], query, ctx.author.id, "magnet"]
-                            )
-                            not_ready += 1
-                    if not_ready == 0:
-                        await ctx.reply(
-                            f"Sent download to <#{config.DL_CHANNEL}>",
-                            mention_author=False,
-                        )
-                    else:
-                        await ctx.reply(
-                            f"Not ready. Added to queue.",
-                            mention_author=False,
-                        )
-            except asyncio.TimeoutError:
-                # await ctx.send("TOO SLOW", mention_author=False)
-                # add reaction to previously sent em_result embed
+        try:
+            not_ready = 0
+            msg = await self.bot.wait_for("message", check=check, timeout=60)
+            if not msg.content.startswith(("!pick", "!Pick")):
+                # await ctx.invoke(self.search, input=msg.content[8:])
                 await e.add_reaction("❌")
-                # await ctx.send("something broke lol")
+            elif msg.content.startswith("!pick"):
+                pick = deb.eval_pick(msg.content.replace("!pick", "").strip())
+                pick = int(msg.content[6:]) - 1
+                if pick > 10:
+                    await ctx.send("WRONG")
+                elif pick < 0:
+                    await e.add_reaction("❌")
+                else:
+                    dl_channel = await self.bot.fetch_channel(config.DL_CHANNEL)
+                    picked_torrent = list(results)[pick]
+                    if indexer == "TheRARBG":
+                        magnet_link = await yar.rarbg(picked_torrent["url"])
+                    else:
+                        magnet_link = picked_torrent["magnet"]
+
+                    mag = await deb.upload_magnet(magnet_link)
+                    if mag[2]:
+                        embed = helpers.embed.download_ready(ctx.author.id, mag[1])
+                        await dl_channel.send(embed=embed)
+                    else:
+                        await DB().add_to_queue(
+                            [mag[0], query, ctx.author.id, "magnet"]
+                        )
+                        not_ready += 1
+                if not_ready == 0:
+                    await ctx.reply(
+                        f"Sent download to <#{config.DL_CHANNEL}>",
+                        mention_author=False,
+                    )
+                else:
+                    await ctx.reply(
+                        f"Not ready. Added to queue.",
+                        mention_author=False,
+                    )
+        except asyncio.TimeoutError:
+            # await ctx.send("TOO SLOW", mention_author=False)
+            # add reaction to previously sent em_result embed
+            await e.add_reaction("❌")
+            # await ctx.send("something broke lol")
 
 
 async def setup(bot):

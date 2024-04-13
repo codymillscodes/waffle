@@ -1,9 +1,7 @@
-import discord
 import g4f
-from discord import app_commands
 from discord.ext import commands
 from loguru import logger
-from lib.prompts import gpt_prompts
+from strings.gpt_prompts import gpt_prompts
 
 import config
 
@@ -13,19 +11,19 @@ class ChatbotCog(commands.Cog):
         self.bot = bot
         self.prompt = gpt_prompts["waffle"]
 
-    @app_commands.command(name="character_prompt")
-    async def character_prompt(
-        self, interaction: discord.Interaction, character: str, series: str
-    ):
-        prompt = (
-            f"The following is a conversation between {character} from {series} and a friend. Respond and answer "
-            f"like {character} using the tone, manner and vocabulary {character} would use. Do not write any "
-            f"explanations. Only answer like {character}. You must know all of the knowledge of {character}."
-        )
-        self.prompt = prompt
-        await interaction.response.send_message(
-            f"Prompt set to {character} from {series}."
-        )
+    # @app_commands.command(name="character_prompt")
+    # async def character_prompt(
+    #     self, interaction: discord.Interaction, character: str, series: str
+    # ):
+    #     prompt = (
+    #         f"The following is a conversation between {character} from {series} and a friend. Respond and answer "
+    #         f"like {character} using the tone, manner and vocabulary {character} would use. Do not write any "
+    #         f"explanations. Only answer like {character}. You must know all of the knowledge of {character}."
+    #     )
+    #     self.prompt = prompt
+    #     await interaction.response.send_message(
+    #         f"Prompt set to {character} from {series}."
+    #     )
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -36,32 +34,30 @@ class ChatbotCog(commands.Cog):
         ]
         send = 0
         if message.channel.id not in config.IGNORE_CHANNELS:
-            if message.reference:
-                replied_message = await message.channel.fetch_message(
-                    message.reference.message_id
-                )
-                if replied_message.author.id == 968919979577704529:
-                    m = [
-                        {"role": "assistant", "content": replied_message.content},
-                        {"role": "user", "content": message.content},
-                    ]
-                    if replied_message.reference:
-                        second_reply = await message.channel.fetch_message(
-                            replied_message.reference.message_id
-                        )
-                        m = [{"role": "user", "content": second_reply.content}] + m
-                        if second_reply.reference:
-                            third_reply = await message.channel.fetch_message(
-                                second_reply.reference.message_id
-                            )
-                            m = [
-                                {"role": "assistant", "content": third_reply.content}
-                            ] + m
+            # if message.reference:
+            #     replied_message = await message.channel.fetch_message(
+            #         message.reference.message_id
+            #     )
+            #     if replied_message.author.id == 968919979577704529:
+            #         m = [
+            #             {"role": "assistant", "content": replied_message.content},
+            #             {"role": "user", "content": message.content},
+            #         ]
+            #         if replied_message.reference:
+            #             second_reply = await message.channel.fetch_message(
+            #                 replied_message.reference.message_id
+            #             )
+            #             m = [{"role": "user", "content": second_reply.content}] + m
+            #             if second_reply.reference:
+            #                 third_reply = await message.channel.fetch_message(
+            #                     second_reply.reference.message_id
+            #                 )
+            #                 m = [
+            #                     {"role": "assistant", "content": third_reply.content}
+            #                 ] + m
 
-                    messages = messages + m
-                    logger.info(f"Input sent: {m}")
-                    send = 1
-            elif "<@968919979577704529>" in message.content or (
+            #         messages = messages + m
+            if "<@968919979577704529>" in message.content or (
                 len(message.mentions) > 0 and "waffle" in message.mentions[0].name
             ):
                 # logger.info(f"{message.channel.id} | {config.IGNORE_CHANNELS}")
@@ -82,9 +78,6 @@ class ChatbotCog(commands.Cog):
                     provider=g4f.Provider.Bing,
                 )
                 r = response
-                # self.previous_messages.append("Waffle: " + response + " ")
-                # print(f"previous_messages: {''.join(self.previous_messages)}")
-                # chat limit is 2000 chars
                 if len(r) > 2000:
                     r = r[:2000]
                 await message.reply(r, mention_author=False)

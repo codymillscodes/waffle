@@ -1,11 +1,8 @@
 import os
 import glob
-import discord
 from discord import File
-from discord import app_commands
 from discord.ext import commands
 from loguru import logger
-from config import ADMIN_ROLE
 
 
 async def get_log():
@@ -17,10 +14,6 @@ async def get_log():
 class SystemCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
-    @commands.command(name="ping", description="Ping waffle.", brief="Ping waffle.")
-    async def ping(self, ctx):
-        await ctx.reply("fuck you", mention_author=False)
 
     # @app_commands.command(name="leave", description="leave a guild by name")
     # async def leaveg(self, interaction: discord.Interaction, guild_name: str):
