@@ -1,7 +1,7 @@
 from random import randint
 from discord.ext import commands
 from loguru import logger
-from lib.dracula import dracula
+from strings.dracula import dracula
 
 message_count = 0
 pause_count = 0
