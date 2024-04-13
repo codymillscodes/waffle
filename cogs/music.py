@@ -11,7 +11,7 @@ from discord.ext import commands
 from discord import app_commands
 from loguru import logger
 from typing import Literal
-from utils.db import DB
+from helpers.db import DB
 
 
 class MusicCog(commands.Cog):
