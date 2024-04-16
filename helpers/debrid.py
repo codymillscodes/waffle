@@ -133,7 +133,7 @@ async def download_tiktok_video(url):
     async with httpx.AsyncClient() as resp:
         r = await resp.get(url["url"])
         logger.info(r.status)
-        if r.status == 200:
+        if r.status_code.OK:
             logger.info("Writing to file")
             with open(f"tiktok/{url['fn']}.mp4", "wb") as f:
                 async for data in resp.content.iter_chunked(1024):
