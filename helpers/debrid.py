@@ -84,9 +84,10 @@ async def get_tiktok_link(url):
         async with httpx.AsyncClient() as resp:
             r = await resp.get(Urls.DEBRID_UNLOCK + url)
         logger.info(url)
-        file_id = r.json()["data"]["id"]
+        r = r.json()
+        file_id = r["data"]["id"]
         logger.info(f"TT File ID: {file_id}")
-        logger.info(r["data"])
+        #logger.info(r["data"])
         if r["data"]["link"] == "":
             logger.info("No link found, getting streaming link")
             streams = r["data"]["streams"]
