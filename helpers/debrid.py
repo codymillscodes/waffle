@@ -135,7 +135,7 @@ async def download_tiktok_video(url):
         logger.info(response.status_code)
         if response.status_code == httpx.codes.OK:
             logger.info("Writing to file")
-            with open(f"tiktok/{url.split('/')[-1]}.mp4", "wb") as f:
+            with open(f"tiktok/{url["fn"]}.mp4", "wb") as f:
                 async for chunk in response.aiter_bytes():
                     f.write(chunk)
                     url["status"] = 1
