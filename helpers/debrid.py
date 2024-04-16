@@ -104,7 +104,7 @@ async def get_tiktok_link(url):
             #     return 0
 
             async with httpx.AsyncClient() as resp:
-                r = await resp.get_json(
+                r = await resp.get(
                     f"{Urls.DEBRID_STREAMING}{file_id}&stream={stream_id}"
                 )
                 r = r.json()
