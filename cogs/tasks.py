@@ -40,21 +40,21 @@ class TasksCog(commands.Cog):
                 if s.user_login in users:
                     logger.info(s.user_login + " online.")
 
-                    if not self.twitchers[user]:
+                    if not self.twitchers[s.user_login]:
                         embed = helpers.embed.stream_embed(
                             user,
                             s.title,
                             s.game_name,
                         )
-                        self.twitchers[user] = True
+                        self.twitchers[s.user_login] = True
                         logger.info(f"{user} is online.")
                         # await self.update_stream_channel(True)
                         await twitch_channel.send("<@1196954735647920230>")
                         await twitch_channel.send(embed=embed)
                     else:
-                        if self.twitchers[user]:
-                            self.twitchers[user] = False
-                            logger.info(f"{user} is offline.")
+                        if self.twitchers[s.user_login]:
+                            self.twitchers[s.user_login] = False
+                            logger.info(f"{s.user_login} is offline.")
                             # await self.update_stream_channel(False)
                         # else:
                         #     logger.info(stream_data)
