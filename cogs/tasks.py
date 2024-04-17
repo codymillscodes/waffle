@@ -42,7 +42,7 @@ class TasksCog(commands.Cog):
 
                     if not self.twitchers[s.user_login]:
                         embed = helpers.embed.stream_embed(
-                            user,
+                            s.user_login,
                             s.title,
                             s.game_name,
                         )
