@@ -97,7 +97,7 @@ class TasksCog(commands.Cog):
                             await dl_channel.send(embed=embed)
                     else:
                         try:
-                            async with httpx.AsyncClient as resp:
+                            async with httpx.AsyncClient() as resp:
                                 status_json = await resp.get(
                                     Urls.DEBRID_STATUS_ONE + str(dl_id["task_id"])
                                 )
