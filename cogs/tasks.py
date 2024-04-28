@@ -80,9 +80,9 @@ class TasksCog(commands.Cog):
                             r = await resp.get(
                                 Urls.DEBRID_DELAYED + str(dl_id["task_id"])
                             )
-                            r = r.json()
-                            logger.info(Urls.DEBRID_DELAYED + str(dl_id["task_id"]))
-                            logger.debug(r)
+                        r = r.json()
+                        logger.info(Urls.DEBRID_DELAYED + str(dl_id["task_id"]))
+                        logger.debug(r)
 
                         if r["data"]["status"] == 2:
                             link = r["data"]["link"]
@@ -101,7 +101,7 @@ class TasksCog(commands.Cog):
                                 status_json = await resp.get(
                                     Urls.DEBRID_STATUS_ONE + str(dl_id["task_id"])
                                 )
-                                status_json = status_json.json()
+                            status_json = status_json.json()
                         except Exception as e:
                             logger.exception(e)
                             pass
