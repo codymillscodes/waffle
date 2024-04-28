@@ -168,7 +168,7 @@ class DebridCog(commands.Cog):
 
         results = await yar.search_jackett(query)
         if len(results) == 0:
-            await ctx.reply("No results. :(", mention_author=false)
+            await ctx.reply("No results. :(", mention_author=False)
         else:
             embed = helpers.embed.torrent_results(results)
             e = await ctx.reply(embed=embed, mention_author=False)
