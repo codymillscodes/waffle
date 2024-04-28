@@ -1,5 +1,6 @@
 from discord.ext import tasks, commands
 from loguru import logger
+import httpx
 from strings.urls import Urls
 import helpers.embed
 import helpers.db
@@ -76,9 +77,10 @@ class TasksCog(commands.Cog):
                     # logger.info(f"Checking: {dl_id['task_id']}")
                     if "link" in dl_id["type"]:
                         async with httpx.AsyncClient() as resp:
-                            r = await resp.get_json(
+                            r = await resp.get(
                                 Urls.DEBRID_DELAYED + str(dl_id["task_id"])
                             )
+                            r = r.json()
                             logger.info(Urls.DEBRID_DELAYED + str(dl_id["task_id"]))
                             logger.debug(r)
 
@@ -95,10 +97,11 @@ class TasksCog(commands.Cog):
                             await dl_channel.send(embed=embed)
                     else:
                         try:
-                            async with Conn() as resp:
-                                status_json = await resp.get_json(
+                            async with httpx.AsyncClient as resp:
+                                status_json = await resp.get(
                                     Urls.DEBRID_STATUS_ONE + str(dl_id["task_id"])
                                 )
+                                status_json = status_json.json()
                         except Exception as e:
                             logger.exception(e)
                             pass
