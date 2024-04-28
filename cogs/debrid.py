@@ -225,6 +225,7 @@ class DebridCog(commands.Cog):
                 await e.add_reaction("❌")
                 # await ctx.send("something broke lol")
             except Exception as e:
+                logger.exception(e)
                 await ctx.reply(f"EXCEPTION!\n {type(e).__name__}")
 
 
