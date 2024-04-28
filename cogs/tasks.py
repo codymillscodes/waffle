@@ -118,7 +118,7 @@ class TasksCog(commands.Cog):
                                     task_id=dl_id["task_id"], status="complete"
                                 )
                                 filename = status_json["data"]["magnets"]["filename"]
-                                embed = download_ready(dl_id["user_id"], filename)
+                                embed = embed.download_ready(dl_id["user_id"], filename)
                                 logger.info(f"Removed: {dl_id['task_id']}")
                                 dl_channel = await self.fetch_channel(config.DL_CHANNEL)
                                 await dl_channel.send(embed=embed)
