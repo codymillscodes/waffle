@@ -90,7 +90,7 @@ class TasksCog(commands.Cog):
                             filename = urllib.parse.unquote(link_split[1])
                             logger.info(f"removing {dl_id['task_id']}")
                             await self.db.set_status(dl_id["task_id"], "complete")
-                            embed = download_ready(
+                            embed = helpers.embed.download_ready(
                                 int(dl_id["user_id"]), filename, link
                             )
                             dl_channel = await self.fetch_channel(config.DL_CHANNEL)
@@ -118,7 +118,7 @@ class TasksCog(commands.Cog):
                                     task_id=dl_id["task_id"], status="complete"
                                 )
                                 filename = status_json["data"]["magnets"]["filename"]
-                                embed = embed.download_ready(dl_id["user_id"], filename)
+                                embed = helpers.embed.download_ready(dl_id["user_id"], filename)
                                 logger.info(f"Removed: {dl_id['task_id']}")
                                 dl_channel = await self.fetch_channel(config.DL_CHANNEL)
                                 await dl_channel.send(embed=embed)
