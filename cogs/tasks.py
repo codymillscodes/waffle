@@ -119,7 +119,7 @@ class TasksCog(commands.Cog):
                                 filename = status_json["data"]["magnets"]["filename"]
                                 embed = helpers.embed.download_ready(dl_id["user_id"], filename)
                                 logger.info(f"Removed: {dl_id['task_id']}")
-                                dl_channel = await self.fetch_channel(config.DL_CHANNEL)
+                                dl_channel = await self.bot.fetch_channel(config.DL_CHANNEL)
                                 await dl_channel.send(embed=embed)
                         except Exception as e:
                             logger.exception(e)
