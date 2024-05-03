@@ -38,7 +38,6 @@ class TasksCog(commands.Cog):
             users = list(self.twitchers.keys())
             async for s in Twitch.get_streams(auth, user_login=users):
                 if s.user_login in users:
-                    logger.info(s)
                     logger.info(s.user_login + " online.")
 
                     if not self.twitchers[s.user_login]:
@@ -50,15 +49,15 @@ class TasksCog(commands.Cog):
                         self.twitchers[s.user_login] = True
                         logger.info(f"{s.user_login} is online.")
                         # await self.update_stream_channel(True)
-                        await twitch_channel.send("<@&1196954735647920230>")
+                        # await twitch_channel.send("<@&1196954735647920230>")
                         await twitch_channel.send(embed=embed)
-                    else:
-                        if self.twitchers[s.user_login]:
-                            self.twitchers[s.user_login] = False
-                            logger.info(f"{s.user_login} is offline.")
-                            # await self.update_stream_channel(False)
-                        # else:
-                        #     logger.info(stream_data)
+                else:
+                    if self.twitchers[s.user_login]:
+                        self.twitchers[s.user_login] = False
+                        logger.info(f"{s.user_login} is offline.")
+                        # await self.update_stream_channel(False)
+                    # else:
+                    #     logger.info(stream_data)
         except (KeyError, IndexError, UnboundLocalError) as e:
             logger.exception(e)
         except TypeError as e:
