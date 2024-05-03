@@ -38,6 +38,8 @@ class TasksCog(commands.Cog):
             users = list(self.twitchers.keys())
             async for s in Twitch.get_streams(auth, user_login=users):
                 twitchers = self.twitchers
+                logger.info(self.twitchers)
+                logger.info(twitchers)
                 if s.user_login in users:
                     logger.info(s.user_login + " online.")
 
