@@ -34,7 +34,7 @@ class TasksCog(commands.Cog):
         # logger.debug("Checking twitchers...")
         # logger.debug(f"Checking {len(self.twitchers)} twitchers...")
         auth = await Twitch(config.TWITCH_CLIENT_ID, config.TWITCH_SECRET)
-
+        print(self.twitchers)
         try:
             users = list(self.twitchers.keys())
             async for s in Twitch.get_streams(auth, user_login=users):
