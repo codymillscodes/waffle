@@ -34,31 +34,32 @@ class TasksCog(commands.Cog):
         # logger.debug("Checking twitchers...")
         # logger.debug(f"Checking {len(self.twitchers)} twitchers...")
         auth = await Twitch(config.TWITCH_CLIENT_ID, config.TWITCH_SECRET)
-        print(self.twitchers)
         try:
             users = list(self.twitchers.keys())
             async for s in Twitch.get_streams(auth, user_login=users):
+                twitchers = self.twitchers
                 if s.user_login in users:
                     logger.info(s.user_login + " online.")
 
-                    if not self.twitchers[s.user_login]:
+                    if not twitchers[s.user_login]:
                         embed = helpers.embed.stream_embed(
                             s.user_login,
                             s.title,
                             s.game_name,
                         )
-                        self.twitchers[s.user_login] = True
+                        twitchers[s.user_login] = True
                         logger.info(f"{s.user_login} is online.")
                         # await self.update_stream_channel(True)
                         await twitch_channel.send("<@&1196954735647920230>")
                         await twitch_channel.send(embed=embed)
                     else:
-                        if self.twitchers[s.user_login]:
-                            self.twitchers[s.user_login] = False
+                        if twitchers[s.user_login]:
+                            twitchers[s.user_login] = False
                             logger.info(f"{s.user_login} is offline.")
                             # await self.update_stream_channel(False)
                         # else:
                         #     logger.info(stream_data)
+                self.twitchers = twitchers
         except (KeyError, IndexError, UnboundLocalError) as e:
             logger.exception(e)
         except TypeError as e:
