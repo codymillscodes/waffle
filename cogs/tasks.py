@@ -52,7 +52,7 @@ class TasksCog(commands.Cog):
                         twitchers[s.user_login] = True
                         logger.info(f"{s.user_login} is online.")
                         # await self.update_stream_channel(True)
-                        await twitch_channel.send("<@&1196954735647920230>")
+                        # await twitch_channel.send("<@&1196954735647920230>")
                         await twitch_channel.send(embed=embed)
                     else:
                         if twitchers[s.user_login]:
