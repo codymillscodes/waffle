@@ -111,7 +111,6 @@ class DebridCog(commands.Cog):
         files = []
         async with httpx.AsyncClient() as resp:
             r = await resp.get(url)
-        r = r.json()
         m3u_name = f"{url.split('/')[-2]}.m3u"
         # m3u_name = m3u_name
         soup = bs(r, "html.parser")
