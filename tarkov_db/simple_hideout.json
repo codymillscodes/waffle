@@ -1,0 +1,2341 @@
+{
+    "Heating": {
+        "1": {
+            "itemRequirements": [
+                {
+                    "item": "Roubles",
+                    "count": 25000
+                },
+                {
+                    "item": "Classic matches",
+                    "count": 2
+                }
+            ],
+            "stationLevelRequirements": [],
+            "skillRequirements": [],
+            "traderRequirements": []
+        },
+        "2": {
+            "itemRequirements": [
+                {
+                    "item": "Roubles",
+                    "count": 50000
+                },
+                {
+                    "item": "Hunting matches",
+                    "count": 2
+                },
+                {
+                    "item": "Dry fuel",
+                    "count": 3
+                },
+                {
+                    "item": "Crickent lighter",
+                    "count": 3
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Vents",
+                    "level": 1
+                },
+                {
+                    "station": "Heating",
+                    "level": 1
+                }
+            ],
+            "skillRequirements": [
+                {
+                    "name": "Endurance",
+                    "level": 1
+                }
+            ],
+            "traderRequirements": []
+        },
+        "3": {
+            "itemRequirements": [
+                {
+                    "item": "Radiator helix",
+                    "count": 8
+                },
+                {
+                    "item": "Bundle of wires",
+                    "count": 8
+                },
+                {
+                    "item": "Phase control relay",
+                    "count": 4
+                },
+                {
+                    "item": "Military corrugated tube",
+                    "count": 2
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Generator",
+                    "level": 2
+                },
+                {
+                    "station": "Workbench",
+                    "level": 2
+                },
+                {
+                    "station": "Heating",
+                    "level": 2
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": [
+                {
+                    "name": "Ragman",
+                    "level": 2
+                }
+            ]
+        }
+    },
+    "Generator": {
+        "1": {
+            "itemRequirements": [
+                {
+                    "item": "Roubles",
+                    "count": 100000
+                },
+                {
+                    "item": "Spark plug",
+                    "count": 1
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Security",
+                    "level": 1
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": []
+        },
+        "2": {
+            "itemRequirements": [
+                {
+                    "item": "Phase control relay",
+                    "count": 5
+                },
+                {
+                    "item": "Electric motor",
+                    "count": 1
+                },
+                {
+                    "item": "Bundle of wires",
+                    "count": 15
+                },
+                {
+                    "item": "Bulbex cable cutter",
+                    "count": 1
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Security",
+                    "level": 2
+                },
+                {
+                    "station": "Vents",
+                    "level": 2
+                },
+                {
+                    "station": "Generator",
+                    "level": 1
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": []
+        },
+        "3": {
+            "itemRequirements": [
+                {
+                    "item": "Phase control relay",
+                    "count": 6
+                },
+                {
+                    "item": "Electric motor",
+                    "count": 3
+                },
+                {
+                    "item": "Spark plug",
+                    "count": 10
+                },
+                {
+                    "item": "Power supply unit",
+                    "count": 5
+                },
+                {
+                    "item": "Metal spare parts",
+                    "count": 7
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Security",
+                    "level": 3
+                },
+                {
+                    "station": "Vents",
+                    "level": 3
+                },
+                {
+                    "station": "Generator",
+                    "level": 2
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": [
+                {
+                    "name": "Mechanic",
+                    "level": 3
+                }
+            ]
+        }
+    },
+    "Vents": {
+        "1": {
+            "itemRequirements": [
+                {
+                    "item": "Roubles",
+                    "count": 25000
+                }
+            ],
+            "stationLevelRequirements": [],
+            "skillRequirements": [],
+            "traderRequirements": []
+        },
+        "2": {
+            "itemRequirements": [
+                {
+                    "item": "Electric motor",
+                    "count": 1
+                },
+                {
+                    "item": "Car battery",
+                    "count": 1
+                },
+                {
+                    "item": "CPU fan",
+                    "count": 3
+                },
+                {
+                    "item": "Metal spare parts",
+                    "count": 2
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Vents",
+                    "level": 1
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": []
+        },
+        "3": {
+            "itemRequirements": [
+                {
+                    "item": "Electric motor",
+                    "count": 4
+                },
+                {
+                    "item": "Bundle of wires",
+                    "count": 14
+                },
+                {
+                    "item": "Printed circuit board",
+                    "count": 5
+                },
+                {
+                    "item": "Car battery",
+                    "count": 4
+                },
+                {
+                    "item": "Metal spare parts",
+                    "count": 5
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Generator",
+                    "level": 2
+                },
+                {
+                    "station": "Vents",
+                    "level": 2
+                }
+            ],
+            "skillRequirements": [
+                {
+                    "name": "Strength",
+                    "level": 2
+                }
+            ],
+            "traderRequirements": []
+        }
+    },
+    "Security": {
+        "1": {
+            "itemRequirements": [
+                {
+                    "item": "Roubles",
+                    "count": 20000
+                },
+                {
+                    "item": "Construction measuring tape",
+                    "count": 1
+                }
+            ],
+            "stationLevelRequirements": [],
+            "skillRequirements": [],
+            "traderRequirements": []
+        },
+        "2": {
+            "itemRequirements": [
+                {
+                    "item": "Roubles",
+                    "count": 45000
+                },
+                {
+                    "item": "Pliers Elite",
+                    "count": 1
+                },
+                {
+                    "item": "WD-40 (100ml)",
+                    "count": 1
+                },
+                {
+                    "item": "TP-200 TNT brick",
+                    "count": 1
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Illumination",
+                    "level": 1
+                },
+                {
+                    "station": "Security",
+                    "level": 1
+                }
+            ],
+            "skillRequirements": [
+                {
+                    "name": "Endurance",
+                    "level": 2
+                }
+            ],
+            "traderRequirements": []
+        },
+        "3": {
+            "itemRequirements": [
+                {
+                    "item": "Working LCD",
+                    "count": 2
+                },
+                {
+                    "item": "Bundle of wires",
+                    "count": 4
+                },
+                {
+                    "item": "NIXXOR lens",
+                    "count": 8
+                },
+                {
+                    "item": "SSD drive",
+                    "count": 1
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Illumination",
+                    "level": 3
+                },
+                {
+                    "station": "Security",
+                    "level": 2
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": [
+                {
+                    "name": "Mechanic",
+                    "level": 2
+                }
+            ]
+        }
+    },
+    "Lavatory": {
+        "1": {
+            "itemRequirements": [
+                {
+                    "item": "Roubles",
+                    "count": 2000
+                },
+                {
+                    "item": "Toilet paper",
+                    "count": 1
+                },
+                {
+                    "item": "Toothpaste",
+                    "count": 1
+                },
+                {
+                    "item": "Soap",
+                    "count": 1
+                },
+                {
+                    "item": "Awl",
+                    "count": 1
+                }
+            ],
+            "stationLevelRequirements": [],
+            "skillRequirements": [],
+            "traderRequirements": []
+        },
+        "2": {
+            "itemRequirements": [
+                {
+                    "item": "Corrugated hose",
+                    "count": 3
+                },
+                {
+                    "item": "Pack of screws",
+                    "count": 5
+                },
+                {
+                    "item": "Electric drill",
+                    "count": 1
+                },
+                {
+                    "item": "KEKTAPE duct tape",
+                    "count": 1
+                },
+                {
+                    "item": "Sewing kit",
+                    "count": 2
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Water Collector",
+                    "level": 1
+                },
+                {
+                    "station": "Vents",
+                    "level": 1
+                },
+                {
+                    "station": "Lavatory",
+                    "level": 1
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": []
+        },
+        "3": {
+            "itemRequirements": [
+                {
+                    "item": "Corrugated hose",
+                    "count": 6
+                },
+                {
+                    "item": "Pressure gauge",
+                    "count": 2
+                },
+                {
+                    "item": "Toolset",
+                    "count": 1
+                },
+                {
+                    "item": "Xenomorph sealing foam",
+                    "count": 3
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Vents",
+                    "level": 2
+                },
+                {
+                    "station": "Water Collector",
+                    "level": 2
+                },
+                {
+                    "station": "Lavatory",
+                    "level": 2
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": []
+        }
+    },
+    "Stash": {
+        "1": {
+            "itemRequirements": [],
+            "stationLevelRequirements": [],
+            "skillRequirements": [],
+            "traderRequirements": []
+        },
+        "2": {
+            "itemRequirements": [
+                {
+                    "item": "Hand drill",
+                    "count": 1
+                },
+                {
+                    "item": "Pack of screws",
+                    "count": 10
+                },
+                {
+                    "item": "WD-40 (100ml)",
+                    "count": 4
+                },
+                {
+                    "item": "Roubles",
+                    "count": 2500000
+                },
+                {
+                    "item": "Pack of nails",
+                    "count": 5
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Vents",
+                    "level": 1
+                },
+                {
+                    "station": "Stash",
+                    "level": 1
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": []
+        },
+        "3": {
+            "itemRequirements": [
+                {
+                    "item": "Electric drill",
+                    "count": 2
+                },
+                {
+                    "item": "Pack of screws",
+                    "count": 15
+                },
+                {
+                    "item": "Roubles",
+                    "count": 8500000
+                },
+                {
+                    "item": "Pack of nails",
+                    "count": 7
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Vents",
+                    "level": 2
+                },
+                {
+                    "station": "Heating",
+                    "level": 2
+                },
+                {
+                    "station": "Stash",
+                    "level": 2
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": [
+                {
+                    "name": "Prapor",
+                    "level": 3
+                },
+                {
+                    "name": "Ragman",
+                    "level": 3
+                }
+            ]
+        },
+        "4": {
+            "itemRequirements": [
+                {
+                    "item": "Euros",
+                    "count": 200000
+                },
+                {
+                    "item": "Bolts",
+                    "count": 10
+                },
+                {
+                    "item": "Screw nuts",
+                    "count": 10
+                },
+                {
+                    "item": "Shustrilo sealing foam",
+                    "count": 5
+                },
+                {
+                    "item": "Ratchet wrench",
+                    "count": 2
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Generator",
+                    "level": 3
+                },
+                {
+                    "station": "Workbench",
+                    "level": 3
+                },
+                {
+                    "station": "Heating",
+                    "level": 3
+                },
+                {
+                    "station": "Stash",
+                    "level": 3
+                },
+                {
+                    "station": "Intelligence Center",
+                    "level": 2
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": [
+                {
+                    "name": "Peacekeeper",
+                    "level": 4
+                },
+                {
+                    "name": "Ragman",
+                    "level": 4
+                }
+            ]
+        }
+    },
+    "Water Collector": {
+        "1": {
+            "itemRequirements": [
+                {
+                    "item": "Corrugated hose",
+                    "count": 4
+                },
+                {
+                    "item": "Bolts",
+                    "count": 5
+                },
+                {
+                    "item": "Screw nuts",
+                    "count": 5
+                },
+                {
+                    "item": "Duct tape",
+                    "count": 3
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Security",
+                    "level": 1
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": []
+        },
+        "2": {
+            "itemRequirements": [
+                {
+                    "item": "Corrugated hose",
+                    "count": 6
+                },
+                {
+                    "item": "Electric motor",
+                    "count": 2
+                },
+                {
+                    "item": "Toolset",
+                    "count": 2
+                },
+                {
+                    "item": "KEKTAPE duct tape",
+                    "count": 2
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Workbench",
+                    "level": 2
+                },
+                {
+                    "station": "Water Collector",
+                    "level": 1
+                }
+            ],
+            "skillRequirements": [
+                {
+                    "name": "Attention",
+                    "level": 3
+                }
+            ],
+            "traderRequirements": [
+                {
+                    "name": "Jaeger",
+                    "level": 2
+                }
+            ]
+        },
+        "3": {
+            "itemRequirements": [
+                {
+                    "item": "Roubles",
+                    "count": 20000
+                },
+                {
+                    "item": "Pliers Elite",
+                    "count": 2
+                },
+                {
+                    "item": "Shustrilo sealing foam",
+                    "count": 5
+                },
+                {
+                    "item": "Ratchet wrench",
+                    "count": 1
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Generator",
+                    "level": 3
+                },
+                {
+                    "station": "Water Collector",
+                    "level": 2
+                },
+                {
+                    "station": "Heating",
+                    "level": 3
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": [
+                {
+                    "name": "Jaeger",
+                    "level": 3
+                }
+            ]
+        }
+    },
+    "Medstation": {
+        "1": {
+            "itemRequirements": [
+                {
+                    "item": "Roubles",
+                    "count": 50000
+                },
+                {
+                    "item": "Disposable syringe",
+                    "count": 1
+                },
+                {
+                    "item": "Pile of meds",
+                    "count": 1
+                },
+                {
+                    "item": "Aseptic bandage",
+                    "count": 2
+                },
+                {
+                    "item": "Bottle of OLOLO Multivitamins",
+                    "count": 1
+                }
+            ],
+            "stationLevelRequirements": [],
+            "skillRequirements": [],
+            "traderRequirements": []
+        },
+        "2": {
+            "itemRequirements": [
+                {
+                    "item": "Roubles",
+                    "count": 150000
+                },
+                {
+                    "item": "Medical bloodset",
+                    "count": 2
+                },
+                {
+                    "item": "Bottle of saline solution",
+                    "count": 3
+                },
+                {
+                    "item": "Esmarch tourniquet",
+                    "count": 5
+                },
+                {
+                    "item": "Medical tools",
+                    "count": 3
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Generator",
+                    "level": 1
+                },
+                {
+                    "station": "Medstation",
+                    "level": 1
+                }
+            ],
+            "skillRequirements": [
+                {
+                    "name": "Health",
+                    "level": 2
+                }
+            ],
+            "traderRequirements": [
+                {
+                    "name": "Therapist",
+                    "level": 2
+                }
+            ]
+        },
+        "3": {
+            "itemRequirements": [
+                {
+                    "item": "Roubles",
+                    "count": 500000
+                },
+                {
+                    "item": "Bottle of saline solution",
+                    "count": 4
+                },
+                {
+                    "item": "LEDX Skin Transilluminator",
+                    "count": 1
+                },
+                {
+                    "item": "Ophthalmoscope",
+                    "count": 1
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Generator",
+                    "level": 2
+                },
+                {
+                    "station": "Lavatory",
+                    "level": 2
+                },
+                {
+                    "station": "Medstation",
+                    "level": 2
+                }
+            ],
+            "skillRequirements": [
+                {
+                    "name": "Vitality",
+                    "level": 3
+                }
+            ],
+            "traderRequirements": [
+                {
+                    "name": "Therapist",
+                    "level": 3
+                },
+                {
+                    "name": "Skier",
+                    "level": 2
+                }
+            ]
+        }
+    },
+    "Nutrition Unit": {
+        "1": {
+            "itemRequirements": [
+                {
+                    "item": "Roubles",
+                    "count": 25000
+                },
+                {
+                    "item": "Phase control relay",
+                    "count": 2
+                },
+                {
+                    "item": "Power cord",
+                    "count": 1
+                },
+                {
+                    "item": "Can of white salt",
+                    "count": 1
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Generator",
+                    "level": 1
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": []
+        },
+        "2": {
+            "itemRequirements": [
+                {
+                    "item": "Wrench",
+                    "count": 4
+                },
+                {
+                    "item": "Corrugated hose",
+                    "count": 2
+                },
+                {
+                    "item": "Alkaline cleaner for heat exchangers",
+                    "count": 2
+                },
+                {
+                    "item": "Phase control relay",
+                    "count": 1
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Lavatory",
+                    "level": 2
+                },
+                {
+                    "station": "Nutrition Unit",
+                    "level": 1
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": []
+        },
+        "3": {
+            "itemRequirements": [
+                {
+                    "item": "Roubles",
+                    "count": 125000
+                },
+                {
+                    "item": "Can of Majaica coffee beans",
+                    "count": 3
+                },
+                {
+                    "item": "Pack of sodium bicarbonate",
+                    "count": 3
+                },
+                {
+                    "item": "Smoked Chimney drain cleaner",
+                    "count": 2
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Generator",
+                    "level": 2
+                },
+                {
+                    "station": "Lavatory",
+                    "level": 3
+                },
+                {
+                    "station": "Stash",
+                    "level": 2
+                },
+                {
+                    "station": "Nutrition Unit",
+                    "level": 2
+                }
+            ],
+            "skillRequirements": [
+                {
+                    "name": "Metabolism",
+                    "level": 3
+                }
+            ],
+            "traderRequirements": []
+        }
+    },
+    "Rest Space": {
+        "1": {
+            "itemRequirements": [
+                {
+                    "item": "Roubles",
+                    "count": 10000
+                },
+                {
+                    "item": "Duct tape",
+                    "count": 1
+                },
+                {
+                    "item": "Classic matches",
+                    "count": 1
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Vents",
+                    "level": 1
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": []
+        },
+        "2": {
+            "itemRequirements": [
+                {
+                    "item": "Roubles",
+                    "count": 35000
+                },
+                {
+                    "item": "DVD drive",
+                    "count": 1
+                },
+                {
+                    "item": "Magnet",
+                    "count": 1
+                },
+                {
+                    "item": "Energy-saving lamp",
+                    "count": 3
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Generator",
+                    "level": 2
+                },
+                {
+                    "station": "Heating",
+                    "level": 2
+                },
+                {
+                    "station": "Rest Space",
+                    "level": 1
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": [
+                {
+                    "name": "Ragman",
+                    "level": 2
+                }
+            ]
+        },
+        "3": {
+            "itemRequirements": [
+                {
+                    "item": "Power cord",
+                    "count": 4
+                },
+                {
+                    "item": "Capacitors",
+                    "count": 5
+                },
+                {
+                    "item": "Bundle of wires",
+                    "count": 7
+                },
+                {
+                    "item": "GreenBat lithium battery",
+                    "count": 5
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Generator",
+                    "level": 3
+                },
+                {
+                    "station": "Heating",
+                    "level": 3
+                },
+                {
+                    "station": "Rest Space",
+                    "level": 2
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": [
+                {
+                    "name": "Skier",
+                    "level": 3
+                }
+            ]
+        }
+    },
+    "Workbench": {
+        "1": {
+            "itemRequirements": [
+                {
+                    "item": "Screw nuts",
+                    "count": 2
+                },
+                {
+                    "item": "Bolts",
+                    "count": 2
+                },
+                {
+                    "item": "Leatherman Multitool",
+                    "count": 1
+                }
+            ],
+            "stationLevelRequirements": [],
+            "skillRequirements": [],
+            "traderRequirements": []
+        },
+        "2": {
+            "itemRequirements": [
+                {
+                    "item": "Toolset",
+                    "count": 3
+                },
+                {
+                    "item": "Electric drill",
+                    "count": 2
+                },
+                {
+                    "item": "Bolts",
+                    "count": 6
+                },
+                {
+                    "item": "Weapon parts",
+                    "count": 3
+                },
+                {
+                    "item": "Set of files \"Master\"",
+                    "count": 1
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Illumination",
+                    "level": 2
+                },
+                {
+                    "station": "Workbench",
+                    "level": 1
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": [
+                {
+                    "name": "Mechanic",
+                    "level": 2
+                }
+            ]
+        },
+        "3": {
+            "itemRequirements": [
+                {
+                    "item": "Roubles",
+                    "count": 395000
+                },
+                {
+                    "item": "Pliers Elite",
+                    "count": 2
+                },
+                {
+                    "item": "#FireKlean gun lube",
+                    "count": 1
+                },
+                {
+                    "item": "Can of thermite",
+                    "count": 2
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Generator",
+                    "level": 2
+                },
+                {
+                    "station": "Stash",
+                    "level": 2
+                },
+                {
+                    "station": "Workbench",
+                    "level": 2
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": [
+                {
+                    "name": "Mechanic",
+                    "level": 3
+                }
+            ]
+        }
+    },
+    "Intelligence Center": {
+        "1": {
+            "itemRequirements": [
+                {
+                    "item": "Intelligence folder",
+                    "count": 1
+                },
+                {
+                    "item": "Topographic survey maps",
+                    "count": 1
+                },
+                {
+                    "item": "Factory plan map",
+                    "count": 1
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Security",
+                    "level": 2
+                },
+                {
+                    "station": "Vents",
+                    "level": 2
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": []
+        },
+        "2": {
+            "itemRequirements": [
+                {
+                    "item": "Intelligence folder",
+                    "count": 3
+                },
+                {
+                    "item": "Secure Flash drive",
+                    "count": 3
+                },
+                {
+                    "item": "Power cord",
+                    "count": 7
+                },
+                {
+                    "item": "Damaged hard drive",
+                    "count": 4
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Security",
+                    "level": 3
+                },
+                {
+                    "station": "Medstation",
+                    "level": 3
+                },
+                {
+                    "station": "Nutrition Unit",
+                    "level": 3
+                },
+                {
+                    "station": "Intelligence Center",
+                    "level": 1
+                }
+            ],
+            "skillRequirements": [
+                {
+                    "name": "Attention",
+                    "level": 3
+                }
+            ],
+            "traderRequirements": [
+                {
+                    "name": "Mechanic",
+                    "level": 2
+                }
+            ]
+        },
+        "3": {
+            "itemRequirements": [
+                {
+                    "item": "Military COFDM Wireless Signal Transmitter",
+                    "count": 2
+                },
+                {
+                    "item": "VPX Flash Storage Module",
+                    "count": 2
+                },
+                {
+                    "item": "Military flash drive",
+                    "count": 5
+                },
+                {
+                    "item": "Military cable",
+                    "count": 5
+                },
+                {
+                    "item": "Secure magnetic tape cassette",
+                    "count": 2
+                },
+                {
+                    "item": "Far-forward GPS Signal Amplifier Unit",
+                    "count": 1
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Workbench",
+                    "level": 3
+                },
+                {
+                    "station": "Generator",
+                    "level": 3
+                },
+                {
+                    "station": "Intelligence Center",
+                    "level": 2
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": [
+                {
+                    "name": "Prapor",
+                    "level": 3
+                }
+            ]
+        }
+    },
+    "Shooting Range": {
+        "1": {
+            "itemRequirements": [
+                {
+                    "item": "Screw nuts",
+                    "count": 1
+                },
+                {
+                    "item": "Bolts",
+                    "count": 1
+                },
+                {
+                    "item": "Metal spare parts",
+                    "count": 1
+                },
+                {
+                    "item": "Roubles",
+                    "count": 20000
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Illumination",
+                    "level": 1
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": []
+        },
+        "2": {
+            "itemRequirements": [
+                {
+                    "item": "Toolset",
+                    "count": 1
+                },
+                {
+                    "item": "Metal spare parts",
+                    "count": 5
+                },
+                {
+                    "item": "Construction measuring tape",
+                    "count": 1
+                },
+                {
+                    "item": "Bundle of wires",
+                    "count": 3
+                },
+                {
+                    "item": "Pack of screws",
+                    "count": 3
+                },
+                {
+                    "item": "Tube of Poxeram cold welding",
+                    "count": 1
+                },
+                {
+                    "item": "Electric motor",
+                    "count": 6
+                },
+                {
+                    "item": "Energy-saving lamp",
+                    "count": 6
+                },
+                {
+                    "item": "WI-FI Camera",
+                    "count": 3
+                },
+                {
+                    "item": "Electric drill",
+                    "count": 1
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Illumination",
+                    "level": 3
+                },
+                {
+                    "station": "Workbench",
+                    "level": 2
+                },
+                {
+                    "station": "Shooting Range",
+                    "level": 1
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": []
+        },
+        "3": {
+            "itemRequirements": [
+                {
+                    "item": "Set of files \"Master\"",
+                    "count": 1
+                },
+                {
+                    "item": "Bundle of wires",
+                    "count": 5
+                },
+                {
+                    "item": "Printed circuit board",
+                    "count": 3
+                },
+                {
+                    "item": "Metal spare parts",
+                    "count": 5
+                },
+                {
+                    "item": "Capacitors",
+                    "count": 5
+                },
+                {
+                    "item": "Phase control relay",
+                    "count": 3
+                },
+                {
+                    "item": "Power cord",
+                    "count": 5
+                },
+                {
+                    "item": "Leatherman Multitool",
+                    "count": 1
+                },
+                {
+                    "item": "Tech manual",
+                    "count": 1
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Shooting Range",
+                    "level": 2
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": []
+        }
+    },
+    "Scav Case": {
+        "1": {
+            "itemRequirements": [
+                {
+                    "item": "Bronze lion figurine",
+                    "count": 3
+                },
+                {
+                    "item": "Gold skull ring",
+                    "count": 6
+                },
+                {
+                    "item": "Golden neck chain",
+                    "count": 8
+                },
+                {
+                    "item": "Roler Submariner gold wrist watch",
+                    "count": 4
+                },
+                {
+                    "item": "Bottle of Fierce Hatchling moonshine",
+                    "count": 3
+                },
+                {
+                    "item": "Lucky Scav Junk box",
+                    "count": 1
+                },
+                {
+                    "item": "Golden rooster figurine",
+                    "count": 1
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Intelligence Center",
+                    "level": 2
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": []
+        }
+    },
+    "Illumination": {
+        "1": {
+            "itemRequirements": [
+                {
+                    "item": "Roubles",
+                    "count": 10000
+                },
+                {
+                    "item": "Crickent lighter",
+                    "count": 1
+                }
+            ],
+            "stationLevelRequirements": [],
+            "skillRequirements": [],
+            "traderRequirements": []
+        },
+        "2": {
+            "itemRequirements": [
+                {
+                    "item": "Light bulb",
+                    "count": 14
+                },
+                {
+                    "item": "Bundle of wires",
+                    "count": 10
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Generator",
+                    "level": 1
+                },
+                {
+                    "station": "Illumination",
+                    "level": 1
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": []
+        },
+        "3": {
+            "itemRequirements": [
+                {
+                    "item": "Roubles",
+                    "count": 50000
+                },
+                {
+                    "item": "Capacitors",
+                    "count": 7
+                },
+                {
+                    "item": "Bundle of wires",
+                    "count": 6
+                },
+                {
+                    "item": "Energy-saving lamp",
+                    "count": 12
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Generator",
+                    "level": 2
+                },
+                {
+                    "station": "Workbench",
+                    "level": 1
+                },
+                {
+                    "station": "Illumination",
+                    "level": 2
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": [
+                {
+                    "name": "Mechanic",
+                    "level": 2
+                }
+            ]
+        }
+    },
+    "Air Filtering Unit": {
+        "1": {
+            "itemRequirements": [
+                {
+                    "item": "Dollars",
+                    "count": 25000
+                },
+                {
+                    "item": "Military power filter",
+                    "count": 5
+                },
+                {
+                    "item": "Gas mask air filter",
+                    "count": 5
+                },
+                {
+                    "item": "Military corrugated tube",
+                    "count": 3
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Generator",
+                    "level": 3
+                },
+                {
+                    "station": "Vents",
+                    "level": 3
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": [
+                {
+                    "name": "Skier",
+                    "level": 3
+                }
+            ]
+        }
+    },
+    "Solar Power": {
+        "1": {
+            "itemRequirements": [
+                {
+                    "item": "Euros",
+                    "count": 25000
+                },
+                {
+                    "item": "Military cable",
+                    "count": 10
+                },
+                {
+                    "item": "Phased array element",
+                    "count": 4
+                },
+                {
+                    "item": "Military power filter",
+                    "count": 10
+                },
+                {
+                    "item": "Working LCD",
+                    "count": 3
+                },
+                {
+                    "item": "Advanced current converter",
+                    "count": 1
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Generator",
+                    "level": 3
+                },
+                {
+                    "station": "Workbench",
+                    "level": 3
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": [
+                {
+                    "name": "Peacekeeper",
+                    "level": 4
+                }
+            ]
+        }
+    },
+    "Booze Generator": {
+        "1": {
+            "itemRequirements": [
+                {
+                    "item": "Silicone tube",
+                    "count": 4
+                },
+                {
+                    "item": "Analog thermometer",
+                    "count": 2
+                },
+                {
+                    "item": "Pressure gauge",
+                    "count": 2
+                },
+                {
+                    "item": "Corrugated hose",
+                    "count": 5
+                },
+                {
+                    "item": "Pipe grip wrench",
+                    "count": 1
+                },
+                {
+                    "item": "Radiator helix",
+                    "count": 3
+                },
+                {
+                    "item": "Metal spare parts",
+                    "count": 2
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Water Collector",
+                    "level": 3
+                },
+                {
+                    "station": "Nutrition Unit",
+                    "level": 3
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": []
+        }
+    },
+    "Bitcoin Farm": {
+        "1": {
+            "itemRequirements": [
+                {
+                    "item": "CPU fan",
+                    "count": 15
+                },
+                {
+                    "item": "Power supply unit",
+                    "count": 10
+                },
+                {
+                    "item": "Power cord",
+                    "count": 10
+                },
+                {
+                    "item": "VPX Flash Storage Module",
+                    "count": 1
+                },
+                {
+                    "item": "T-Shaped plug",
+                    "count": 5
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Intelligence Center",
+                    "level": 2
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": []
+        },
+        "2": {
+            "itemRequirements": [
+                {
+                    "item": "CPU fan",
+                    "count": 15
+                },
+                {
+                    "item": "Power supply unit",
+                    "count": 10
+                },
+                {
+                    "item": "Printed circuit board",
+                    "count": 15
+                },
+                {
+                    "item": "Phase control relay",
+                    "count": 5
+                },
+                {
+                    "item": "Military power filter",
+                    "count": 2
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Bitcoin Farm",
+                    "level": 1
+                },
+                {
+                    "station": "Generator",
+                    "level": 3
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": []
+        },
+        "3": {
+            "itemRequirements": [
+                {
+                    "item": "CPU fan",
+                    "count": 25
+                },
+                {
+                    "item": "Silicone tube",
+                    "count": 15
+                },
+                {
+                    "item": "Electric motor",
+                    "count": 10
+                },
+                {
+                    "item": "Pressure gauge",
+                    "count": 10
+                },
+                {
+                    "item": "6-STEN-140-M military battery",
+                    "count": 1
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Bitcoin Farm",
+                    "level": 2
+                },
+                {
+                    "station": "Solar Power",
+                    "level": 1
+                },
+                {
+                    "station": "Water Collector",
+                    "level": 3
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": []
+        }
+    },
+    "Gym": {
+        "1": {
+            "itemRequirements": [
+                {
+                    "item": "Toolset",
+                    "count": 1
+                },
+                {
+                    "item": "Electric drill",
+                    "count": 1
+                },
+                {
+                    "item": "Metal cutting scissors",
+                    "count": 1
+                },
+                {
+                    "item": "Screw nuts",
+                    "count": 3
+                },
+                {
+                    "item": "Bolts",
+                    "count": 3
+                },
+                {
+                    "item": "WD-40 (100ml)",
+                    "count": 1
+                },
+                {
+                    "item": "Insulating tape",
+                    "count": 1
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Defective Wall",
+                    "level": 6
+                },
+                {
+                    "station": "Illumination",
+                    "level": 2
+                },
+                {
+                    "station": "Vents",
+                    "level": 2
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": []
+        }
+    },
+    "Defective Wall": {
+        "1": {
+            "itemRequirements": [],
+            "stationLevelRequirements": [
+                {
+                    "station": "Medstation",
+                    "level": 1
+                },
+                {
+                    "station": "Water Collector",
+                    "level": 1
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": []
+        },
+        "2": {
+            "itemRequirements": [],
+            "stationLevelRequirements": [
+                {
+                    "station": "Defective Wall",
+                    "level": 1
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": []
+        },
+        "3": {
+            "itemRequirements": [],
+            "stationLevelRequirements": [
+                {
+                    "station": "Defective Wall",
+                    "level": 2
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": []
+        },
+        "4": {
+            "itemRequirements": [
+                {
+                    "item": "Fierce Blow sledgehammer",
+                    "count": 1
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Defective Wall",
+                    "level": 3
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": []
+        },
+        "5": {
+            "itemRequirements": [
+                {
+                    "item": "Metal cutting scissors",
+                    "count": 1
+                },
+                {
+                    "item": "Toolset",
+                    "count": 1
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Defective Wall",
+                    "level": 4
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": []
+        },
+        "6": {
+            "itemRequirements": [
+                {
+                    "item": "Corrugated hose",
+                    "count": 2
+                },
+                {
+                    "item": "Duct tape",
+                    "count": 1
+                },
+                {
+                    "item": "Toolset",
+                    "count": 1
+                },
+                {
+                    "item": "Pliers Elite",
+                    "count": 1
+                },
+                {
+                    "item": "Metal spare parts",
+                    "count": 5
+                },
+                {
+                    "item": "Xenomorph sealing foam",
+                    "count": 1
+                },
+                {
+                    "item": "Bundle of wires",
+                    "count": 2
+                },
+                {
+                    "item": "Light bulb",
+                    "count": 2
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Defective Wall",
+                    "level": 5
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": []
+        }
+    },
+    "Weapon Rack": {
+        "1": {
+            "itemRequirements": [
+                {
+                    "item": "Hand drill",
+                    "count": 1
+                },
+                {
+                    "item": "Metal cutting scissors",
+                    "count": 1
+                },
+                {
+                    "item": "Energy-saving lamp",
+                    "count": 5
+                },
+                {
+                    "item": "Xenomorph sealing foam",
+                    "count": 3
+                },
+                {
+                    "item": "Bolts",
+                    "count": 15
+                },
+                {
+                    "item": "Insulating tape",
+                    "count": 5
+                },
+                {
+                    "item": "Pack of nails",
+                    "count": 5
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Illumination",
+                    "level": 3
+                },
+                {
+                    "station": "Stash",
+                    "level": 2
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": [
+                {
+                    "name": "Mechanic",
+                    "level": 2
+                }
+            ]
+        },
+        "2": {
+            "itemRequirements": [
+                {
+                    "item": "Electric drill",
+                    "count": 1
+                },
+                {
+                    "item": "Set of files \"Master\"",
+                    "count": 1
+                },
+                {
+                    "item": "Energy-saving lamp",
+                    "count": 10
+                },
+                {
+                    "item": "Pack of screws",
+                    "count": 10
+                },
+                {
+                    "item": "Duct tape",
+                    "count": 5
+                },
+                {
+                    "item": "Bundle of wires",
+                    "count": 10
+                },
+                {
+                    "item": "Metal spare parts",
+                    "count": 5
+                },
+                {
+                    "item": "Weapon parts",
+                    "count": 5
+                },
+                {
+                    "item": "Tube of Poxeram cold welding",
+                    "count": 3
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Shooting Range",
+                    "level": 2
+                },
+                {
+                    "station": "Workbench",
+                    "level": 2
+                },
+                {
+                    "station": "Stash",
+                    "level": 3
+                },
+                {
+                    "station": "Weapon Rack",
+                    "level": 1
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": [
+                {
+                    "name": "Mechanic",
+                    "level": 3
+                }
+            ]
+        },
+        "3": {
+            "itemRequirements": [
+                {
+                    "item": "Electric drill",
+                    "count": 1
+                },
+                {
+                    "item": "Energy-saving lamp",
+                    "count": 15
+                },
+                {
+                    "item": "Metal spare parts",
+                    "count": 10
+                },
+                {
+                    "item": "KEKTAPE duct tape",
+                    "count": 5
+                },
+                {
+                    "item": "Bundle of wires",
+                    "count": 15
+                },
+                {
+                    "item": "Shustrilo sealing foam",
+                    "count": 3
+                },
+                {
+                    "item": "Tech manual",
+                    "count": 1
+                },
+                {
+                    "item": "#FireKlean gun lube",
+                    "count": 1
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Shooting Range",
+                    "level": 3
+                },
+                {
+                    "station": "Workbench",
+                    "level": 3
+                },
+                {
+                    "station": "Weapon Rack",
+                    "level": 2
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": [
+                {
+                    "name": "Mechanic",
+                    "level": 4
+                }
+            ]
+        }
+    },
+    "Library": {
+        "1": {
+            "itemRequirements": [
+                {
+                    "item": "Roubles",
+                    "count": 400000
+                },
+                {
+                    "item": "Horse figurine",
+                    "count": 1
+                },
+                {
+                    "item": "Chainlet",
+                    "count": 2
+                },
+                {
+                    "item": "Tech manual",
+                    "count": 5
+                },
+                {
+                    "item": "Diary",
+                    "count": 2
+                },
+                {
+                    "item": "Slim diary",
+                    "count": 2
+                },
+                {
+                    "item": "BakeEzy cook book",
+                    "count": 1
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Rest Space",
+                    "level": 3
+                }
+            ],
+            "skillRequirements": [
+                {
+                    "name": "Hideout Management",
+                    "level": 5
+                }
+            ],
+            "traderRequirements": []
+        }
+    },
+    "Hall of Fame": {
+        "1": {
+            "itemRequirements": [
+                {
+                    "item": "Round pliers",
+                    "count": 1
+                },
+                {
+                    "item": "Fleece fabric",
+                    "count": 5
+                },
+                {
+                    "item": "Cat figurine",
+                    "count": 1
+                },
+                {
+                    "item": "Light bulb",
+                    "count": 5
+                },
+                {
+                    "item": "Pack of nails",
+                    "count": 5
+                },
+                {
+                    "item": "Insulating tape",
+                    "count": 2
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Defective Wall",
+                    "level": 6
+                },
+                {
+                    "station": "Illumination",
+                    "level": 2
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": [
+                {
+                    "name": "Mechanic",
+                    "level": 2
+                }
+            ]
+        },
+        "2": {
+            "itemRequirements": [
+                {
+                    "item": "Tech manual",
+                    "count": 1
+                },
+                {
+                    "item": "Pliers Elite",
+                    "count": 1
+                },
+                {
+                    "item": "Toolset",
+                    "count": 1
+                },
+                {
+                    "item": "Golden rooster figurine",
+                    "count": 1
+                },
+                {
+                    "item": "Energy-saving lamp",
+                    "count": 10
+                },
+                {
+                    "item": "Pack of screws",
+                    "count": 6
+                },
+                {
+                    "item": "Duct tape",
+                    "count": 3
+                },
+                {
+                    "item": "Xenomorph sealing foam",
+                    "count": 2
+                },
+                {
+                    "item": "Tube of Poxeram cold welding",
+                    "count": 2
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Hall of Fame",
+                    "level": 1
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": []
+        },
+        "3": {
+            "itemRequirements": [
+                {
+                    "item": "Set of files \"Master\"",
+                    "count": 1
+                },
+                {
+                    "item": "Electric drill",
+                    "count": 1
+                },
+                {
+                    "item": "Bronze lion figurine",
+                    "count": 1
+                },
+                {
+                    "item": "Energy-saving lamp",
+                    "count": 15
+                },
+                {
+                    "item": "KEKTAPE duct tape",
+                    "count": 3
+                },
+                {
+                    "item": "T-Shaped plug",
+                    "count": 3
+                },
+                {
+                    "item": "Metal spare parts",
+                    "count": 15
+                },
+                {
+                    "item": "Power cord",
+                    "count": 5
+                }
+            ],
+            "stationLevelRequirements": [
+                {
+                    "station": "Hall of Fame",
+                    "level": 2
+                }
+            ],
+            "skillRequirements": [],
+            "traderRequirements": []
+        }
+    }
+}

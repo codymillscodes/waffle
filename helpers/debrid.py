@@ -1,4 +1,4 @@
-from strings.urls import Urls
+import strings.urls as Urls
 import httpx
 from loguru import logger
 import os

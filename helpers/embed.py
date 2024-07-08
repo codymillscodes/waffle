@@ -6,7 +6,7 @@ from helpers.utils import percentage
 from strings.link_msg import get_link_msg
 from config import DEBRID_WEBDAV, TWITCH_NOTIFY_ROLE
 from urllib.parse import quote
-from strings.urls import Urls
+import strings.urls as Urls
 
 
 def twitcher_embed(twitchers, online=False):

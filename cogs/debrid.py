@@ -13,7 +13,7 @@ import config
 import helpers.debrid as deb
 import helpers.embed
 from helpers.db import DB
-from strings.urls import Urls
+import strings.urls as Urls
 import helpers.yar as yar
 
 

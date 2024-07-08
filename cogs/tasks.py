@@ -1,7 +1,7 @@
 from discord.ext import tasks, commands
 from loguru import logger
 import httpx
-from strings.urls import Urls
+import strings.urls as Urls
 import helpers.embed
 import helpers.db
 import config
