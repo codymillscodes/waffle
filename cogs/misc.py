@@ -44,7 +44,7 @@ class MiscCog(commands.Cog):
 
     @commands.command(name="inspireme", description="Get inspiration")
     async def inspireme(self, ctx):
-        with httpx.AsyncClient() as resp:
+        async with httpx.AsyncClient() as resp:
             r = await resp.get("https://inspirobot.me/api?generate=true")
 
         await ctx.send(r.text)
