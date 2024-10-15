@@ -2,15 +2,17 @@ twitchers.txt
 debrid.txt
 queue.txt
 *.ini
+tarkov_db/
+.vscode/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
 test/
-.vscode/
+
 # C extensions
 *.so
-tarkov_db/
+
 # Distribution / packaging
 .Python
 build/
