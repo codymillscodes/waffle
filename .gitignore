@@ -1,17 +1,16 @@
 twitchers.txt
 debrid.txt
-dreams/
-cogs/reminders.py
+queue.txt
 *.ini
-tiktok/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
 test/
+.vscode/
 # C extensions
 *.so
-
+tarkov_db/
 # Distribution / packaging
 .Python
 build/

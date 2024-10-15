@@ -1,70 +1,60 @@
 from bs4 import BeautifulSoup as bs
 import httpx
-from config import JACKETT_URL
-from helpers.utils import sizeof_fmt
 
+def scrape_btsearch(q):
+    url = f"https://bitsearch.to/search?q={q.replace(' ', '+')}&sort=seeders"
 
-async def sort_and_filter_xml(xml_data):
-    soup = bs(xml_data, "xml")
-    items = soup.find_all("item")
+    with httpx.Client() as client:
+        response = client.get(url)
 
-    # Filter out items with seeders=0
-    filtered_items = [
-        item
-        for item in items
-        if item.find("torznab:attr", attrs={"name": "seeders", "value": "0"}) is None
-    ]
-
-    # Sort items by seeders (ascending order)
-    sorted_items = sorted(
-        filtered_items,
-        key=lambda x: int(x.find("torznab:attr", attrs={"name": "seeders"})["value"]),
-        reverse=True,
-    )
-
-    return sorted_items
-
-
-async def rarbg(url):
-    async with httpx.AsyncClient() as client:
-        response = await client.get(url.replace("?format=json", ""), timeout=60)
-
-    tpage = bs(response.text, features="html.parser")
-    magnet_link = tpage.select_one("a[href*=magnet]")
-    if magnet_link == None:
-        logger.info("Retrying...")
-        magnet_link = rargb(url)
-        return magnet_link
-    return magnet_link["href"]
-
-
-async def search_jackett(query):
-    url = f"{JACKETT_URL}{query.replace(' ', '+')}"
-    timeout_settings = httpx.Timeout(60.0)
-    async with httpx.AsyncClient() as client:
-        r = await client.get(url, timeout=timeout_settings)
-    sorted_filtered_items = await sort_and_filter_xml(r.text)
-    sorted_filtered_items = sorted_filtered_items[:10]
+    soup = bs(response.text, "html.parser")
     results = []
-    for s in sorted_filtered_items:
-        title = s.find("title").text
-        seeders = s.find("torznab:attr", attrs={"name": "seeders"})["value"]
-        indexer = s.find("jackettindexer").text
-        size = s.find("size").text
-        url = s.find("guid").text
-        try:
-            magnet = s.find("torznab:attr", attrs={"name": "magneturl"})["value"]
-        except:
-            if "TheRARBG" in indexer:
-                magnet = "None"
-        torrent = {
-            "name": title,
-            "seeders": seeders,
-            "indexer": indexer,
-            "url": url,
-            "magnet": magnet,
-            "size": sizeof_fmt(int(size)),
-        }
-        results.append(torrent)
+    for item in soup.select('.card.search-result.my-2'):
+        # Failsafe for magnet link
+        magnet_link_element = item.select_one('.dl-magnet')
+        if not magnet_link_element:
+            continue
+        magnet_link = magnet_link_element['href']
+
+        # Failsafe for title
+        title_element = item.select_one('.title a')
+        title = title_element.text.strip() if title_element else "Title not found"
+
+        # Failsafe for link
+        link = title_element['href'] if title_element else "Link not found"
+
+        # Failsafe for category
+        category_element = item.select_one('.category')
+        category = category_element.text.strip() if category_element else "Category not found"
+
+        # Failsafe for size
+        size_element = item.select_one('.stats img[alt="Size"]')
+        size = size_element.parent.text.strip() if size_element and size_element.parent else "Size not found"
+
+        # Failsafe for seeders
+        seeders_element = item.select_one('.stats img[alt="Seeder"]')
+        seeders = seeders_element.parent.text.strip() if seeders_element and seeders_element.parent else "Seeders not found"
+
+        # Failsafe for leechers
+        leechers_element = item.select_one('.stats img[alt="Leecher"]')
+        leechers = leechers_element.parent.text.strip() if leechers_element and leechers_element.parent else "Leechers not found"
+
+        # Failsafe for date
+        date_element = item.select_one('.stats img[alt="Date"]')
+        date = date_element.parent.text.strip() if date_element and date_element.parent else "Date not found"
+
+        results.append({
+            'title': title,
+            'link': link,
+            'category': category,
+            'size': size,
+            'seeders': seeders,
+            'leechers': leechers,
+            'date': date,
+            'magnet_link': magnet_link
+        })
+
+        if len(results) >= 10:
+            break
 
     return results

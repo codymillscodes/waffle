@@ -1,41 +1,12 @@
-from random import randint
 from discord import Embed
-from loguru import logger
-from hurry.filesize import size
-from helpers.utils import percentage
+# from hurry.filesize import size
+from helpers.utils import percentage, size
 from strings.link_msg import get_link_msg
-from config import DEBRID_WEBDAV, TWITCH_NOTIFY_ROLE
+from config import DEBRID_WEBDAV
 from urllib.parse import quote
-import strings.urls as Urls
-
-
-def twitcher_embed(twitchers, online=False):
-    embed = Embed(title="__Twitchers__", color=0x00FF00)
-    for t in twitchers:
-        if online and t["online"]:
-            embed.add_field(
-                name=f"{t['user']}",
-                value=f"Status: ONLINE\nGame: {t['game']}\n{Urls.TWITCH_CHANNEL}{t['user']}",
-                inline=False,
-            )
-        elif online == False:
-            if t["online"]:
-                embed.add_field(
-                    name=f"{t['user']}",
-                    value=f"Status: ONLINE\nGame: {t['game']}\n{Urls.TWITCH_CHANNEL}{t['user']}",
-                    inline=False,
-                )
-            else:
-                embed.add_field(
-                    name=f"{t['user']}",
-                    value=f"Status: OFFLINE\n{Urls.TWITCH_CHANNEL}{t['user']}",
-                    inline=False,
-                )
-    return embed
-
 
 def fortnite(stats):
-    logger.info(f"Building embed for {stats.user.name}")
+    print(f"Building embed for {stats.user.name}")
     embed = Embed(
         title=f"{stats.user.name}",
         description=f"**Battle Pass:** {stats.battle_pass.level}",
@@ -83,12 +54,12 @@ def fortnite(stats):
             value="No squad stats, seriously?\nWhere are you on Fridays?",
             inline=False,
         )
-    logger.info(f"Built embed for {stats.user.name}")
+    print(f"Built embed for {stats.user.name}")
     return embed
 
 
 def hltb(name, results):
-    logger.info(f"Building embed for {results[0].game_name}")
+    print(f"Building embed for {results[0].game_name}")
     embed = Embed(
         title=f"HLTB Results for {name}",
         url="https://howlongtobeat.com?q=" + name.replace(" ", "+"),
@@ -114,7 +85,7 @@ def hltb(name, results):
                 value=f"**Dev:** {results[i].profile_dev}\n**Platforms:** {platforms[:-2]}\n**Main Story:** {results[i].main_story}h | **Main + Extras:** {results[i].main_extra}h\n**Completionist:** {results[i].completionist}h | **All:** {results[i].all_styles}h\n{results[i].game_web_link}",
                 inline=False,
             )
-    logger.info(f"Built embed for {results[0].game_name}")
+    print(f"Built embed for {results[0].game_name}")
     return embed
 
 
@@ -150,7 +121,6 @@ def debrid_status(all_status):
         )
     return embed
 
-
 def download_ready(author, magnet, link=None):
     embed = Embed(description=f"<@{author}>")
     if link is None:
@@ -161,14 +131,13 @@ def download_ready(author, magnet, link=None):
     )
     return embed
 
-
 def torrent_results(results):
     embed = Embed()
     x = 0
     for torrent in results:
-        result_value = f"Seeders: {torrent['seeders']} | Indexer: {torrent['indexer']} | Size: {torrent['size']}"
+        result_value = f"Seeders: {torrent['seeders']} | Leechers: {torrent['leechers']} | Size: {torrent['size']}"
         embed.add_field(
-            name=f"{x+1}. {torrent['name']}",
+            name=f"{x+1}. {torrent['title']}",
             value=result_value,
             inline=False,
         )
@@ -178,15 +147,5 @@ def torrent_results(results):
         value="You should pick the one with the most seeders and a reasonable filesize. Pay attention to the quality. You dont want a cam or TS.\n*!pick 1-10, !pick 1,3,5, !pick 1.\nSupports range or comma-separated picks.*",
         inline=False,
     )
-    logger.info("Built embed for torrent results")
-    return embed
-
-
-def stream_embed(name, title=None, game=None):
-    embed = Embed(description=f":rotating_light:")
-    if title is not None:
-        embed.add_field(
-            name=f"""{name} is live!""",
-            value=f"{title}\n{game}\n{Urls.TWITCH_CHANNEL}{name}",
-        )
+    print("Built embed for torrent results")
     return embed
